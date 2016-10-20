@@ -4,6 +4,7 @@
 		private $_img;
 		private $_size;
 		private $_nbImg;
+		private $_filtre;
 
 		/**
 		 * PhotoController constructor.
@@ -20,6 +21,9 @@
 			$this->setImg( $img );
 			$this->setSize( $_GET[ "size" ] );
 			$this->setNbImg( $_GET[ "nbImg" ] );
+			$this->setFiltre( $_GET[ "flt" ] );
+
+
 		}
 
 
@@ -49,6 +53,25 @@
 			$data = $this->toData();
 			require __DIR__ . '/../view/PhotoMatrix/photoMatrix.view.php';*/
 			$this->renderView( __FUNCTION__ );
+		}
+
+		public function filtreByCategoryAction(){
+			$this->_dataContent['matrix']=[];
+
+			 $filtreImages= $this->_dao->filtreImage($this->getImg(),$this->getFiltre(),$this->getNbImg());
+
+			 foreach ($filtreImages as $image) {
+
+			 	$this->_dataContent['matrix'][]=[
+
+			 		$image->getPath(),
+					BASE_URL . "viewPhoto&imgId=".$image->getId()
+				];
+			 }
+
+			$this->renderView( __FUNCTION__ );
+
+
 		}
 
 		public function firstPhotoMatrixAction() {
@@ -169,6 +192,16 @@
 			$this->_size = (int) ( isset( $size ) )
 				? htmlentities( $size )
 				: MIN_WIDTH_PIC;
+		}
+
+		public function getFiltre(){
+			return $this->_filtre;
+		}
+
+		public function setFiltre(&$filtre){
+			$this->_filtre = ( isset( $filtre ) )
+				? htmlentities( $filtre )
+				: null;
 		}
 
 		/**

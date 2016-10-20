@@ -66,6 +66,33 @@
 
 			return ( !empty( $data ) ) ? $data : null;
 		}
+
+
+		/**
+		 *
+
+		 */
+
+
+		public function filtreImage(Image $img,$filtre,$nbImage){
+
+			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE category = ? LIMIT  ?,?" );
+
+
+			try {
+				$pQuery->execute( [ 
+					$filtre,
+					$img->getId(),
+					$nbImage
+				] );
+				$data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
+			} catch ( Exception $exc ) {
+				var_dump( $exc->getMessage() );
+				$data = [];
+			}
+
+			return ( !empty( $data ) ) ? $data : [];
+		}
 		
 		
 		/**

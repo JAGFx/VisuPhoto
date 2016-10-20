@@ -77,6 +77,12 @@
 			$controller->nextPhotoMatrixAction();
 			break;
 
+		case 'filtrebycategoryPhotoMatrix':
+			$controller->filtreByCategoryAction();
+			break;
+
+
+
 
 		// ----------------------------------------------------------------------------------------------A Propos
 		case 'viewAPropos' :

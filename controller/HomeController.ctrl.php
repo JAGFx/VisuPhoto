@@ -19,7 +19,7 @@
 		}
 
 		public function homeAction() {
-			$this->showView( __FUNCTION__ );
+			$this->renderView( __FUNCTION__ );
 		}
 
 		protected function makeMenu() {
@@ -31,7 +31,7 @@
 		}
 
 		protected function toData() {
-			return (Object) [
+			return [
 				'menu' => $this->_menu
 			];
 		}

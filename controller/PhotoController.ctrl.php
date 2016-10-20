@@ -1,13 +1,8 @@
 <?php
-	# Utilisation du modèle
-	// Débute l'acces aux images
+
 	class PhotoController extends Controller {
 		private $_img;
 		private $_size;
-
-		private $_matrix;
-
-		private $_navBarContent;
 
 		/**
 		 * PhotoController constructor.
@@ -25,61 +20,105 @@
 			$this->setSize( $_GET[ "size" ] );
 		}
 
+		// ---------------------------------------------------------------------------------------------- Actions
+
+		// FIRST - Random, More, Zoom+, Zoom-, Prev, Next
 		public function photoAction() {
-			# Ajoute à imgMatrixURL
-			#  0 : l'URL de l'image
-			#  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
-			$this->_matrix = [
+			$this->_dataContent[ 'matrix' ] = [
 				$this->getImg()->getPath(),
-				BASE_URL . "zomemorePhoto&imgId=" . $this->getImg()->getId(
+				BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
 				) . "&size=" . $this->getSize()
 			];
 
-			$this->showView( __FUNCTION__ );
+			$this->renderView( __FUNCTION__ );
+		}
+
+		public function firstPhotoAction() {
+			$firstImg = $this->_dao->getFirstImage();
+			$this->setImg( $firstImg );
+
+			$this->photoAction();
+		}
+
+		public function randomPhotoAction() {
+			$randomImg = $this->_dao->getRandomImage();
+			$this->setImg( $randomImg );
+
+			$this->photoAction();
+		}
+
+		public function zoommorePhotoAction() {
+			$ratio = $this->getSize() * MORE_RATIO;
+			$this->setSize( $ratio );
+
+			$this->photoAction();
+		}
+
+		public function zoomlessPhotoAction() {
+			$ratio = $this->getSize() * LESS_RATIO;
+			$this->setSize( $ratio );
+
+			$this->photoAction();
+		}
+
+		public function prevPhotoAction() {
+			$prevImg = $this->_dao->getPrevImage( $this->getImg() );
+			$this->setImg( $prevImg );
+
+
+			$this->photoAction();
+		}
+
+		public function nextPhotoAction() {
+			$prevImg = $this->_dao->getNextImage( $this->getImg() );
+			$this->setImg( $prevImg );
+
+			$this->photoAction();
 		}
 
 
+		// ---------------------------------------------------------------------------------------------- Maker
 		protected function makeMenu() {
 			parent::makeMenu();
 
 			# Change l'etat pour indiquer que cette image est la nouvelle
 
 			$this->_menu[ 'First' ] = BASE_URL . "firstPhoto&imgId=" .
-						  $this->getImg()->getId() . "&size=" . $this->getSize();
+				$this->getImg()->getId() . "&size=" . $this->getSize();
 
 			$this->_menu[ 'Random' ] = BASE_URL . "randomPhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
+				$this->getImg()->getId() . "&size=" . $this->getSize();
 
 			$this->_menu[ 'More' ] = BASE_URL . "morePhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&size=" . $this->getSize();
+				$this->getImg()->getId() . "&size=" . $this->getSize();
 
-			$this->_menu[ 'Zoom +' ] = BASE_URL . "zomemorePhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
+			$this->_menu[ 'Zoom +' ] = BASE_URL . "zoommorePhoto&imgId=" .
+				$this->getImg()->getId() . "&size=" . $this->getSize();
 
-			$this->_menu[ 'Zoom -' ] = BASE_URL . "zomelessPhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
+			$this->_menu[ 'Zoom -' ] = BASE_URL . "zoomlessPhoto&imgId=" .
+				$this->getImg()->getId() . "&size=" . $this->getSize();
 		}
 
 		protected function makeContent() {
-			$this->_navBarContent = [
+			$this->_dataContent[ 'navBar' ] = [
 				"Prev" => BASE_URL . 'prevPhoto&imgId=' .
-					  ( $this->getImg()->getId() - 1 ) . '&size=' . $this->getSize(),
+					( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
 
 				"Next" => BASE_URL . 'nextPhoto&imgId=' .
-					  ( $this->getImg()->getId() + 1 ) . '&size=' . $this->getSize()
+					( $this->getImg()->getId() ) . '&size=' . $this->getSize()
 			];
 		}
 
 		protected function toData() {
-			return (Object) [
-				'img'           => $this->_img,
-				'menu'          => $this->_menu,
-				'matrix'        => $this->_matrix,
-				'size'          => $this->_size,
-				'navbarContent' => $this->_navBarContent
+			return [
+				'img'  => $this->_img,
+				'menu' => $this->_menu,
+				'size' => $this->_size
 			];
 		}
 
+
+		// ---------------------------------------------------------------------------------------------- Getters / Setters
 		/**
 		 * @return Image
 		 */
@@ -111,61 +150,4 @@
 				? htmlentities( $size )
 				: MIN_WIDTH_PIC;
 		}
-
-		/**
-		 * @return mixed
-		 */
-		public function getNavBarContent() {
-			return $this->_navBarContent;
-		}
 	}
-
-
-	/*// Construit l'image courante
-	// et l'ID courant
-	// NB un id peut être toute chaine de caractère !!
-	if ( isset( $_GET[ "imgId" ] ) ) {
-		$data[ 'img' ] = $imgDAO->getImage( htmlentities( $_GET[ "imgId" ] ) );
-	} else
-		$data[ 'img' ] = $imgDAO->getFirstImage();
-
-
-	$data[ 'size' ] = (int) ( isset( $_GET[ "size" ] ) ) ? htmlentities( $_GET[ "size" ] ) : MIN_WIDTH_PIC;
-
-
-	$firstImg = $imgDAO->getFirstImage();
-
-
-	# Mise en place du menu
-	$menu[ 'Home' ]     = "./";
-	$menu[ 'A propos' ] = BASE_URL . "aPropos";
-	// Pre-calcule la première image
-
-	$menu[ 'First' ] = BASE_URL . "viewPhoto&imgId=" . $firstImg->getId() . "&size=" . $data[ 'size' ];
-	# Pre-calcule une image au hasard
-	$menu[ 'Random' ] = BASE_URL . "randomPhoto&imgId=" . $firstImg->getId() . "&size=" . $data[ 'size' ];
-	# Pour afficher plus d'image passe à une autre page
-	$menu[ 'More' ] = BASE_URL . "viewPhotoMatrix&imgId=" . $data[ 'img' ]->getId();
-	// Demande à calculer un zoom sur l'image
-	$menu[ 'Zoom +' ] = BASE_URL . "zoomPhoto&zoom=" . MORE_RATIO . "&imgId=" . $data[ 'img' ]->getId(
-		) . "&size=" . $data[ 'size' ];
-	// Demande à calculer un zoom sur l'image
-	$menu[ 'Zoom -' ] = BASE_URL . "zoomPhoto&zoom=" . LESS_RATIO . "&imgId=" . $data[ 'img' ]->getId(
-		) . "&size=" . $data[ 'size' ];
-	// Affichage du menu
-
-	$data[ 'menu' ] = $menu;
-
-
-	$prevImg               = $imgDAO->getPrevImage( $data[ 'img' ] );
-	$data[ 'prevImgLink' ] = BASE_URL . 'viewPhoto&imgId=' . $prevImg->getId() . '&size=' . $data[ 'size' ];
-
-
-	$nextImg               = $imgDAO->getNextImage( $data[ 'img' ] );
-	$data[ 'nextImgLink' ] = BASE_URL . 'viewPhoto&imgId=' . $nextImg->getId() . '&size=' . $data[ 'size' ];
-
-	$data[ 'zoomLink' ] = BASE_URL . 'zoomPhoto&zoom=' . MORE_RATIO . '&imgId=' . $data[ 'img' ]->getId(
-		) . '&size=' . $data[ 'size' ];
-
-	$data = (Object) $data;
-	require __DIR__ . '/../view/Photo/photo.view.php';*/

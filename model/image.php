@@ -9,16 +9,14 @@
 		private $category;
 		private $comment;
 
-		function __construct() {
-
-		}
+		function __construct() { }
 
 		# Retourne l'URL de cette image
-		function getPath() {
+		public function getPath() {
 			return self::BASE_PATH . $this->path;
 		}
 
-		function getId() {
+		public function getId() {
 			return (int) $this->id;
 		}
 

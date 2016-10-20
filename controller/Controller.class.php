@@ -9,6 +9,7 @@
 	abstract class Controller {
 		protected $_dao;
 		protected $_menu;
+		protected $_dataContent;
 
 		/**
 		 * Controller constructor.
@@ -17,13 +18,14 @@
 		 */
 		protected function __construct( ImageDAO $_dao ) {
 			$this->_dao = $_dao;
+			$this->_dataContent = [ ];
 		}
 
 		/**
 		 *
 		 */
 		protected function makeMenu() {
-			$this->_menu[ 'Home' ]     = "./";
+			$this->_menu[ 'Home' ] = "./";
 			$this->_menu[ 'A propos' ] = BASE_URL . "viewAPropos";
 		}
 
@@ -37,15 +39,25 @@
 		 */
 		protected abstract function toData();
 
-		protected function showView( $fx ) {
+		/**
+		 * @param $fx
+		 */
+		protected function renderView( $fx ) {
 			$this->makeMenu();
 			$this->makeContent();
 
-			$className    = str_replace( 'Controller', '', get_class( $this ) );
+			$className = str_replace( 'Controller', '', get_class( $this ) );
 			$functionName = str_replace( 'Action', '', $fx );
-
-			$data = $this->toData();
 			$path = __DIR__ . '/../view/' . $className . '/' . $functionName . '.view.php';
-			require $path;
+
+			$data = (Object) array_merge(
+				$this->toData(),
+				$this->_dataContent,
+				[
+					'view' => $path
+				]
+			);
+
+			require __DIR__ . '/../view/Default/default.view.php';
 		}
 	}

@@ -5,10 +5,6 @@
 		private $_size;
 		private $_nbImg;
 
-		private $_navBarContent;
-
-		private $_matrix;
-
 		/**
 		 * PhotoController constructor.
 		 *
@@ -26,6 +22,8 @@
 			$this->setNbImg( $_GET[ "nbImg" ] );
 		}
 
+
+		// ---------------------------------------------------------------------------------------------- Actions
 		public function photoMatrixAction() {
 			# Calcul la liste des images à afficher
 			$imgLst = $this->_dao->getImageList( $this->getImg(), $this->_nbImg );
@@ -38,7 +36,10 @@
 				# Ajoute à imgMatrixURL
 				#  0 : l'URL de l'image
 				#  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
-				$this->_matrix[] = [ $i->getPath(), BASE_URL . "viewPhoto&imgId=$iId" ];
+				$this->_dataContent[ 'matrix' ][] = [
+					$i->getPath(),
+					BASE_URL . "viewPhoto&imgId=$iId"
+				];
 			}
 
 			/*$this->makeMenu();
@@ -47,7 +48,7 @@
 
 			$data = $this->toData();
 			require __DIR__ . '/../view/PhotoMatrix/photoMatrix.view.php';*/
-			$this->showView( __FUNCTION__ );
+			$this->renderView( __FUNCTION__ );
 		}
 
 		public function firstPhotoMatrixAction() {
@@ -72,7 +73,10 @@
 		}
 
 		public function randomPhotoMatrixAction() {
-			// TODO Random matrix
+			$randomImg = $this->_dao->getRandomImage();
+			$this->setImg( $randomImg );
+
+			$this->photoMatrixAction();
 		}
 
 		public function prevPhotoMatrixAction() {
@@ -89,57 +93,52 @@
 			$this->photoMatrixAction();
 		}
 
+
+		// ---------------------------------------------------------------------------------------------- Maker
 		protected function makeMenu() {
 			parent::makeMenu();
 
 			# Change l'etat pour indiquer que cette image est la nouvelle
 			$this->_menu[ 'First' ] = BASE_URL . "firstPhotoMatrix&imgId=" .
-						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-				) . "&size=" . $this->getSize();
+				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
 
-			// TODO Random matrix
-			$this->_menu[ 'Random' ] = "nonRealise.php";
+			$this->_menu[ 'Random' ] = BASE_URL . "randomPhotoMatrix&imgId=" .
+				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
 
 			$this->_menu[ 'More' ] = BASE_URL . "morePhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg();
+				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
 
 
 			$this->_menu[ 'Less' ] = BASE_URL . "lessPhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg();
+				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
 		}
 
 		protected function makeContent() {
-			$this->_navBarContent = [
+			$this->_dataContent[ 'navBar' ] = [
 				"Prev" => BASE_URL . 'prevPhotoMatrix&imgId=' .
-					  ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
-					  $this->getNbImg() . '&size=' . $this->getSize(),
+					( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
+					$this->getNbImg() . '&size=' . $this->getSize(),
 
 				"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
-					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
-					  $this->getNbImg() . '&size=' . $this->getSize()
+					( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
+					$this->getNbImg() . '&size=' . $this->getSize()
 			];
 
-			/*$nextImg = $this->_dao->getNextImage( $data[ 'img' ] );
-			$data[ 'nextImgLink' ] = BASE_URL . 'jumpTo&imgId=' .
-				$nextImg->getId() . '&nbJump=' . $this->getNbImg() . '&nbImg=' .
-				$this->getNbImg() . '&size=' . $this->getSize();*/
-
-			$size = MIN_WIDTH_PIC / sqrt( count( $this->_matrix ) );
+			$size = MIN_WIDTH_PIC / sqrt( count( $this->_dataContent[ 'matrix' ] ) );
 			$this->setSize( $size );
 
 		}
 
 		protected function toData() {
-			return (Object) [
-				'img'           => $this->_img,
-				'imgMatrixURL'  => $this->_matrix,
-				'menu'          => $this->_menu,
-				'size'          => $this->_size,
-				'navbarContent' => $this->_navBarContent
+			return [
+				'img' => $this->_img,
+				'menu' => $this->_menu,
+				'size' => $this->_size
 			];
 		}
 
 
+		// ---------------------------------------------------------------------------------------------- Getters / Setters
 		/**
 		 * @return Image
 		 */

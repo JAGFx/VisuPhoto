@@ -12,7 +12,7 @@
 		private $pdo;
 
 
-		function __construct() {
+		public function __construct() {
 
 			$dsn = 'sqlite:model/imageDB.db'; // Data source name
 			try {
@@ -29,7 +29,7 @@
 		 *
 		 * @return int
 		 */
-		function size() {
+		public function size() {
 			$pQuery = $this->pdo->prepare( "SELECT COUNT (*) FROM image" );
 
 			try {
@@ -51,7 +51,7 @@
 		 *
 		 * @return Image|null
 		 */
-		function getImage( $imgId ) {
+		public function getImage( $imgId ) {
 
 			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id = ?" );
 
@@ -73,7 +73,7 @@
 		 *
 		 * @return Image|null
 		 */
-		function getRandomImage() {
+		public function getRandomImage() {
 			$nbFichiers = $this->size();
 
 			$rand = rand( 1, $nbFichiers );
@@ -88,7 +88,7 @@
 		 *
 		 * @return Image|null
 		 */
-		function getFirstImage() {
+		public function getFirstImage() {
 			return $this->getImage( 1 );
 		}
 		
@@ -99,7 +99,7 @@
 		 *
 		 * @return image|null
 		 */
-		function getNextImage( image $img ) {
+		public function getNextImage( image $img ) {
 			$id = $img->getId();
 			if ( $id < $this->size() ) {
 				$img = $this->getImage( $id + 1 );
@@ -115,7 +115,7 @@
 		 *
 		 * @return image|null
 		 */
-		function getPrevImage( image $img ) {
+		public function getPrevImage( image $img ) {
 			$id = $img->getId();
 			if ( $id > 1 ) {
 				$img = $this->getImage( $id - 1 );
@@ -133,7 +133,7 @@
 		 *
 		 * @return image|null
 		 */
-		function jumpToImage( image $img, $nb ) {
+		public function jumpToImage( image $img, $nb ) {
 			$imgID = (int) $img->getId();
 
 			if ( $imgID + $nb >= 1 && $imgID + $nb <= $this->size() )
@@ -151,7 +151,7 @@
 		 *
 		 * @return Image[]
 		 */
-		function getImageList( image $img, $nb ) {
+		public function getImageList( image $img, $nb ) {
 			$res = [ ];
 
 			# Verifie que le nombre d'image est non nul

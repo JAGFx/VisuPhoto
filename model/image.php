@@ -16,6 +16,9 @@
 			return self::BASE_PATH . $this->path;
 		}
 
+		/**
+		 * @return int
+		 */
 		public function getId() {
 			return (int) $this->id;
 		}

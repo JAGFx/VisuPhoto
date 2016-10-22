@@ -121,28 +121,32 @@
 
 			# Change l'etat pour indiquer que cette image est la nouvelle
 			$this->_menu[ 'First' ] = BASE_URL . "firstPhotoMatrix&imgId=" .
-				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
+						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize();
 
 			$this->_menu[ 'Random' ] = BASE_URL . "randomPhotoMatrix&imgId=" .
-				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
+						   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize();
 
 			$this->_menu[ 'More' ] = BASE_URL . "morePhotoMatrix&imgId=" .
-				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
+						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize();
 
 
 			$this->_menu[ 'Less' ] = BASE_URL . "lessPhotoMatrix&imgId=" .
-				$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize();
+						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize();
 		}
 
 		protected function makeContent() {
 			$this->_dataContent[ 'navBar' ] = [
 				"Prev" => BASE_URL . 'prevPhotoMatrix&imgId=' .
-					( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
-					$this->getNbImg() . '&size=' . $this->getSize(),
+					  ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
+					  $this->getNbImg() . '&size=' . $this->getSize(),
 
 				"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
-					( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
-					$this->getNbImg() . '&size=' . $this->getSize()
+					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
+					  $this->getNbImg() . '&size=' . $this->getSize()
 			];
 
 			$size = MIN_WIDTH_PIC / sqrt( count( $this->_dataContent[ 'matrix' ] ) );
@@ -150,9 +154,12 @@
 
 		}
 
+		/**
+		 * @return array
+		 */
 		protected function toData() {
 			return [
-				'img' => $this->_img,
+				'img'  => $this->_img,
 				'menu' => $this->_menu,
 				'size' => $this->_size
 			];
@@ -168,7 +175,7 @@
 		}
 
 		/**
-		 * @param mixed $img
+		 * @param Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -177,14 +184,14 @@
 		}
 
 		/**
-		 * @return mixed
+		 * @return int
 		 */
 		public function getSize() {
-			return $this->_size;
+			return (int) $this->_size;
 		}
 
 		/**
-		 * @param $size
+		 * @param int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )
@@ -192,10 +199,16 @@
 				: MIN_WIDTH_PIC;
 		}
 
+		/**
+		 * @return string
+		 */
 		public function getFiltre() {
 			return $this->_filtre;
 		}
 
+		/**
+		 * @param string $filtre
+		 */
 		public function setFiltre( &$filtre ) {
 			$this->_filtre = ( isset( $filtre ) )
 				? htmlentities( $filtre )
@@ -203,17 +216,26 @@
 		}
 
 		/**
-		 * @return mixed
+		 * @return bool
+		 */
+		private function isFiltred() {
+			return is_null( $this->getFiltre() );
+		}
+
+		/**
+		 * @return int
 		 */
 		public function getNbImg() {
 			return (int) $this->_nbImg;
 		}
 
 		/**
-		 * @param mixed $nbImg
+		 * @param int $nbImg
 		 */
 		private function setNbImg( &$nbImg ) {
-			$this->_nbImg = ( isset( $nbImg ) ) ? (int) htmlentities( $nbImg ) : MIN_NB_PIC;
+			$this->_nbImg = ( isset( $nbImg ) )
+				? (int) htmlentities( $nbImg )
+				: MIN_NB_PIC;
 		}
 
 

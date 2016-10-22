@@ -6,16 +6,14 @@
 	 * Time: 8:32
 	 */
 
+	require __DIR__ . '/../model/DAO.class.php';
 	require __DIR__ . '/../model/imageDAO.php';
-
-	define( 'BASE_URL', '?a=' );
-	define( 'MORE_RATIO', 1.25 );
-	define( 'LESS_RATIO', 0.75 );
-	define( 'MIN_WIDTH_PIC', 480 );
-	define( 'MIN_NB_PIC', 1 );
+	require __DIR__ . '/commons.php';
 
 	$action = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
-	$controller = loadController( $action );
+
+	$imgDAO     = new ImageDAO();
+	$controller = loadController( $action, $imgDAO );
 
 	switch ( $action ) {
 		// ----------------------------------------------------------------------------------------------Photo
@@ -91,24 +89,4 @@
 		default:
 			$controller->homeAction();
 			break;
-	}
-
-
-	/**
-	 * @param $action
-	 *
-	 * @return Controller
-	 */
-	function loadController( $action ) {
-		preg_match( '/^[a-z]+(\w+)$/', htmlentities( $action ), $matches );
-
-		$ctrl = ( ( empty( $matches[ 0 ] ) ) ? 'Home' : $matches[ 1 ] ) . 'Controller';
-		$path = __DIR__ . '/' . $ctrl . '.ctrl.php';
-
-		require __DIR__ . '/Controller.class.php';
-		require $path;
-
-		$imgDAO = new ImageDAO();
-
-		return new  $ctrl( $imgDAO );
 	}

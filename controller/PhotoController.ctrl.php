@@ -1,8 +1,20 @@
 <?php
 
 	class PhotoController extends Controller {
+		/**
+		 * @var Image
+		 */
 		private $_img;
+
+		/**
+		 * @var int
+		 */
 		private $_size;
+
+		/**
+		 * @var ImageDAO
+		 */
+		protected $_dao;
 
 		/**
 		 * PhotoController constructor.
@@ -22,7 +34,6 @@
 
 		// ---------------------------------------------------------------------------------------------- Actions
 
-		// FIRST - Random, More, Zoom+, Zoom-, Prev, Next
 		public function photoAction() {
 			$this->_dataContent[ 'matrix' ] = [
 				$this->getImg()->getPath(),
@@ -81,8 +92,6 @@
 		protected function makeMenu() {
 			parent::makeMenu();
 
-			# Change l'etat pour indiquer que cette image est la nouvelle
-
 			$this->_menu[ 'First' ] = BASE_URL . "firstPhoto&imgId=" .
 				$this->getImg()->getId() . "&size=" . $this->getSize();
 
@@ -136,14 +145,14 @@
 		}
 
 		/**
-		 * @return mixed
+		 * @return int
 		 */
 		public function getSize() {
 			return $this->_size;
 		}
 
 		/**
-		 * @param mixed $size
+		 * @param int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )

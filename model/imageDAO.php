@@ -4,26 +4,8 @@
 	/**
 	 * Class ImageDAO
 	 */
-	class ImageDAO {
+	class ImageDAO extends DAO {
 
-		/**
-		 * @var PDO
-		 */
-		private $pdo;
-
-
-		public function __construct() {
-
-			$dsn = 'sqlite:model/imageDB.db'; // Data source name
-			try {
-				$this->pdo = new PDO( $dsn ); //$db est un attribut privé d'ImageDAO
-
-			} catch ( PDOException $e ) {
-
-				die ( "Erreur : " . $e->getMessage() );
-			}
-		}
-		
 		/**
 		 * Retourne le nombre d'images référencées dans le DAO
 		 *
@@ -199,19 +181,3 @@
 			return $res;
 		}
 	}
-	
-	# Test unitaire
-	# Appeler le code PHP depuis le navigateur avec la variable test
-	# Exemple : http://localhost/image/model/imageDAO.php?test
-	if ( isset( $_GET[ "test" ] ) ) {
-		echo "<H1>Test de la classe ImageDAO</H1>";
-		$imgDAO = new ImageDAO();
-		echo "<p>Creation de l'objet ImageDAO.</p>\n";
-		echo "<p>La base contient " . $imgDAO->size() . " images.</p>\n";
-		$img = $imgDAO->getFirstImage();
-		echo "La premiere image est : " . $img->getPath() . "</p>\n";
-		# Affiche l'image
-		echo "<img src=\"" . $img->getPath() . "\"/>\n";
-	}
-
-

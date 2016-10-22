@@ -69,29 +69,32 @@
 
 
 		/**
+		 * @param Image $img
+		 * @param       $filtre
+		 * @param       $nbImage
 		 *
-
+		 * @return Image[]
 		 */
-
-
-		public function filtreImage(Image $img,$filtre,$nbImage){
+		public function filtreImage( Image $img, $filtre, $nbImage ) {
 
 			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE category = ? LIMIT  ?,?" );
 
 
 			try {
-				$pQuery->execute( [ 
-					$filtre,
-					$img->getId(),
-					$nbImage
-				] );
-				$data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
+				$pQuery->execute(
+					[
+						$filtre,
+						$img->getId(),
+						$nbImage
+					]
+				);
+				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
 			} catch ( Exception $exc ) {
 				var_dump( $exc->getMessage() );
-				$data = [];
+				$data = [ ];
 			}
 
-			return ( !empty( $data ) ) ? $data : [];
+			return ( !empty( $data ) ) ? $data : [ ];
 		}
 		
 		
@@ -186,7 +189,7 @@
 				debug_print_backtrace();
 				trigger_error( "Erreur dans ImageDAO.getImageList: nombre d'images nul" );
 			}
-			$id  = $img->getId();
+			$id = $img->getId();
 			$max = $id + $nb;
 			while ( $id < $this->size() && $id < $max ) {
 				$res[] = $this->getImage( $id );

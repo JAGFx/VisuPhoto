@@ -22,8 +22,6 @@
 			$this->setSize( $_GET[ "size" ] );
 			$this->setNbImg( $_GET[ "nbImg" ] );
 			$this->setFiltre( $_GET[ "flt" ] );
-
-
 		}
 
 
@@ -55,23 +53,23 @@
 			$this->renderView( __FUNCTION__ );
 		}
 
-		public function filtreByCategoryAction(){
-			$this->_dataContent['matrix']=[];
+		public function filtreByCategoryAction() {
+			$this->_dataContent[ 'matrix' ] = [ ];
 
-			 $filtreImages= $this->_dao->filtreImage($this->getImg(),$this->getFiltre(),$this->getNbImg());
+			$filtreImages = $this->_dao->filtreImage(
+				$this->getImg(), $this->getFiltre(), $this->getNbImg()
+			);
 
-			 foreach ($filtreImages as $image) {
+			foreach ( $filtreImages as $image ) {
 
-			 	$this->_dataContent['matrix'][]=[
+				$this->_dataContent[ 'matrix' ][] = [
 
-			 		$image->getPath(),
-					BASE_URL . "viewPhoto&imgId=".$image->getId()
+					$image->getPath(),
+					BASE_URL . "viewPhoto&imgId=" . $image->getId()
 				];
-			 }
+			}
 
 			$this->renderView( __FUNCTION__ );
-
-
 		}
 
 		public function firstPhotoMatrixAction() {
@@ -194,11 +192,11 @@
 				: MIN_WIDTH_PIC;
 		}
 
-		public function getFiltre(){
+		public function getFiltre() {
 			return $this->_filtre;
 		}
 
-		public function setFiltre(&$filtre){
+		public function setFiltre( &$filtre ) {
 			$this->_filtre = ( isset( $filtre ) )
 				? htmlentities( $filtre )
 				: null;

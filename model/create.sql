@@ -1,6 +1,6 @@
 CREATE TABLE image (
-id int primary key,
-path varchar(1024),
-category varchar(64),
-comment varchar(1024)
+  id       INT PRIMARY KEY,
+  path     VARCHAR(1024),
+  category VARCHAR(64),
+  comment  VARCHAR(1024)
 );

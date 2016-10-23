@@ -35,11 +35,8 @@
 		// ---------------------------------------------------------------------------------------------- Actions
 
 		public function photoAction() {
-			$this->_dataContent[ 'matrix' ] = [
-				$this->getImg()->getPath(),
-				BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
-				) . "&size=" . $this->getSize()
-			];
+			$this->_dataContent[ 'url' ] = BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
+				) . "&size=" . $this->getSize();
 
 			$this->renderView( __FUNCTION__ );
 		}
@@ -110,11 +107,11 @@
 
 		protected function makeContent() {
 			$this->_dataContent[ 'navBar' ] = [
-				"Prev" => BASE_URL . 'prevPhoto&imgId=' .
-					( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
+				"previous" => BASE_URL . 'prevPhoto&imgId=' .
+					      ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
 
-				"Next" => BASE_URL . 'nextPhoto&imgId=' .
-					( $this->getImg()->getId() ) . '&size=' . $this->getSize()
+				"next" => BASE_URL . 'nextPhoto&imgId=' .
+					  ( $this->getImg()->getId() ) . '&size=' . $this->getSize()
 			];
 		}
 

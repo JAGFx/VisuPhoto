@@ -1,4 +1,6 @@
 <section class="row" >
+	<h1 class="col-xs-12 text-center" >Photo</h1 >
+
 	<nav aria-label="Page navigation" class="col-xs-12" >
 		<ul class="pager" >
 
@@ -10,20 +12,20 @@
 		</ul >
 	</nav >
 
-	<h1 class="col-xs-12" ><?= $data->img->getComment(); ?></h1 >
-	<p class="col-xs-12" >
-		<span class="label label-primary" ><?= $data->img->getCategory(); ?></span >
-	</p >
-	<!--<p >
-	<?php /*foreach ( $data->navBar as $text => $link ) : */ ?>
-		<a href="<? /*= $link; */ ?>" ><? /*= $text; */ ?></a >
-	<?php /*endforeach; */ ?>
-	<!--<a href="<? /* /*= $data->prevImgLink; */ ?>" >Prev</a >
-				<a href="<? /* /*= $data->nextImgLink; */ ?>" >Next</a >
-</p >-->
-
-	<a href="<?= $data->url; ?>" class="col-xs-12" >
-		<img src="<?= $data->img->getPath(); ?>" width="<?= $data->size; ?>" class="img-rounded" >
-	</a >
-
+	<div class="col-xs-12 col-md-4 col-md-offset-4" >
+		<div class="thumbnail" >
+			<a href="<?= $data->url; ?>" >
+				<img src="<?= $data->img->getPath(); ?>" alt="<?= $data->img->getComment(
+				); ?>" width="<?= $data->size; ?>" >
+			</a >
+			<div class="caption" >
+				<h3 ><?= $data->img->getComment(); ?></h3 >
+				<p >
+					<span class="label label-primary" >
+						<?= $data->img->getCategory(); ?>
+					</span >
+				</p >
+			</div >
+		</div >
+	</div >
 </section >

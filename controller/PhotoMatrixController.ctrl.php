@@ -7,6 +7,11 @@
 		private $_filtre;
 
 		/**
+		 * @var ImageDAO
+		 */
+		protected $_dao;
+
+		/**
 		 * PhotoController constructor.
 		 *
 		 * @param ImageDAO $_dao
@@ -39,8 +44,9 @@
 				#  0 : l'URL de l'image
 				#  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
 				$this->_dataContent[ 'matrix' ][] = [
-					$i->getPath(),
-					BASE_URL . "viewPhoto&imgId=$iId"
+					$i,
+					BASE_URL . "viewPhoto&imgId=$iId" . '&nbImg=' .
+					$this->getNbImg() . '&size=' . $this->getSize()
 				];
 			}
 
@@ -140,17 +146,17 @@
 
 		protected function makeContent() {
 			$this->_dataContent[ 'navBar' ] = [
-				"Prev" => BASE_URL . 'prevPhotoMatrix&imgId=' .
-					  ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
-					  $this->getNbImg() . '&size=' . $this->getSize(),
+				"previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
+					      ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
+					      $this->getNbImg() . '&size=' . $this->getSize(),
 
-				"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
+				"next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
 					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
 					  $this->getNbImg() . '&size=' . $this->getSize()
 			];
 
-			$size = MIN_WIDTH_PIC / sqrt( count( $this->_dataContent[ 'matrix' ] ) );
-			$this->setSize( $size );
+			/*$size = MIN_WIDTH_PIC / sqrt( count( $this->_dataContent[ 'matrix' ] ) );
+			$this->setSize( $size );*/
 
 		}
 

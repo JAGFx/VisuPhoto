@@ -52,7 +52,11 @@
 		 *
 		 * @return array
 		 */
-		protected abstract function toData();
+		protected function toData() {
+			return [
+				'menu' => $this->_menu
+			];
+		}
 
 		/**
 		 * Effectue la préparation des données et importe les vues

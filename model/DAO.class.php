@@ -102,7 +102,7 @@
 				$pQuery->execute( $aParams );
 				$data = ( !is_null( $className ) && class_exists( $className ) )
 					? $pQuery->fetchObject( $className )
-					: $pQuery->fetch();
+					: $pQuery->fetchObject();
 
 			} catch ( Exception $exc ) {
 				$data = null;
@@ -111,6 +111,6 @@
 
 			$pQuery->closeCursor();
 
-			return ( empty( $data ) ) ? null : $data[ 0 ];
+			return ( empty( $data ) ) ? null : $data;
 		}
 	}

@@ -84,6 +84,16 @@
 			$controller->aProposAction();
 			break;
 
+		// ----------------------------------------------------------------------------------------------User
+		// TODO SessionManager
+		case 'loginUser' :
+			$controller->loginUserAction();
+			break;
+
+		case 'registerUser' :
+			$controller->registerUserAction();
+			break;
+
 		// ----------------------------------------------------------------------------------------------Home
 		default:
 			$controller->homeAction();

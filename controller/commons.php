@@ -16,8 +16,53 @@
 	define( 'ERR_INVALID_DAO_NAME', 'Nom de DAO invalide ou introuvable' );
 	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
 
+	define( 'TYPE_FEEDBACK_SUCCESS', -1 );
+	define( 'TYPE_FEEDBACK_INFO', 1 );
+	define( 'TYPE_FEEDBACK_WARN', 2 );
+	define( 'TYPE_FEEDBACK_DANGER', 3 );
+	define( 'TYPE_FEEDBACK_ERROR', 4 );
 
 	// ----------------------------------------------------------------------------------------------Functions
+
+	/**
+	 * Renvoie un JSON pour l'AJAX
+	 *
+	 * @param  String $typeFeedback Le type de retour : "danger", "warning" ou "success"
+	 * @param  array  $data         un tableau des données qui seront affichées
+	 *                              array("Titre" => "Erreur", "Message" => "")
+	 * @param  String $url          Url de redirection
+	 *
+	 * @return string       le JSON
+	 */
+	function toAjax( $typeFeedback, $data, $url = null ) {
+		//var_dump($typeFeedback);
+
+		$type = [
+			TYPE_FEEDBACK_SUCCESS => 'success',
+			TYPE_FEEDBACK_INFO    => 'info',
+			TYPE_FEEDBACK_WARN    => 'warning',
+			TYPE_FEEDBACK_DANGER  => 'danger',
+			TYPE_FEEDBACK_ERROR   => 'error'
+		];
+
+		return json_encode(
+			[
+				"Type" => $type[ $typeFeedback ],
+				"Data" => $data,
+				"Url"  => $url
+			]
+		);
+	}
+
+	function ivExceptionToAjax( $error ) {
+		return toAjax(
+			$error->code,
+			[
+				'Titre'   => $error->title,
+				'Message' => $error->message
+			]
+		);
+	}
 
 	/**
 	 * Importe et crée un objet Controller correspondant à l'$action

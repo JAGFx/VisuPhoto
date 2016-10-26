@@ -1,5 +1,8 @@
 <?php
 
+	/**
+	 * Class PhotoController
+	 */
 	class PhotoController extends Controller {
 		/**
 		 * @var Image

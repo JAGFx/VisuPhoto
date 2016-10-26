@@ -7,20 +7,13 @@
 		private $_filtre;
 
 		/**
-		 * @var ImageDAO
-		 */
-		protected $_dao;
-
-		/**
 		 * PhotoController constructor.
-		 *
-		 * @param ImageDAO $_dao
 		 */
-		public function __construct( ImageDAO $_dao ) {
-			parent::__construct( $_dao );
+		public function __construct() {
+			parent::__construct( 'ImageDAO' );
 
 			$img = ( isset( $_GET[ "imgId" ] ) )
-				? $_dao->getImage( htmlentities( $_GET[ "imgId" ] ) )
+				? $this->getDAO()->getImage( htmlentities( $_GET[ "imgId" ] ) )
 				: null;
 
 			$this->setImg( $img );
@@ -33,7 +26,7 @@
 		// ---------------------------------------------------------------------------------------------- Actions
 		public function photoMatrixAction() {
 			# Calcul la liste des images à afficher
-			$imgLst = $this->_dao->getImageList( $this->getImg(), $this->_nbImg );
+			$imgLst = $this->getDAO()->getImageList( $this->getImg(), $this->_nbImg );
 
 			# Transforme cette liste en liste de couples (tableau a deux valeurs)
 			# contenant l'URL de l'image et l'URL de l'action sur cette image
@@ -62,7 +55,7 @@
 		public function filtreByCategoryAction() {
 			$this->_dataContent[ 'matrix' ] = [ ];
 
-			$filtreImages = $this->_dao->filtreImage(
+			$filtreImages = $this->getDAO()->filtreImage(
 				$this->getImg(), $this->getFiltre(), $this->getNbImg()
 			);
 
@@ -79,7 +72,7 @@
 		}
 
 		public function firstPhotoMatrixAction() {
-			$firstImg = $this->_dao->getFirstImage();
+			$firstImg = $this->getDAO()->getFirstImage();
 			$this->setImg( $firstImg );
 
 			$this->photoMatrixAction();
@@ -100,21 +93,21 @@
 		}
 
 		public function randomPhotoMatrixAction() {
-			$randomImg = $this->_dao->getRandomImage();
+			$randomImg = $this->getDAO()->getRandomImage();
 			$this->setImg( $randomImg );
 
 			$this->photoMatrixAction();
 		}
 
 		public function prevPhotoMatrixAction() {
-			$prevImg = $this->_dao->jumpToImage( $this->getImg(), ( -$this->getNbImg() ) );
+			$prevImg = $this->getDAO()->jumpToImage( $this->getImg(), ( -$this->getNbImg() ) );
 			$this->setImg( $prevImg );
 
 			$this->photoMatrixAction();
 		}
 
 		public function nextPhotoMatrixAction() {
-			$nextImg = $this->_dao->jumpToImage( $this->getImg(), $this->getNbImg() );
+			$nextImg = $this->getDAO()->jumpToImage( $this->getImg(), $this->getNbImg() );
 			$this->setImg( $nextImg );
 
 			$this->photoMatrixAction();
@@ -186,7 +179,7 @@
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
 				? $img
-				: $this->_dao->getFirstImage();
+				: $this->getDAO()->getFirstImage();
 		}
 
 		/**
@@ -242,6 +235,13 @@
 			$this->_nbImg = ( isset( $nbImg ) )
 				? (int) htmlentities( $nbImg )
 				: MIN_NB_PIC;
+		}
+
+		/**
+		 * @return ImageDAO
+		 */
+		protected function getDAO() {
+			return parent::getDAO();
 		}
 
 

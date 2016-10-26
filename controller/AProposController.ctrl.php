@@ -6,10 +6,9 @@
 		/**
 		 * AProposController constructor.
 		 *
-		 * @param ImageDAO $_dao
 		 */
-		public function __construct( ImageDAO $_dao ) {
-			parent::__construct( $_dao );
+		public function __construct() {
+			parent::__construct();
 		}
 
 		public function aProposAction() {

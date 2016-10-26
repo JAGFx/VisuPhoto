@@ -1,5 +1,5 @@
 <?php
-	require __DIR__ . '/image.php';
+	require __DIR__ . '/../Image.class.php';
 
 	/**
 	 * Class ImageDAO

@@ -10,7 +10,7 @@
 		/**
 		 * @var DAO
 		 */
-		protected $_dao;
+		private $_dao = null;
 
 		/**
 		 * @var array
@@ -27,10 +27,10 @@
 		/**
 		 * Controller constructor.
 		 *
-		 * @param DAO $_dao
+		 * @param string $nameDAO
 		 */
-		protected function __construct( DAO $_dao ) {
-			$this->_dao         = $_dao;
+		protected function __construct( $nameDAO = null ) {
+			$this->_dao         = $this->setDAO( $nameDAO );
 			$this->_dataContent = [ ];
 		}
 
@@ -59,7 +59,7 @@
 		 *
 		 * @param string $fx Nom de la fonction appelante
 		 */
-		protected function renderView( $fx ) {
+		protected final function renderView( $fx ) {
 			// Génération des données de class
 			$this->makeMenu();
 			$this->makeContent();
@@ -85,5 +85,35 @@
 
 			// Importation de la vue par défaut et de la sous-vue associé
 			require __DIR__ . '/../view/Default/default.view.php';
+		}
+
+		/**
+		 * @param $name
+		 *
+		 * @return DAO
+		 * @throws Exception
+		 */
+		protected final function loadDAO( $name ) {
+			$path = __DIR__ . '/DAO/' . $name . '.dao.php';
+
+			if ( !is_file( $path ) )
+				throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $path );
+
+			require $path;
+
+			return new $name();
+		}
+
+		/**
+		 * @return DAO|null
+		 */
+		protected function getDAO() {
+			return $this->_dao;
+		}
+
+		private function setDAO( $nameDAO ) {
+			return ( !is_null( $nameDAO ) )
+				? $this->loadDAO( $nameDAO )
+				: null;
 		}
 	}

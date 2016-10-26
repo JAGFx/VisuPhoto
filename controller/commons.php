@@ -13,18 +13,21 @@
 	define( 'MIN_WIDTH_PIC', 480 );
 	define( 'MIN_NB_PIC', 1 );
 
+	define( 'ERR_INVALID_DAO_NAME', 'Nom de DAO invalide ou introuvable' );
+	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
+
 
 	// ----------------------------------------------------------------------------------------------Functions
 
 	/**
 	 * Importe et crée un objet Controller correspondant à l'$action
 	 *
-	 * @param $action
-	 * @param $dao
+	 * @param string $action
 	 *
 	 * @return Controller
+	 * @throws Exception
 	 */
-	function loadController( $action, $dao ) {
+	function loadController( $action ) {
 		/*
 		 * Exempe pris: zoomPhotoMatrix
 		 * Les actions sont normalisées.
@@ -36,12 +39,32 @@
 		// Recupération du contrôleur ou "Home" si pas de correspondance
 		$ctrl = ( ( empty( $matches[ 0 ] ) ) ? 'Home' : $matches[ 1 ] ) . 'Controller';
 
+		//loadDAO( $matches[ 1 ] );
+
 		// Chargement du contrôleur
 		$path = __DIR__ . '/' . $ctrl . '.ctrl.php';
+
+		if ( !is_file( $path ) )
+			throw new Exception( ERR_INVALID_CTRL_NAME );
 
 		require __DIR__ . '/../model/Controller.class.php';
 		require $path;
 
 		// Création et retour du contrôleur
-		return new  $ctrl( $dao );
+		return new  $ctrl();
+	}
+
+	/**
+	 * Crypte les mots de passes
+	 *
+	 * @param  String $data les données à crypter
+	 *
+	 * @return String       les données cryptées
+	 */
+	function encrypt( $data ) {
+		return password_hash(
+			$data,
+			PASSWORD_DEFAULT,
+			[ 'salt' => mcrypt_create_iv( 22, MCRYPT_DEV_URANDOM ) ]
+		);
 	}

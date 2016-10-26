@@ -5,15 +5,14 @@
 	 * Date: 17-Oct-16
 	 * Time: 8:32
 	 */
+	session_start();
 
 	require __DIR__ . '/../model/DAO.class.php';
-	require __DIR__ . '/../model/imageDAO.php';
 	require __DIR__ . '/commons.php';
 
 	$action = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
 
-	$imgDAO     = new ImageDAO();
-	$controller = loadController( $action, $imgDAO );
+	$controller = loadController( $action );
 
 	switch ( $action ) {
 		// ----------------------------------------------------------------------------------------------Photo

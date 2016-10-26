@@ -1,7 +1,7 @@
 <?php
 
 	# Notion d'image
-	class Image {
+	final class Image {
 		const BASE_PATH = 'model/imgs/';
 
 		private $path = "";

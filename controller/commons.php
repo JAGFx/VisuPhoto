@@ -27,10 +27,10 @@
 	/**
 	 * Renvoie un JSON pour l'AJAX
 	 *
-	 * @param  String $typeFeedback Le type de retour : "danger", "warning" ou "success"
+	 * @param  string $typeFeedback Le type de retour : "danger", "warning" ou "success"
 	 * @param  array  $data         un tableau des données qui seront affichées
 	 *                              array("Titre" => "Erreur", "Message" => "")
-	 * @param  String $url          Url de redirection
+	 * @param  string $url          Url de redirection
 	 *
 	 * @return string       le JSON
 	 */
@@ -54,6 +54,13 @@
 		);
 	}
 
+	/**
+	 * Prépare le retour d'erreur InputValidatorException en JSON
+	 *
+	 * @param object $error Information de l'erreur  de l'exception
+	 *
+	 * @return string JSON
+	 */
 	function ivExceptionToAjax( $error ) {
 		return toAjax(
 			$error->code,
@@ -74,17 +81,15 @@
 	 */
 	function loadController( $action ) {
 		/*
-		 * Exempe pris: zoomPhotoMatrix
+		 * Exemple pris: zoomPhotoMatrix
 		 * Les actions sont normalisées.
-		 * 	- Premiere partie obligatoirement en minuscule: Nom de l'action (Ici "zoom")
+		 * 	- Première partie obligatoirement en minuscule: Nom de l'action (Ici "zoom")
 		 * 	- Deuxième partie : Nom du controller associé (Ici "PhotoMatrix")
 		 */
 		preg_match( '/^[a-z]+(\w+)$/', htmlentities( $action ), $matches );
 
-		// Recupération du contrôleur ou "Home" si pas de correspondance
+		// Récupération du contrôleur ou "Home" si pas de correspondance
 		$ctrl = ( ( empty( $matches[ 0 ] ) ) ? 'Home' : $matches[ 1 ] ) . 'Controller';
-
-		//loadDAO( $matches[ 1 ] );
 
 		// Chargement du contrôleur
 		$path = __DIR__ . '/' . $ctrl . '.ctrl.php';

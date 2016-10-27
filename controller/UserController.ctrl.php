@@ -10,7 +10,22 @@
 	 *        Date: 25/10/2016
 	 *        Time: 20:34
 	 */
+
+	/**
+	 * Exemple pris: photoMatrixAction
+	 *
+	 * Les noms des méthodes action sont normalisées
+	 *        - Première partie: Nom de la sous-vue (Ici "photoMatrix")
+	 *        - Deuxième partie: "Action" Nécessaire pour définir une méthode "Action"
+	 */
+
+	/**
+	 * Class UserController
+	 *
+	 * Contrôleur pour l'authentification utilisateur
+	 */
 	class UserController extends Controller {
+
 		/**
 		 * UserController constructor.
 		 */
@@ -19,11 +34,16 @@
 		}
 
 		// ---------------------------------------------------------------------------------------------- Actions
+		/**
+		 * Rendue et traitement de la page de Connexion
+		 */
 		public function loginUserAction() {
+			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
 				$inputValidator = new InputValidator();
 
 				try {
+					// Récupération des données utilisateur validé
 					$pswd   = htmlentities(
 						$inputValidator->validateString( $_POST[ 'password' ] )
 					);
@@ -31,6 +51,7 @@
 						$inputValidator->validateString( $_POST[ 'pseudo' ] )
 					);
 
+					// Vérification des informations utilisateur dans la BDD
 					$user       = $this->getDAO()->findUser( $pseudo );
 					$verifyPswd = password_verify( $pswd, $user->getPassword() );
 
@@ -41,6 +62,8 @@
 							TYPE_FEEDBACK_WARN
 						);
 
+					// FIXME Path Redirect
+					// Notification de succès et redirection vers le tableau de bord
 					echo toAjax(
 						TYPE_FEEDBACK_SUCCESS,
 						[
@@ -51,18 +74,25 @@
 					);
 
 				} catch ( InputValidatorExceptions $ive ) {
+					// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
 					echo ivExceptionToAjax( (object) $ive->getError() );
 				}
 
+				// Sinon génération de la page de connexion
 			} else
 				$this->renderView( __FUNCTION__ );
 		}
 
+		/**
+		 * Rendue et traitement de la page d'Inscription
+		 */
 		public function registerUserAction() {
+			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
 				$inputValidator = new InputValidator();
 
 				try {
+					// Récupération des données utilisateur validé
 					$pswd        = htmlentities(
 						$inputValidator->validateString( $_POST[ 'password' ] )
 					);
@@ -73,6 +103,7 @@
 						$inputValidator->validateString( $_POST[ 'pseudo' ] )
 					);
 
+					// Vérification des données utilisateur
 					if ( $pswd !== $confirmPswd )
 						throw new InputValidatorExceptions(
 							'Mot de passe différents',
@@ -80,6 +111,7 @@
 							TYPE_FEEDBACK_WARN
 						);
 
+					// Insertion de l'utilisateur dans le BDD
 					$result = (Object) $this->getDAO()->addUser(
 						new User( $pseudo, encrypt( $pswd ) )
 					);
@@ -92,26 +124,29 @@
 						);
 
 					// TODO Redirection
+					// Notification de succès et redirection vers le tableau de bord
 
 				} catch ( InputValidatorExceptions $ive ) {
+					// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
 					echo ivExceptionToAjax( (object) $ive->getError() );
 				}
 
+				// Sinon génération de la page d'inscription
 			} else
 				$this->renderView( __FUNCTION__ );
 		}
 
 
 		/**
-		 *
+		 * Génération des données du contenu
 		 */
-		protected function makeContent() {
-			// TODO: Implement makeContent() method.
-		}
+		protected function makeContent() { }
 
 
 		// ---------------------------------------------------------------------------------------------- Getters / Setters
 		/**
+		 * Non nécessaire. Utilisé pour caster l'objet DAO en UserDAO pour l'IDE
+		 *
 		 * @return UserDAO
 		 */
 		protected function getDAO() {

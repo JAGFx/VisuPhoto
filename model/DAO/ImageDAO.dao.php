@@ -51,9 +51,9 @@
 
 
 		/**
-		 * @param Image $img
-		 * @param       $filtre
-		 * @param       $nbImage
+		 * @param Image  $img
+		 * @param string $filtre
+		 * @param int    $nbImage
 		 *
 		 * @return Image[]
 		 */
@@ -171,7 +171,7 @@
 				debug_print_backtrace();
 				trigger_error( "Erreur dans ImageDAO.getImageList: nombre d'images nul" );
 			}
-			$id = $img->getId();
+			$id  = $img->getId();
 			$max = $id + $nb;
 			while ( $id < $this->size() && $id < $max ) {
 				$res[] = $this->getImage( $id );

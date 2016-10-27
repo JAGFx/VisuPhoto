@@ -7,7 +7,13 @@
 	 * Time: 19:39
 	 */
 	final class User {
-		const USER_PRIVILEGE  = 0;
+		/**
+		 * Constante pour le privilège standard
+		 */
+		const USER_PRIVILEGE = 0;
+		/**
+		 *Constante pour le privilège admin
+		 */
 		const ADMIN_PRIVILEGE = 1;
 
 		/**

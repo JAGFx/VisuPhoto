@@ -6,6 +6,12 @@
 	 * Date: 22/10/2016
 	 * Time: 11:46
 	 */
+
+	/**
+	 * Class DAO
+	 *
+	 * Classe offrant des interaction de base avec un SGBD
+	 */
 	class DAO {
 		/**
 		 * @var PDO
@@ -26,10 +32,12 @@
 		}
 
 		/**
+		 * Execute une requête ne nécessitant pas de résultat
+		 *
 		 * @param string $aQuery
 		 * @param array  $aParams
 		 *
-		 * @return array
+		 * @return array Variable de succès et / ou message en cas d'erreur
 		 */
 		public function execQuery( $aQuery, array $aParams ) {
 			/*var_dump( $aQuery );
@@ -41,6 +49,7 @@
 				$pQuery->execute( $aParams );
 				$rowCount = $pQuery->rowCount();
 
+				// Message en cas de nombre de ligne null
 				if ( $rowCount <= 0 )
 					$execResult[ 'message' ] = $pQuery->errorInfo()[ 2 ];
 
@@ -57,9 +66,11 @@
 		}
 
 		/**
+		 * Execute une requête de recherche pour l'ensemble des correspondances (Mode objet)
+		 *
 		 * @param string      $aQuery
 		 * @param array       $aParams
-		 * @param string|null $className
+		 * @param string|null $className Nom de la class objet ou null si Objet neutre
 		 *
 		 * @return array|object[]
 		 */
@@ -86,9 +97,11 @@
 		}
 
 		/**
+		 * Execute une requête de recherche pour une correspondances (Mode objet)
+		 *
 		 * @param string      $aQuery
 		 * @param array       $aParams
-		 * @param string|null $className
+		 * @param string|null $className Nom de la class objet ou null si Objet neutre
 		 *
 		 * @return object|null
 		 */

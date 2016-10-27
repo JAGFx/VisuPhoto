@@ -1,16 +1,26 @@
 <?php
 
 	/**
+	 * Exemple pris: photoMatrixAction
+	 *
+	 * Les noms des méthodes action sont normalisées
+	 *        - Première partie: Nom de la sous-vue (Ici "photoMatrix")
+	 *        - Deuxième partie: "Action" Nécessaire pour définir une méthode "Action"
+	 */
+
+	/**
 	 * Class PhotoController
+	 *
+	 * Contrôleur pour l'affichage d'une photo
 	 */
 	class PhotoController extends Controller {
 		/**
-		 * @var Image
+		 * @var Image Image actuel
 		 */
 		private $_img;
 
 		/**
-		 * @var int
+		 * @var int Taille en hauteur maximal actuel
 		 */
 		private $_size;
 
@@ -20,6 +30,7 @@
 		public function __construct() {
 			parent::__construct( 'ImageDAO' );
 
+			// Récupération de l'image actuel si défini
 			$img = ( isset( $_GET[ "imgId" ] ) )
 				? $this->getDAO()->getImage( htmlentities( $_GET[ "imgId" ] ) )
 				: null;
@@ -29,59 +40,95 @@
 		}
 
 		// ---------------------------------------------------------------------------------------------- Actions
-
+		/**
+		 * Rendue de page par défaut
+		 */
 		public function photoAction() {
+			// Création des variables de contenu
 			$this->_dataContent[ 'url' ] = BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
 				) . "&size=" . $this->getSize();
 
+			// Génération de la vue
 			$this->renderView( __FUNCTION__ );
 		}
 
+		/**
+		 * Traitement pour accèder à la première image
+		 */
 		public function firstPhotoAction() {
+			// Traitement
 			$firstImg = $this->getDAO()->getFirstImage();
 			$this->setImg( $firstImg );
 
+			// Génération de la vue
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour accèder à une image aléatoirement
+		 */
 		public function randomPhotoAction() {
+			// Traitement
 			$randomImg = $this->getDAO()->getRandomImage();
 			$this->setImg( $randomImg );
 
+			// Génération de la vue
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour zoomer l'image actuel
+		 */
 		public function zoommorePhotoAction() {
+			// Traitement
 			$ratio = $this->getSize() * MORE_RATIO;
 			$this->setSize( $ratio );
 
+			// Génération de la vue
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour de-zoomer l'image actuel
+		 */
 		public function zoomlessPhotoAction() {
+			// Traitement
 			$ratio = $this->getSize() * LESS_RATIO;
 			$this->setSize( $ratio );
 
+			// Génération de la vue
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour accèder à l'image précedente
+		 */
 		public function prevPhotoAction() {
+			// Traitement
 			$prevImg = $this->getDAO()->getPrevImage( $this->getImg() );
 			$this->setImg( $prevImg );
 
-
+			// Génération de la vue
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour accèder à l'image suivante
+		 */
 		public function nextPhotoAction() {
+			// Traitement
 			$prevImg = $this->getDAO()->getNextImage( $this->getImg() );
 			$this->setImg( $prevImg );
 
+			// Génération de la vue
 			$this->photoAction();
 		}
 
 
 		// ---------------------------------------------------------------------------------------------- Maker
+		/**
+		 * Génération des données du menu
+		 */
 		protected function makeMenu() {
 			parent::makeMenu();
 
@@ -101,6 +148,9 @@
 						   $this->getImg()->getId() . "&size=" . $this->getSize();
 		}
 
+		/**
+		 * Génération des données du contenu
+		 */
 		protected function makeContent() {
 			$this->_dataContent[ 'navBar' ] = [
 				"previous" => BASE_URL . 'prevPhoto&imgId=' .
@@ -111,6 +161,11 @@
 			];
 		}
 
+		/**
+		 * Convertis les données de class en un tableau
+		 *
+		 * @return array
+		 */
 		protected function toData() {
 			return [
 				'img'  => $this->_img,
@@ -129,7 +184,7 @@
 		}
 
 		/**
-		 * @param Image $img
+		 * @param &Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -145,7 +200,7 @@
 		}
 
 		/**
-		 * @param int $size
+		 * @param &int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )
@@ -154,6 +209,8 @@
 		}
 
 		/**
+		 * Non nécessaire. Utilisé pour caster l'objet DAO en ImageDAO pour l'IDE
+		 *
 		 * @return ImageDAO
 		 */
 		protected function getDAO() {

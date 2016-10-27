@@ -6,6 +6,12 @@
 	 * Date: 19/10/2016
 	 * Time: 20:55
 	 */
+
+	/**
+	 * Class Controller
+	 *
+	 * Contrôleur de base
+	 */
 	abstract class Controller {
 		/**
 		 * @var DAO
@@ -27,7 +33,7 @@
 		/**
 		 * Controller constructor.
 		 *
-		 * @param string $nameDAO
+		 * @param string $nameDAO Nom du DAO à charger
 		 */
 		protected function __construct( $nameDAO = null ) {
 			$this->_dao         = $this->setDAO( $nameDAO );
@@ -35,7 +41,8 @@
 		}
 
 		/**
-		 * Méthode factorisé à tous les Contrôleur. Et indique les menu minimaux
+		 * Génération des données du menu
+		 * Méthode factorisé à tous les Contrôleur. Indique les menu minimaux
 		 */
 		protected function makeMenu() {
 			$this->_menu[ 'Home' ]     = "./";
@@ -43,7 +50,7 @@
 		}
 
 		/**
-		 *
+		 * Génération des données du contenu
 		 */
 		protected abstract function makeContent();
 
@@ -92,7 +99,7 @@
 		}
 
 		/**
-		 * @param $name
+		 * @param string $name
 		 *
 		 * @return DAO
 		 * @throws Exception
@@ -101,7 +108,7 @@
 			$path = __DIR__ . '/DAO/' . $name . '.dao.php';
 
 			if ( !is_file( $path ) )
-				throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $path );
+				throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
 
 			require $path;
 
@@ -115,6 +122,12 @@
 			return $this->_dao;
 		}
 
+		/**
+		 * @param string $nameDAO
+		 *
+		 * @return DAO|null
+		 * @throws Exception
+		 */
 		private function setDAO( $nameDAO ) {
 			return ( !is_null( $nameDAO ) )
 				? $this->loadDAO( $nameDAO )

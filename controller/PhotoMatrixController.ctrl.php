@@ -1,9 +1,34 @@
 <?php
 
+	/**
+	 * Exemple pris: photoMatrixAction
+	 *
+	 * Les noms des méthodes action sont normalisées
+	 *        - Première partie: Nom de la sous-vue (Ici "photoMatrix")
+	 *        - Deuxième partie: "Action" Nécessaire pour définir une méthode "Action"
+	 */
+
+	/**
+	 * Class PhotoMatrixController
+	 *
+	 * Contrôleur pour l'affichage d'une matrice d'image
+	 */
 	class PhotoMatrixController extends Controller {
+		/**
+		 * @var Image Image actuel
+		 */
 		private $_img;
+		/**
+		 * @var int Taille en hauteur maximal actuel
+		 */
 		private $_size;
+		/**
+		 * @var int Nombre affiché dans la matrice
+		 */
 		private $_nbImg;
+		/**
+		 * @var string Nom du paramètre de filtrage (Catégorie)
+		 */
 		private $_filtre;
 
 		/**
@@ -24,6 +49,9 @@
 
 
 		// ---------------------------------------------------------------------------------------------- Actions
+		/**
+		 * Rendue de page par défaut
+		 */
 		public function photoMatrixAction() {
 			# Calcul la liste des images à afficher
 			$imgLst = $this->getDAO()->getImageList( $this->getImg(), $this->_nbImg );
@@ -33,6 +61,7 @@
 			foreach ( $imgLst as $i ) {
 				# l'identifiant de cette image $i
 				$iId = $i->getId();
+
 				# Ajoute à imgMatrixURL
 				#  0 : l'URL de l'image
 				#  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
@@ -43,78 +72,107 @@
 				];
 			}
 
-			/*$this->makeMenu();
-			$this->makeContent();
-
-
-			$data = $this->toData();
-			require __DIR__ . '/../view/PhotoMatrix/photoMatrix.view.php';*/
+			// Génération de la vue
 			$this->renderView( __FUNCTION__ );
 		}
 
+		/**
+		 * Filtrage des images de la matrice par catégorie
+		 */
 		public function filtreByCategoryAction() {
-			$this->_dataContent[ 'matrix' ] = [ ];
-
 			$filtreImages = $this->getDAO()->filtreImage(
 				$this->getImg(), $this->getFiltre(), $this->getNbImg()
 			);
 
-			foreach ( $filtreImages as $image ) {
-
+			// Création des variables de contenu
+			$this->_dataContent[ 'matrix' ] = [ ];
+			foreach ( $filtreImages as $image )
 				$this->_dataContent[ 'matrix' ][] = [
-
 					$image->getPath(),
 					BASE_URL . "viewPhoto&imgId=" . $image->getId()
 				];
-			}
 
+			// Génération de la vue
 			$this->renderView( __FUNCTION__ );
 		}
 
+		/**
+		 * Traitement pour accèder à la première image
+		 */
 		public function firstPhotoMatrixAction() {
+			// Traitement
 			$firstImg = $this->getDAO()->getFirstImage();
 			$this->setImg( $firstImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
+		/**
+		 * Traitement pour afficher plus d'image dans la matrice
+		 */
 		public function morePhotoMatrixAction() {
+			// Traitement
 			$moreNbImg = $this->getNbImg() * 2;
 			$this->setNbImg( $moreNbImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
+		/**
+		 * Traitement pour afficher moins d'image dans la matrice
+		 */
 		public function lessPhotoMatrixAction() {
+			// Traitement
 			$lessNbImg = ( $this->getNbImg() / 2 < 1 ) ? 1 : $this->getNbImg() / 2;
 			$this->setNbImg( $lessNbImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
+		/**
+		 * Traitement pour accèder à une image aléatoirement
+		 */
 		public function randomPhotoMatrixAction() {
+			// Traitement
 			$randomImg = $this->getDAO()->getRandomImage();
 			$this->setImg( $randomImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
+		/**
+		 * Traitement pour accèder à l'image précedente
+		 */
 		public function prevPhotoMatrixAction() {
+			// Traitement
 			$prevImg = $this->getDAO()->jumpToImage( $this->getImg(), ( -$this->getNbImg() ) );
 			$this->setImg( $prevImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
+		/**
+		 * Traitement pour accèder à l'image suivante
+		 */
 		public function nextPhotoMatrixAction() {
+			// Traitement
 			$nextImg = $this->getDAO()->jumpToImage( $this->getImg(), $this->getNbImg() );
 			$this->setImg( $nextImg );
 
+			// Génération de la vue
 			$this->photoMatrixAction();
 		}
 
 
 		// ---------------------------------------------------------------------------------------------- Maker
+		/**
+		 * Génération des données du menu
+		 */
 		protected function makeMenu() {
 			parent::makeMenu();
 
@@ -137,6 +195,9 @@
 				) . "&size=" . $this->getSize();
 		}
 
+		/**
+		 * Génération des données du contenu
+		 */
 		protected function makeContent() {
 			$this->_dataContent[ 'navBar' ] = [
 				"previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
@@ -154,6 +215,8 @@
 		}
 
 		/**
+		 * Convertis les données de class en un tableau
+		 *
 		 * @return array
 		 */
 		protected function toData() {
@@ -174,7 +237,7 @@
 		}
 
 		/**
-		 * @param Image $img
+		 * @param &Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -190,7 +253,7 @@
 		}
 
 		/**
-		 * @param int $size
+		 * @param &int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )
@@ -206,7 +269,7 @@
 		}
 
 		/**
-		 * @param string $filtre
+		 * @param &string $filtre
 		 */
 		public function setFiltre( &$filtre ) {
 			$this->_filtre = ( isset( $filtre ) )
@@ -214,12 +277,6 @@
 				: null;
 		}
 
-		/**
-		 * @return bool
-		 */
-		private function isFiltred() {
-			return is_null( $this->getFiltre() );
-		}
 
 		/**
 		 * @return int
@@ -229,7 +286,7 @@
 		}
 
 		/**
-		 * @param int $nbImg
+		 * @param &int $nbImg
 		 */
 		private function setNbImg( &$nbImg ) {
 			$this->_nbImg = ( isset( $nbImg ) )
@@ -238,6 +295,8 @@
 		}
 
 		/**
+		 * Non nécessaire. Utilisé pour caster l'objet DAO en ImageDAO pour l'IDE
+		 *
 		 * @return ImageDAO
 		 */
 		protected function getDAO() {

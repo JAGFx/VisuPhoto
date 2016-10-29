@@ -113,6 +113,8 @@
 		}
 
 		/**
+		 * Charge un DAO spécifique
+		 *
 		 * @param string $name
 		 *
 		 * @return DAO
@@ -129,6 +131,11 @@
 			return new $name();
 		}
 
+		/**
+		 * Redirige vers une route
+		 *
+		 * @param string|null $route
+		 */
 		protected final function redirectToRoute( $route = null ) {
 			$path = ( is_null( $route ) )
 				? './'

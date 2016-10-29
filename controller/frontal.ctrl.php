@@ -24,6 +24,7 @@
 	require __DIR__ . '/commons.php';
 
 	UserSessionManager::init();
+	UserSessionManager::start();
 
 	$action = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
 

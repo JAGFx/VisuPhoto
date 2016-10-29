@@ -34,7 +34,6 @@
 		 */
 		public static function init() {
 			session_start();
-			self::start();
 		}
 
 		/**
@@ -43,7 +42,6 @@
 		 * @param User|null $user
 		 */
 		public static function start( User &$user = null ) {
-			//self::close();
 			session_regenerate_id( true );
 
 			if ( is_null( $user ) )

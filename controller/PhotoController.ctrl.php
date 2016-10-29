@@ -163,7 +163,8 @@
 			];
 
 			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
-								$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC;
+								$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
+								. "&flt=";
 		}
 
 		/**

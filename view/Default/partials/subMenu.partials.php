@@ -8,7 +8,8 @@
 	elseif ( $text == 'Next' ) : ?>
 		<li class="next" >
 			<a href="<?= $link; ?>" ><?= $text; ?>
-				<span aria-hidden="true" >&rarr;</span ></a >
+				<span aria-hidden="true" >&rarr;</span >
+			</a >
 		</li >
 		<?php
 	elseif ( $text == 'list' ) : ?>
@@ -19,6 +20,10 @@
 					<option value="<?= $data->listCategoty; ?><?php echo $list[ 0 ]; ?>" ><?php echo $list[ 0 ]; ?> </option >
 				<?php endforeach; ?>
 			</select >
+		</li >
+	<?php else : ?>
+		<li >
+			<a href="<?= $link; ?>" ><?= $text; ?></span ></a >
 		</li >
 	<?php endif; ?>
 <?php endforeach; ?>

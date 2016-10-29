@@ -27,20 +27,17 @@
 		}
 
 
+		public function getListCategory() {
 
-		public function getListCategory(){
+			$pQuery = $this->pdo->prepare( "SELECT category FROM image GROUP BY category" );
 
-			$pQuery=$this->pdo->prepare("SELECT category FROM image GROUP BY category");
-
-			try{
+			try {
 				$pQuery->execute();
-				$data=$pQuery->fetchAll();
+				$data = $pQuery->fetchAll();
 
-			}
-
-			catch(Exception $exc){
-				var_dump($exc->getMessage());
-				$data=null;
+			} catch ( Exception $exc ) {
+				var_dump( $exc->getMessage() );
+				$data = null;
 
 			}
 
@@ -80,14 +77,14 @@
 		 */
 		public function filtreImage( Image $img, $filtre, $nbImage ) {
 
-			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE category = ? LIMIT  ?,?" );
+			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id >= ? AND category = ? LIMIT  ?" );
 
 
 			try {
 				$pQuery->execute(
 					[
+						$img->getId() - 1,
 						$filtre,
-						$img->getId(),
 						$nbImage
 					]
 				);
@@ -100,20 +97,40 @@
 			return ( !empty( $data ) ) ? $data : [ ];
 		}
 		
-		
+
 		/**
 		 * Retourne une image au hazard
 		 *
+		 * @param string $filter
+		 *
 		 * @return Image|null
 		 */
-		public function getRandomImage() {
-			$nbFichiers = $this->size();
+		public function getRandomImage( $filter = null ) {
 
-			$rand = rand( 1, $nbFichiers );
+			if ( is_null( $filter ) ) {
 
-			//var_dump($nbFichiers, $rand);
+				$nbFichiers = $this->size();
 
-			return $this->getImage( $rand );
+				$rand = rand( 1, $nbFichiers );
+
+				//var_dump($nbFichiers, $rand);
+
+				return $this->getImage( $rand );
+
+			} else
+				return $this->getRandomFilter( $filter );
+		}
+
+		public function getRandomFilter( $filter ) {
+			$query  = 'SELECT * FROM image WHERE category = ?';
+			$params = [
+				$filter
+			];
+
+			$result  = $this->findAll( $query, $params, 'Image' );
+			$keyRand = array_rand( $result );
+
+			return $result[ $keyRand ];
 		}
 		
 		/**
@@ -161,18 +178,42 @@
 		 * Retourne la nouvelle image
 		 * saute en avant ou en arrière de $nb images
 		 *
-		 * @param image $img
-		 * @param int   $nb
+		 * @param image  $img
+		 * @param int    $nb
+		 * @param string $filter
 		 *
-		 * @return image|null
+		 * @return Image|null
 		 */
-		public function jumpToImage( image $img, $nb ) {
-			$imgID = (int) $img->getId();
+		public function jumpToImage( image $img, $nb, $filter = null ) {
+			if ( is_null( $filter ) ) {
+				$imgID = (int) $img->getId();
 
-			if ( $imgID + $nb >= 1 && $imgID + $nb <= $this->size() )
-				$img = $this->getImage( $imgID + $nb );
+				if ( $imgID + $nb >= 1 && $imgID + $nb <= $this->size() )
+					$img = $this->getImage( $imgID + $nb );
 
-			return $img;
+				return $img;
+
+			} else
+				return $this->jumpToImageFiltred( $img, $nb, $filter );
+		}
+
+		/**
+		 * @param Image  $img
+		 * @param int    $nb
+		 * @param string $filter
+		 *
+		 * @return null|Image
+		 */
+		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
+			$firstFiltredImg = $this->filtreImage( $img, $filter, $nb )[ 0 ];
+
+			$query  = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
+			$params = [
+				$firstFiltredImg->getId(),
+				$filter
+			];
+
+			return $this->findOne( $query, $params, 'Image' );
 		}
 		
 

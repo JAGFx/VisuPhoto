@@ -54,6 +54,7 @@
 		protected function makeMenu() {
 			$this->_menu[ 'Home' ]        = "./";
 			$this->_menu[ 'A propos' ]    = BASE_URL . "viewAPropos";
+			$this->_menu[ 'Photos' ]      = BASE_URL . "viewPhoto";
 			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
 			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
 		}

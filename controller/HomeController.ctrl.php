@@ -21,14 +21,13 @@
 	 * Contrôleur pour la page d'accueil
 	 */
 	class HomeController extends Controller {
-
-
 		/**
 		 * HomeController constructor.
 		 */
 		public function __construct() {
 			parent::__construct();
 		}
+
 
 		/**
 		 * Rendue de page par défaut
@@ -39,26 +38,7 @@
 		}
 
 		/**
-		 * Génération des données du menu
-		 */
-		protected function makeMenu() {
-			parent::makeMenu();
-			$this->_menu[ 'Voir photos' ] = BASE_URL . 'viewPhoto';
-		}
-
-		/**
 		 * Génération des données du contenu
 		 */
 		protected function makeContent() { }
-
-		/**
-		 * Convertis les données de class en un tableau
-		 *
-		 * @return array
-		 */
-		protected function toData() {
-			return [
-				'menu' => $this->_menu
-			];
-		}
 	}

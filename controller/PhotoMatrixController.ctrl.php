@@ -88,15 +88,11 @@
 				$this->getImg(), $this->getFiltre(), $this->getNbImg()
 			);
 
-			foreach ( $filtreImages as $image ) {
-				$img = $this->getDAO()->getImage( $image->getId() );
-
+			foreach ( $filtreImages as $image )
 				$this->_dataContent[ 'matrix' ][] = [
-
-					$img,
+					$image,
 					BASE_URL . "viewPhoto&imgId=" . $image->getId()
 				];
-			}
 
 			$this->renderView( __FUNCTION__ );
 		}
@@ -110,7 +106,9 @@
 			$this->setImg( $firstImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 		/**
@@ -122,7 +120,9 @@
 			$this->setNbImg( $moreNbImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 		/**
@@ -131,10 +131,14 @@
 		public function lessPhotoMatrixAction() {
 			// Traitement
 			$lessNbImg = ( $this->getNbImg() / 2 < 1 ) ? 1 : $this->getNbImg() / 2;
+			$lessNbImg = round( $lessNbImg, 0, PHP_ROUND_HALF_UP );
+
 			$this->setNbImg( $lessNbImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 		/**
@@ -142,11 +146,13 @@
 		 */
 		public function randomPhotoMatrixAction() {
 			// Traitement
-			$randomImg = $this->getDAO()->getRandomImage();
+			$randomImg = $this->getDAO()->getRandomImage( $this->getFiltre() );
 			$this->setImg( $randomImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 		/**
@@ -154,11 +160,15 @@
 		 */
 		public function prevPhotoMatrixAction() {
 			// Traitement
-			$prevImg = $this->getDAO()->jumpToImage( $this->getImg(), ( -$this->getNbImg() ) );
+			$prevImg = $this->getDAO()->jumpToImage(
+				$this->getImg(), ( -$this->getNbImg() ), $this->getFiltre()
+			);
 			$this->setImg( $prevImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 		/**
@@ -166,11 +176,15 @@
 		 */
 		public function nextPhotoMatrixAction() {
 			// Traitement
-			$nextImg = $this->getDAO()->jumpToImage( $this->getImg(), $this->getNbImg() );
+			$nextImg = $this->getDAO()->jumpToImage(
+				$this->getImg(), $this->getNbImg(), $this->getFiltre()
+			);
 			$this->setImg( $nextImg );
 
 			// Génération de la vue
-			$this->photoMatrixAction();
+			( is_null( $this->getFiltre() ) )
+				? $this->photoMatrixAction()
+				: $this->filtreByCategoryAction();
 		}
 
 
@@ -193,34 +207,36 @@
 			$this->_dataContent[ 'navBar' ] = [
 				"Previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
 					      ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
-					      $this->getNbImg() . '&size=' . $this->getSize(),
+					      $this->getNbImg() . '&size=' . $this->getSize()
+					      . "&flt=" . $this->getFiltre(),
 
 				"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
 					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
-					  $this->getNbImg() . '&size=' . $this->getSize(),
+					  $this->getNbImg() . '&size=' . $this->getSize()
+					  . "&flt=" . $this->getFiltre(),
 
 				"First" => BASE_URL . "firstPhotoMatrix&imgId=" .
 					   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-					) . "&size=" . $this->getSize(),
+					) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
 				"Random" => BASE_URL . "randomPhotoMatrix&imgId=" .
 					    $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-					) . "&size=" . $this->getSize(),
+					) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
 				"More" => BASE_URL . "morePhotoMatrix&imgId=" .
 					  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-					) . "&size=" . $this->getSize(),
+					) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
 				"Less" => BASE_URL . "lessPhotoMatrix&imgId=" .
 					  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-					) . "&size=" . $this->getSize(),
+					) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
 				"list" => $this->getDAO()->getListCategory()
 			];
 
 			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
 								$this->getImg()->getId() . "&nbImg=" .
-								$this->getNbImg() . "&flt=" . $this->getFiltre();
+								$this->getNbImg() . "&flt=";
 		}
 
 		/**
@@ -281,7 +297,7 @@
 		 * @param &string $filtre
 		 */
 		public function setFiltre( &$filtre ) {
-			$this->_filtre = ( isset( $filtre ) )
+			$this->_filtre = ( isset( $filtre ) && !empty( $filtre ) )
 				? htmlentities( $filtre )
 				: null;
 		}

@@ -8,8 +8,6 @@
 			?>
 		</ul >
 	</nav >
-
-
 	<?php foreach ( $data->matrix as $imgInfo ) : ?>
 		<div class="col-sm-6 col-md-4" >
 			<div class="thumbnail" >

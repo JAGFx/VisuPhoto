@@ -161,6 +161,11 @@
 
 				"list" => $this->getDAO()->getListCategory()
 			];
+
+            $this->_dataContent['listCategoty'] = [
+                "list" => BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" . $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC . "&flt=",
+
+            ];
 		}
 
 		/**

@@ -72,7 +72,7 @@
 							'Titre'   => 'Connexion réussie',
 							'Message' => 'Vous êtes maintenant connecté !',
 						],
-						PATH_TO_DASH
+						BASE_URL . PATH_TO_DASH
 					);
 
 				} catch ( InputValidatorExceptions $ive ) {
@@ -82,11 +82,19 @@
 
 				// Sinon si utilisateur déjà connecté, redirection vers le tableau de bord
 			} elseif ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) )
-				header( 'Location: ' . PATH_TO_DASH );
+				$this->redirectToRoute( PATH_TO_DASH );
 
 			// Sinon génération de la page de connexion
 			else
 				$this->renderView( __FUNCTION__ );
+		}
+
+		/**
+		 * Met fin à la session utilisateur
+		 */
+		public function logoutUserAction() {
+			UserSessionManager::close();
+			$this->redirectToRoute();
 		}
 
 		/**
@@ -138,7 +146,7 @@
 							'Titre'   => 'Inscription réussite réussie',
 							'Message' => 'Vous êtes maintenant connecté !',
 						],
-						PATH_TO_DASH
+						BASE_URL . PATH_TO_DASH
 					);
 
 				} catch ( InputValidatorExceptions $ive ) {
@@ -148,7 +156,7 @@
 
 				// Sinon si utilisateur déjà connecté, redirection vers le tableau de bord
 			} elseif ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) )
-				header( 'Location: ' . PATH_TO_DASH );
+				$this->redirectToRoute( PATH_TO_DASH );
 
 			// Sinon génération de la page d'inscription
 			else

@@ -99,13 +99,24 @@
 			$controller->aProposAction();
 			break;
 
+
 		// ----------------------------------------------------------------------------------------------User
 		case 'loginUser' :
 			$controller->loginUserAction();
 			break;
 
+		case 'logoutUser' :
+			$controller->logoutUserAction();
+			break;
+
 		case 'registerUser' :
 			$controller->registerUserAction();
+			break;
+
+
+		// ----------------------------------------------------------------------------------------------Dashboard
+		case 'homeDashboard' :
+			$controller->dashboardAction();
 			break;
 
 		// ----------------------------------------------------------------------------------------------Home

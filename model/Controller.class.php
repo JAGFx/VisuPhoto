@@ -31,6 +31,13 @@
 		protected $_dataContent;
 
 		/**
+		 * Vue principale
+		 *
+		 * @var string
+		 */
+		private $_defaultView = __DIR__ . '/../view/Default/default.view.php';
+
+		/**
 		 * Controller constructor.
 		 *
 		 * @param string $nameDAO Nom du DAO à charger
@@ -102,7 +109,7 @@
 			);
 
 			// Importation de la vue par défaut et de la sous-vue associé
-			require __DIR__ . '/../view/Default/default.view.php';
+			require $this->_defaultView;
 		}
 
 		/**
@@ -120,6 +127,13 @@
 			require $path;
 
 			return new $name();
+		}
+
+		protected final function redirectToRoute( $route = null ) {
+			$path = ( is_null( $route ) )
+				? './'
+				: BASE_URL . $route;
+			header( 'Location: ' . $path );
 		}
 
 		/**
@@ -140,4 +154,19 @@
 				? $this->loadDAO( $nameDAO )
 				: null;
 		}
+
+		/**
+		 * @param $defaultView
+		 *
+		 * @throws Exception
+		 */
+		protected final function setDefaultView( $defaultView ) {
+			$path = __DIR__ . '/../view/' . $defaultView;
+
+			if ( !is_file( $path ) )
+				throw new Exception( ERR_INVALID_VIEW_NAME . ' : ' . $defaultView );
+
+			$this->_defaultView = $path;
+		}
+
 	}

@@ -24,7 +24,7 @@
 	define( 'TYPE_FEEDBACK_ERROR', 4 );
 
 	// FIXME Path Redirect
-	define( 'PATH_TO_DASH', './' );
+	define( 'PATH_TO_DASH', 'homeDashboard' );
 
 	// ----------------------------------------------------------------------------------------------Functions
 

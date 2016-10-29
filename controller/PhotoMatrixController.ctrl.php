@@ -30,6 +30,7 @@
 		 * @var string Nom du paramètre de filtrage (Catégorie)
 		 */
 		private $_filtre;
+		
 
 		/**
 		 * PhotoController constructor.
@@ -80,19 +81,21 @@
 		 * Filtrage des images de la matrice par catégorie
 		 */
 		public function filtreByCategoryAction() {
-			$filtreImages = $this->getDAO()->filtreImage(
-				$this->getImg(), $this->getFiltre(), $this->getNbImg()
-			);
 
-			// Création des variables de contenu
-			$this->_dataContent[ 'matrix' ] = [ ];
-			foreach ( $filtreImages as $image )
-				$this->_dataContent[ 'matrix' ][] = [
-					$image->getPath(),
-					BASE_URL . "viewPhoto&imgId=" . $image->getId()
+			$this->_dataContent['matrix']=[];
+
+			 $filtreImages= $this->getDAO()->filtreImage($this->getImg(),$this->getFiltre(),$this->getNbImg());
+
+			 foreach ($filtreImages as $image) {
+			 	$img=$this->getDAO()->getImage($image->getId());
+
+			 	$this->_dataContent['matrix'][]=[
+
+			 		$img,
+					BASE_URL . "viewPhoto&imgId=".$image->getId()
 				];
+			 }
 
-			// Génération de la vue
 			$this->renderView( __FUNCTION__ );
 		}
 
@@ -169,6 +172,8 @@
 		}
 
 
+
+
 		// ---------------------------------------------------------------------------------------------- Maker
 		/**
 		 * Génération des données du menu
@@ -176,23 +181,7 @@
 		protected function makeMenu() {
 			parent::makeMenu();
 
-			# Change l'etat pour indiquer que cette image est la nouvelle
-			$this->_menu[ 'First' ] = BASE_URL . "firstPhotoMatrix&imgId=" .
-						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-				) . "&size=" . $this->getSize();
-
-			$this->_menu[ 'Random' ] = BASE_URL . "randomPhotoMatrix&imgId=" .
-						   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-				) . "&size=" . $this->getSize();
-
-			$this->_menu[ 'More' ] = BASE_URL . "morePhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-				) . "&size=" . $this->getSize();
-
-
-			$this->_menu[ 'Less' ] = BASE_URL . "lessPhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-				) . "&size=" . $this->getSize();
+		
 		}
 
 		/**
@@ -206,7 +195,30 @@
 
 				"next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
 					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
-					  $this->getNbImg() . '&size=' . $this->getSize()
+					  $this->getNbImg() . '&size=' . $this->getSize(),
+
+				"First" => BASE_URL . "firstPhotoMatrix&imgId=" .
+						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize(),
+
+				"Random" =>BASE_URL . "randomPhotoMatrix&imgId=" .
+						   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize(),
+
+				"More" =>BASE_URL . "morePhotoMatrix&imgId=" .
+						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize(),
+
+				"Less" =>BASE_URL . "lessPhotoMatrix&imgId=" .
+						 $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
+				) . "&size=" . $this->getSize(),
+
+				"list" => $this->getDAO()->getListCategory()
+			];
+
+			$this->_dataContent['listCategoty']=[
+				"list"=>BASE_URL."filtrebycategoryPhotoMatrix&imgId=".$this->getImg()->getId()."&nbImg=".$this->getNbImg()."&flt=",
+
 			];
 
 			/*$size = MIN_WIDTH_PIC / sqrt( count( $this->_dataContent[ 'matrix' ] ) );

@@ -132,20 +132,6 @@
 		protected function makeMenu() {
 			parent::makeMenu();
 
-			$this->_menu[ 'First' ] = BASE_URL . "firstPhoto&imgId=" .
-						  $this->getImg()->getId() . "&size=" . $this->getSize();
-
-			$this->_menu[ 'Random' ] = BASE_URL . "randomPhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
-
-			$this->_menu[ 'More' ] = BASE_URL . "morePhotoMatrix&imgId=" .
-						 $this->getImg()->getId() . "&size=" . $this->getSize();
-
-			$this->_menu[ 'Zoom +' ] = BASE_URL . "zoommorePhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
-
-			$this->_menu[ 'Zoom -' ] = BASE_URL . "zoomlessPhoto&imgId=" .
-						   $this->getImg()->getId() . "&size=" . $this->getSize();
 		}
 
 		/**
@@ -157,7 +143,23 @@
 					      ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
 
 				"next" => BASE_URL . 'nextPhoto&imgId=' .
-					  ( $this->getImg()->getId() ) . '&size=' . $this->getSize()
+					  ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
+				"First" => BASE_URL . "firstPhoto&imgId=" .
+						  $this->getImg()->getId() . "&size=" . $this->getSize(),
+
+				"Random" =>BASE_URL . "randomPhoto&imgId=" .
+						   $this->getImg()->getId() . "&size=" . $this->getSize(),
+
+				"More" =>BASE_URL . "morePhotoMatrix&imgId=" .
+						 $this->getImg()->getId() . "&size=" . $this->getSize(),
+
+				"zoom +" =>BASE_URL . "zoommorePhoto&imgId=" .
+						   $this->getImg()->getId() . "&size=" . $this->getSize(),
+
+				"zoom -"=>BASE_URL . "zoomlessPhoto&imgId=" .
+						   $this->getImg()->getId() . "&size=" . $this->getSize(),
+
+				"list" => $this->getDAO()->getListCategory()
 			];
 		}
 

@@ -46,7 +46,7 @@
 
 			if ( is_null( $user ) )
 				$user = ( is_null( self::getSession() ) )
-					? new User( 'unknown', null, self::NO_PRIVILEGE )
+					? new User( 'Invité', null, self::NO_PRIVILEGE )
 					: self::getSession();
 
 			$_SESSION[ 'user' ] = serialize( $user );

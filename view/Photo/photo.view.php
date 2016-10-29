@@ -3,44 +3,9 @@
 
 	<nav aria-label="Page navigation" class="col-xs-12" >
 		<ul class="pager" >
-
-			<li class="previous" >
-				<a href="<?= $data->navBar[ 'previous' ]; ?>" ><span aria-hidden="true" >&larr;</span > Previous</a >
-			</li >
-			<li  >
-				<a href="<?= $data->navBar[ 'First' ]; ?>" >First <span aria-hidden="true" ></span ></a >
-			</li >
-
-			<li  >
-				<a href="<?= $data->navBar[ 'Random' ]; ?>" >Random <span aria-hidden="true" ></span ></a >
-			</li >
-
-			<li  >
-				<a href="<?= $data->navBar[ 'More' ]; ?>" >More <span aria-hidden="true" ></span ></a >
-			</li >
-
-			<li  >
-				<a href="<?= $data->navBar[ 'zoom -' ]; ?>" >Zoom - <span aria-hidden="true" ></span ></a >
-			</li >
-
-			<li  >
-				<a href="<?= $data->navBar[ 'zoom +' ]; ?>" >Zoom + <span aria-hidden="true" ></span ></a >
-			</li >
-
-			<li  >
-			<select name="selectList" onChange="window.location.href=this.value"> 
-			<option value = "default">Selectionner une categorie </option>
-			<?php foreach ($data->navBar[ 'list' ] as $list) { ?>
-                <option
-                    value="<?= $data->listCategoty['list']; ?><?php echo $list[0]; ?>"><?php echo $list[0]; ?> </option>
-					
-				<?php } ; ?>
-				</select>
-			
-			</li >
-			<li class="next" >
-                <a href="<?= $data->navBar['next']; ?>">Next<span aria-hidden="true">&rarr;</span></a>
-			</li >
+			<?php
+				require __DIR__ . '/../Default/partials/subMenu.partials.php';
+			?>
 		</ul >
 	</nav >
 

@@ -25,6 +25,27 @@
 
 			return $data;
 		}
+
+
+
+		public function getListCategory(){
+
+			$pQuery=$this->pdo->prepare("SELECT category FROM image GROUP BY category");
+
+			try{
+				$pQuery->execute();
+				$data=$pQuery->fetchAll();
+
+			}
+
+			catch(Exception $exc){
+				var_dump($exc->getMessage());
+				$data=null;
+
+			}
+
+			return ( !empty( $data ) ) ? $data : null;
+		}
 		
 		/**
 		 * Retourne un objet image correspondant à l'identifiant

@@ -45,8 +45,10 @@
 		 * Méthode factorisé à tous les Contrôleur. Indique les menu minimaux
 		 */
 		protected function makeMenu() {
-			$this->_menu[ 'Home' ]     = "./";
-			$this->_menu[ 'A propos' ] = BASE_URL . "viewAPropos";
+			$this->_menu[ 'Home' ]        = "./";
+			$this->_menu[ 'A propos' ]    = BASE_URL . "viewAPropos";
+			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
+			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
 		}
 
 		/**
@@ -69,6 +71,8 @@
 		 * Effectue la préparation des données et importe les vues
 		 *
 		 * @param string $fx Nom de la fonction appelante
+		 *
+		 * @throws Exception
 		 */
 		protected final function renderView( $fx ) {
 			// Génération des données de class
@@ -87,6 +91,9 @@
 			$functionName = str_replace( 'Action', '', $fx );
 			$path         = __DIR__ . '/../view/' . $className . '/' . $functionName . '.view.php';
 
+			if ( !is_file( $path ) )
+				throw new Exception( ERR_INVALID_VIEW_NAME . ' : ' . $className . '/' . $functionName );
+
 			// Génération des données pour la vue
 			$data = (Object) array_merge(
 				$this->toData(),
@@ -104,7 +111,7 @@
 		 * @return DAO
 		 * @throws Exception
 		 */
-		protected final function loadDAO( $name ) {
+		private function loadDAO( $name ) {
 			$path = __DIR__ . '/DAO/' . $name . '.dao.php';
 
 			if ( !is_file( $path ) )

@@ -7,12 +7,13 @@
 			<li class="previous" >
 				<a href="<?= $data->navBar[ 'previous' ]; ?>" ><span aria-hidden="true" >&larr;</span > Previous</a >
 			</li >
-			<li class="next" ><a href="<?= $data->navBar[ 'next' ]; ?>" >Next
-					<span aria-hidden="true" >&rarr;</span ></a ></li >
+			<li class="next" >
+				<a href="<?= $data->navBar[ 'next' ]; ?>" >Next<span aria-hidden="true" >&rarr;</span ></a >
+			</li >
 		</ul >
 	</nav >
 
-	<div class="col-xs-12 col-md-4 col-md-offset-4" >
+	<div class="col-xs-12 col-md-8 col-md-offset-2" >
 		<div class="thumbnail" >
 			<a href="<?= $data->url; ?>" >
 				<img src="<?= $data->img->getPath(); ?>" alt="<?= $data->img->getComment(

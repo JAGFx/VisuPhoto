@@ -15,12 +15,16 @@
 
 	define( 'ERR_INVALID_DAO_NAME', 'Nom de DAO invalide ou introuvable' );
 	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
+	define( 'ERR_INVALID_VIEW_NAME', 'Nom de la Vue invalide ou introuvable' );
 
 	define( 'TYPE_FEEDBACK_SUCCESS', -1 );
 	define( 'TYPE_FEEDBACK_INFO', 1 );
 	define( 'TYPE_FEEDBACK_WARN', 2 );
 	define( 'TYPE_FEEDBACK_DANGER', 3 );
 	define( 'TYPE_FEEDBACK_ERROR', 4 );
+
+	// FIXME Path Redirect
+	define( 'PATH_TO_DASH', './' );
 
 	// ----------------------------------------------------------------------------------------------Functions
 

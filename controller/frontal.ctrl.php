@@ -18,10 +18,12 @@
 	 *        - Premiere partie obligatoirement en minuscule: Nom de l'action (Ici "zoom")
 	 *        - Deuxième partie : Nom du controller associé (Ici "PhotoMatrix")
 	 */
-	session_start();
 
+	require __DIR__ . '/../model/UserSessionManager.class.php';
 	require __DIR__ . '/../model/DAO.class.php';
 	require __DIR__ . '/commons.php';
+
+	UserSessionManager::init();
 
 	$action = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
 
@@ -98,7 +100,6 @@
 			break;
 
 		// ----------------------------------------------------------------------------------------------User
-		// TODO SessionManager
 		case 'loginUser' :
 			$controller->loginUserAction();
 			break;

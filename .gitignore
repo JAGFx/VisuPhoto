@@ -4,5 +4,5 @@ tmp
 .DS_Store
 .idea
 model/imgs/jons/*
-*.map
-npm.js
+/**/*.map
+/**/npm.js

@@ -1,7 +1,7 @@
 <?php
 	require __DIR__ . '/../components/InputValidator/dist/InputValidator.php';
 	use InputValidator\InputValidator;
-	use \InputValidator\InputValidatorExceptions;
+	use InputValidator\InputValidatorExceptions;
 
 	/**
 	 * Created by PhpStorm.
@@ -62,7 +62,9 @@
 							TYPE_FEEDBACK_WARN
 						);
 
-					// FIXME Path Redirect
+					// Création d'une session utilisateur
+					UserSessionManager::renew( $user );
+
 					// Notification de succès et redirection vers le tableau de bord
 					echo toAjax(
 						TYPE_FEEDBACK_SUCCESS,
@@ -70,7 +72,7 @@
 							'Titre'   => 'Connexion réussie',
 							'Message' => 'Vous êtes maintenant connecté !',
 						],
-						'./'
+						BASE_URL . PATH_TO_DASH
 					);
 
 				} catch ( InputValidatorExceptions $ive ) {
@@ -78,9 +80,21 @@
 					echo ivExceptionToAjax( (object) $ive->getError() );
 				}
 
-				// Sinon génération de la page de connexion
-			} else
+				// Sinon si utilisateur déjà connecté, redirection vers le tableau de bord
+			} elseif ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) )
+				$this->redirectToRoute( PATH_TO_DASH );
+
+			// Sinon génération de la page de connexion
+			else
 				$this->renderView( __FUNCTION__ );
+		}
+
+		/**
+		 * Met fin à la session utilisateur
+		 */
+		public function logoutUserAction() {
+			UserSessionManager::close();
+			$this->redirectToRoute();
 		}
 
 		/**
@@ -112,9 +126,8 @@
 						);
 
 					// Insertion de l'utilisateur dans le BDD
-					$result = (Object) $this->getDAO()->addUser(
-						new User( $pseudo, encrypt( $pswd ) )
-					);
+					$user   = new User( $pseudo, encrypt( $pswd ) );
+					$result = (Object) $this->getDAO()->addUser( $user );
 
 					if ( !$result->success )
 						throw new InputValidatorExceptions(
@@ -123,16 +136,30 @@
 							TYPE_FEEDBACK_DANGER
 						);
 
-					// TODO Redirection
+					// Création d'une session utilisateur
+					UserSessionManager::start( $user );
+
 					// Notification de succès et redirection vers le tableau de bord
+					echo toAjax(
+						TYPE_FEEDBACK_SUCCESS,
+						[
+							'Titre'   => 'Inscription réussite réussie',
+							'Message' => 'Vous êtes maintenant connecté !',
+						],
+						BASE_URL . PATH_TO_DASH
+					);
 
 				} catch ( InputValidatorExceptions $ive ) {
 					// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
 					echo ivExceptionToAjax( (object) $ive->getError() );
 				}
 
-				// Sinon génération de la page d'inscription
-			} else
+				// Sinon si utilisateur déjà connecté, redirection vers le tableau de bord
+			} elseif ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) )
+				$this->redirectToRoute( PATH_TO_DASH );
+
+			// Sinon génération de la page d'inscription
+			else
 				$this->renderView( __FUNCTION__ );
 		}
 

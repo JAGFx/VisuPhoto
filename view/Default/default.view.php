@@ -16,7 +16,6 @@
 		?>
 		<section class="container" >
 			<?php
-
 				require $data->view;
 			?>
 		</section >

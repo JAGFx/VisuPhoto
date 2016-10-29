@@ -8,15 +8,6 @@
 	 */
 	final class User {
 		/**
-		 * Constante pour le privilège standard
-		 */
-		const USER_PRIVILEGE = 0;
-		/**
-		 *Constante pour le privilège admin
-		 */
-		const ADMIN_PRIVILEGE = 1;
-
-		/**
 		 * @var string
 		 */
 		private $_pseudo;
@@ -38,17 +29,14 @@
 		 * @param string $password
 		 * @param int    $privilege
 		 */
-		public function __construct( $pseudo, $password = null, $privilege = self::USER_PRIVILEGE ) {
+		public function __construct(
+			$pseudo,
+			$password = null,
+			$privilege = UserSessionManager::USER_PRIVILEGE
+		) {
 			$this->_pseudo    = $pseudo;
 			$this->_password  = $password;
-			$this->_privilege = $privilege;
-		}
-
-		/**
-		 * @return bool
-		 */
-		public function hasAdminPrivilege() {
-			return $this->_privilege == self::ADMIN_PRIVILEGE;
+			$this->_privilege = (int) $privilege;
 		}
 
 		/**
@@ -65,12 +53,26 @@
 			return $this->_password;
 		}
 
-
 		/**
 		 * @return int
 		 */
 		public function getPrivilege() {
 			return $this->_privilege;
+		}
+
+		/**
+		 * serialize() checks if your class has a function with the magic name __sleep.
+		 * If so, that function is executed prior to any serialization.
+		 * It can clean up the object and is supposed to return an array with the names of all variables of that object that should be serialized.
+		 * If the method doesn't return anything then NULL is serialized and E_NOTICE is issued.
+		 * The intended use of __sleep is to commit pending data or perform similar cleanup tasks.
+		 * Also, the function is useful if you have very large objects which do not need to be saved completely.
+		 *
+		 * @return array|NULL
+		 * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.sleep
+		 */
+		function __sleep() {
+			return [ '_pseudo', '_privilege' ];
 		}
 
 

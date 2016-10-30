@@ -8,6 +8,20 @@ body {
 }
 
 
+.user { position: relative; }
+
+
+.nav > li.user > a {
+	padding-left: 55px;
+}
+
+
+.user > a > img {
+	top:      10px;
+	left:     15px;
+	position: absolute;
+}
+
 /*
  * Global add-ons
  */

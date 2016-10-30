@@ -40,6 +40,8 @@
 		protected function makeMenu() {
 			parent::makeMenu();
 			$this->_menu[ 'Voir photos' ] = BASE_URL . 'viewPhoto';
+			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
+			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
 		}
 
 		/**

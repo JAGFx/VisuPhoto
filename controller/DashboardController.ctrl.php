@@ -14,6 +14,7 @@
 	 * Contrôleur pour le dashboard
 	 */
 	class DashboardController extends Controller {
+		private $_subNav;
 
 		/**
 		 * DashboardController constructor.
@@ -37,11 +38,37 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
+		/**
+		 * Convertis les données de class en un tableau
+		 *
+		 * @return array
+		 */
+		protected function toData() {
+			return [
+				'menu'       => $this->_menu,
+				'pathLogout' => BASE_URL . 'logoutUser',
+				'subNav'     => $this->_subNav
+			];
+		}
+
+
+
 		// ---------------------------------------------------------------------------------------------- Maker
 		/**
 		 * Génération des données du contenu
 		 */
 		protected function makeContent() {
-			// TODO: Implement makeContent() method.
+			$this->_subNav = [
+				'Album' => [
+					'Créer'     => 'path',
+					'Modifier'  => 'path',
+					'Supprimer' => 'path'
+				],
+				'Image' => [
+					'Créer'     => 'path',
+					'Modifier'  => 'path',
+					'Supprimer' => 'path'
+				]
+			];
 		}
 	}

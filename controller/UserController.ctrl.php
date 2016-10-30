@@ -170,6 +170,18 @@
 		 */
 		protected function makeContent() { }
 
+		/**
+		 * Génération des données du menu
+		 * Méthode factorisé à tous les Contrôleur. Indique les menu minimaux
+		 */
+		protected function makeMenu() {
+			parent::makeMenu();
+			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
+			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
+		}
+
+
+
 
 		// ---------------------------------------------------------------------------------------------- Getters / Setters
 		/**

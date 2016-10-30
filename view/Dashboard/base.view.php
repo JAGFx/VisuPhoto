@@ -17,7 +17,7 @@
 
 	<body >
 		<nav class="navbar navbar-inverse navbar-fixed-top" >
-			<div class="container-fluid" >
+			<div class="container" >
 				<div class="navbar-header" >
 					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" >
 						<span class="sr-only" >Toggle navigation</span >
@@ -32,6 +32,17 @@
 						<?php foreach ( $data->menu as $item => $act ) : ?>
 							<li ><a href="<?= $act ?>" ><?= $item ?></a ></li >
 						<?php endforeach; ?>
+						<li class="dropdown user" >
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
+								<img src="view/Default/assets/pics/nouser.png" width="30" height="30" class="img-circle" > <?= UserSessionManager::getSession(
+								)->getPseudo() ?> <span class="caret" ></span >
+							</a >
+							<ul class="dropdown-menu" >
+								<li >
+									<a href="<?= $data->pathLogout ?>" >Déconnexion</a >
+								</li >
+							</ul >
+						</li >
 					</ul >
 				</div >
 			</div >
@@ -40,25 +51,15 @@
 		<div class="container-fluid" >
 			<div class="row" >
 				<div class="col-sm-3 col-md-2 sidebar" >
-					<ul class="nav nav-sidebar" >
-						<li class="active" ><a href="#" >Overview
-								<span class="sr-only" >(current)</span ></a ></li >
-						<li ><a href="#" >Reports</a ></li >
-						<li ><a href="#" >Analytics</a ></li >
-						<li ><a href="#" >Export</a ></li >
-					</ul >
-					<ul class="nav nav-sidebar" >
-						<li ><a href="" >Nav item</a ></li >
-						<li ><a href="" >Nav item again</a ></li >
-						<li ><a href="" >One more nav</a ></li >
-						<li ><a href="" >Another nav item</a ></li >
-						<li ><a href="" >More navigation</a ></li >
-					</ul >
-					<ul class="nav nav-sidebar" >
-						<li ><a href="" >Nav item again</a ></li >
-						<li ><a href="" >One more nav</a ></li >
-						<li ><a href="" >Another nav item</a ></li >
-					</ul >
+
+					<?php foreach ( $data->subNav as $groupe => $items ) : ?>
+						<h3 ><?= $groupe ?></h3 >
+						<ul class="nav nav-sidebar" >
+							<?php foreach ( $items as $item => $link ) : ?>
+								<li ><a href="<?= $link ?>" ><?= $item ?></a ></li >
+							<?php endforeach; ?>
+						</ul >
+					<?php endforeach; ?>
 				</div >
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
 					<div class="row" >

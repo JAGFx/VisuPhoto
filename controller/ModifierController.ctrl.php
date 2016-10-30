@@ -84,10 +84,8 @@ class ModifierController extends Controller
                     ]
 
                 );
-            } catch (Exception $exc) {
-
-                echo var_dump($exc->getMessage());
-
+            } catch (InputValidatorExceptions $ive) {
+                echo ivExceptionToAjax((object)$ive->getError());
             }
         }
     }

@@ -80,20 +80,28 @@
         public function updateImage($category, $commentaire, $imgId)
         {
 
-            $pQuery = $this->pdo->prepare("UPDATE image set category=?,comment=? WHERE id=?");
+            $pQuery = "UPDATE image set category=?,comment=? WHERE id=?";
 
-            try {
-                $pQuery->execute(
-                    [
-                        $category,
-                        $commentaire,
-                        $imgId
-                    ]
-                );
-            } catch (Exception $exc) {
-                var_dump($exc->getMessage());
-            }
+            $param = [
+                $category,
+                $commentaire,
+                $imgId
+            ];
 
+            $this->execQuery($pQuery, $param);
+            /*
+                        try {
+                            $pQuery->execute(
+                                [
+                                    $category,
+                                    $commentaire,
+                                    $imgId
+                                ]
+                            );
+                        } catch (Exception $exc) {
+                            var_dump($exc->getMessage());
+                        }
+            */
 
         }
 

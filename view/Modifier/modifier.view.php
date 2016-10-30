@@ -18,6 +18,7 @@
 
                 <form method="POST" action="?a=updateModifier" data-preventDefault="yes" class="col-xs-12">
 
+                    <div class="messageForm"></div>
 
                     <div class="form-group">
                         <label for="commentaire">Description </label>
@@ -45,7 +46,7 @@
                     <br><br>
 
                     <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                    <div class="messageForm"></div>
+
                 </form>
 
 

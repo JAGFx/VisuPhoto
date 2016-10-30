@@ -93,6 +93,6 @@
 			if ( is_null( self::getSession() ) )
 				return false;
 
-			return self::getSession()->getPrivilege() === $priviege;
+			return self::getSession()->getPrivilege() >= $priviege;
 		}
 	}

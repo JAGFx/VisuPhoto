@@ -23,7 +23,6 @@
 	define( 'TYPE_FEEDBACK_DANGER', 3 );
 	define( 'TYPE_FEEDBACK_ERROR', 4 );
 
-	// FIXME Path Redirect
 	define( 'PATH_TO_DASH', 'homeDashboard' );
 
 	// ----------------------------------------------------------------------------------------------Functions
@@ -101,7 +100,7 @@
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_CTRL_NAME );
 
-		require __DIR__ . '/../model/Controller.class.php';
+		require_once __DIR__ . '/../model/Controller.class.php';
 		require $path;
 
 		// Création et retour du contrôleur

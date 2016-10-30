@@ -22,6 +22,11 @@ body {
 	position: absolute;
 }
 
+
+.subNavTab h3 {
+	padding-left: 20px;
+}
+
 /*
  * Global add-ons
  */

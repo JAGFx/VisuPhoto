@@ -1,3 +1,4 @@
+<!--FIXME Fail next & prev photo: Last never show -->
 <?php foreach ( $data->navBar as $text => $link ) :
 	if ( $text == 'Previous' ) : ?>
 		<li class="previous" >

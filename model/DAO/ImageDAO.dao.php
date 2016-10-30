@@ -68,6 +68,35 @@
 			return ( !empty( $data ) ) ? $data : null;
 		}
 
+        /**
+         *
+         * Met à jour la catégorie et le commentaire d'une photo
+         *
+         * @param string $category
+         * @param string $commentaire
+         * @param int $imgId
+         */
+
+        public function updateImage($category, $commentaire, $imgId)
+        {
+
+            $pQuery = $this->pdo->prepare("UPDATE image set category=?,comment=? WHERE id=?");
+
+            try {
+                $pQuery->execute(
+                    [
+                        $category,
+                        $commentaire,
+                        $imgId
+                    ]
+                );
+            } catch (Exception $exc) {
+                var_dump($exc->getMessage());
+            }
+
+
+        }
+
 
 		/**
 		 * @param Image  $img
@@ -122,7 +151,9 @@
 				return $this->getRandomFilter( $filter );
 		}
 
-		public function getRandomFilter( $filter ) {
+
+        public function getRandomFilter($filter)
+        {
 			$query  = 'SELECT * FROM image WHERE category = ?';
 			$params = [
 				$filter

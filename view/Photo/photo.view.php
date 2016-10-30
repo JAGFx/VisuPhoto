@@ -23,6 +23,12 @@
 					</span >
 				</p >
 			</div >
+            <div class="caption">
+
+                <a href=<?php echo $data->modifier["Button"]; ?>>
+                    <button>Modifier</button>
+                </a>
+            </div>
 		</div >
 	</div >
 </section >

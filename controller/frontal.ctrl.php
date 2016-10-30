@@ -104,7 +104,15 @@
 		case 'viewAPropos' :
 			$controller->aProposAction();
 			break;
+        // ----------------------------------------------------------------------------------------------Modifier image
 
+        case 'viewModifier' :
+            $controller->modifierAction();
+            break;
+
+        case 'updateModifier' :
+            $controller->updateModifierAction();
+            break;
 
 		// ----------------------------------------------------------------------------------------------User
 		case 'loginUser' :

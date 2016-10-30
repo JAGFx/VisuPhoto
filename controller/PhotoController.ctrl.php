@@ -199,6 +199,11 @@
 			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
 								$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
 								. "&flt=";
+
+            $this->_dataContent['modifier'] = [
+                "Button" => '?a=viewModifier&imgId=' .
+                    ($this->getImg()->getId()) . '&size=' . $this->getSize()
+            ];
 		}
 
 		/**

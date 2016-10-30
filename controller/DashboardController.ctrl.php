@@ -37,6 +37,7 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
+		// ---------------------------------------------------------------------------------------------- Maker
 		/**
 		 * Génération des données du contenu
 		 */

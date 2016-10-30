@@ -1,5 +1,6 @@
 <?php
 	require __DIR__ . '/../Image.class.php';
+	use \InputValidator\InputValidatorExceptions;
 
 	/**
 	 * Class ImageDAO
@@ -241,5 +242,29 @@
 			}
 
 			return $res;
+		}
+
+		/**
+		 * @param $path
+		 * @param $ctge
+		 * @param $comment
+		 *
+		 * @throws InputValidatorExceptions
+		 */
+		public function addImage( $path, $ctge, $comment ) {
+			$query  = 'INSERT INTO image( path, category, comment ) VALUES ( ?, ?, ? )';
+			$params = [
+				$path,
+				$ctge,
+				$comment
+			];
+
+			$result = (Object) $this->execQuery( $query, $params );
+			if ( !$result->success )
+				throw new InputValidatorExceptions(
+					"Ajout impossible",
+					$result->message,
+					TYPE_FEEDBACK_WARN
+				);
 		}
 	}

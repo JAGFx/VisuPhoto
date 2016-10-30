@@ -1,6 +1,4 @@
 <?php
-	require __DIR__ . '/../components/InputValidator/dist/InputValidator.php';
-	use InputValidator\InputValidator;
 	use InputValidator\InputValidatorExceptions;
 
 	/**
@@ -40,7 +38,7 @@
 		public function loginUserAction() {
 			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
-				$inputValidator = new InputValidator();
+				$inputValidator = new IValidatorVisu();
 
 				try {
 					// Récupération des données utilisateur validé
@@ -103,7 +101,7 @@
 		public function registerUserAction() {
 			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
-				$inputValidator = new InputValidator();
+				$inputValidator = new IValidatorVisu();
 
 				try {
 					// Récupération des données utilisateur validé
@@ -118,23 +116,11 @@
 					);
 
 					// Vérification des données utilisateur
-					if ( $pswd !== $confirmPswd )
-						throw new InputValidatorExceptions(
-							'Mot de passe différents',
-							'Les deux mots de passe saisis sont différents.',
-							TYPE_FEEDBACK_WARN
-						);
+					$inputValidator->validateSameString( $pswd, $confirmPswd );
 
 					// Insertion de l'utilisateur dans le BDD
 					$user   = new User( $pseudo, encrypt( $pswd ) );
-					$result = (Object) $this->getDAO()->addUser( $user );
-
-					if ( !$result->success )
-						throw new InputValidatorExceptions(
-							"Impossible d'ajouter l'utilisateur",
-							$result->message,
-							TYPE_FEEDBACK_DANGER
-						);
+					$this->getDAO()->addUser( $user );
 
 					// Création d'une session utilisateur
 					UserSessionManager::start( $user );

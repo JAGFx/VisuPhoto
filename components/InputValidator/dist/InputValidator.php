@@ -272,7 +272,7 @@
 		 * @return mixed
 		 * @throws InputValidatorExceptions
 		 */
-		public function &validateFileUploaded( &$file, array &$type, &$size ) {
+		public function &validateFileUploaded( &$file, array &$type = [ ], &$size = -1 ) {
 			$fileValid = $this->checkConformity( $file );
 			$typeValid = $this->validateArray( $type );
 			$sizeValid = $this->validateInt( $size );
@@ -294,14 +294,14 @@
 					$fileValid[ 'error' ]
 				);
 
-			elseif ( !in_array( $fileValid[ 'type' ], $typeValid ) )
+			elseif ( !empty( $typeValid ) && !in_array( $fileValid[ 'type' ], $typeValid ) )
 				throw new InputValidatorExceptions(
 					INVALID_UPLOAD_DEGREE_TITLE,
 					$fileUploadErrors[ UPLOAD_ERR_EXTENSION ],
 					UPLOAD_ERR_EXTENSION
 				);
 
-			elseif ( $fileValid[ 'size' ] > $sizeValid )
+			elseif ( $sizeValid > -1 && $fileValid[ 'size' ] > $sizeValid )
 				throw new InputValidatorExceptions(
 					INVALID_UPLOAD_DEGREE_TITLE,
 					$fileUploadErrors[ UPLOAD_ERR_FORM_SIZE ],

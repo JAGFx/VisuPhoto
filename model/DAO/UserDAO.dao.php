@@ -1,6 +1,7 @@
 <?php
 
 	require_once __DIR__ . '/../User.class.php';
+	use InputValidator\InputValidatorExceptions;
 
 	/**
 	 * Created by PhpStorm.
@@ -18,9 +19,9 @@
 		/**
 		 * Ajoute un utilisateur dans la BDD
 		 *
-		 * @param User $user Utilisateur
+		 * @param User $user
 		 *
-		 * @return array Résultat de la requête
+		 * @throws InputValidatorExceptions
 		 */
 		public function addUser( User $user ) {
 			$query  = 'INSERT INTO user VALUES(?, ?, ?)';
@@ -30,7 +31,14 @@
 				$user->getPrivilege()
 			];
 
-			return $this->execQuery( $query, $params );
+			$result = (Object) $this->execQuery( $query, $params );
+
+			if ( !$result->success )
+				throw new InputValidatorExceptions(
+					"Impossible d'ajouter l'utilisateur",
+					$result->message,
+					TYPE_FEEDBACK_DANGER
+				);
 		}
 
 		/**

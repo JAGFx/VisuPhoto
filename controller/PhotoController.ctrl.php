@@ -8,6 +8,8 @@
 	 *        - Deuxième partie: "Action" Nécessaire pour définir une méthode "Action"
 	 */
 
+	use InputValidator\InputValidatorExceptions;
+
 	/**
 	 * Class PhotoController
 	 *
@@ -122,6 +124,37 @@
 
 			// Génération de la vue
 			$this->photoAction();
+		}
+
+		public function addPhotoAction() {
+			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE )
+			     && !empty( $_POST )
+			) {
+				$iv = new IValidatorVisu();
+
+				try {
+					$comment = $iv->validateString( $_POST[ 'comment' ] );
+					$ctge    = $iv->validateString( $_POST[ 'category' ] );
+					$path    = 'uploads/';
+
+					$file = $iv->moveFileUpload( $_FILES[ 'image' ], $path );
+					$this->getDAO()->addImage( $path . $file[ 'name' ], $ctge, $comment );
+
+					// Notification de succès et redirection vers le tableau de bord
+					echo toAjax(
+						TYPE_FEEDBACK_SUCCESS,
+						[
+							'Titre'   => 'Ajout réussie',
+							'Message' => "L'ajout de l'image à été effectué avec succès",
+						]
+					);
+
+				} catch ( InputValidatorExceptions $ive ) {
+					// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
+					echo ivExceptionToAjax( (object) $ive->getError() );
+				}
+			} else
+				$this->redirectToRoute( BASE_URL . PATH_TO_DASH );
 		}
 
 

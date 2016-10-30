@@ -1,5 +1,5 @@
 CREATE TABLE image (
-	id       INT PRIMARY KEY,
+	id       INT PRIMARY KEY AUTOINCREMENT,
 	path     VARCHAR(1024),
 	category VARCHAR(64),
 	comment  VARCHAR(1024)

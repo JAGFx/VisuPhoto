@@ -31,11 +31,32 @@
 		 * @throws Exception
 		 */
 		public function dashboardAction() {
-			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) )
+			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				$photoCtrl                         = loadController( 'aPhoto' );
+				$this->_dataContent[ 'listeCtge' ] = $photoCtrl->getDAO()->getListCategory();
 				$this->renderView( __FUNCTION__ );
 
-			else
+			} else
 				$this->redirectToRoute( 'loginUser' );
+		}
+
+		// ---------------------------------------------------------------------------------------------- Maker
+		/**
+		 * Génération des données du contenu
+		 */
+		protected function makeContent() {
+			$this->_subNav = [
+				'Album' => [
+					'Créer'     => '#addAlbum',
+					'Modifier'  => 'path',
+					'Supprimer' => 'path'
+				],
+				'Image' => [
+					'Créer'     => '#addImage',
+					'Modifier'  => 'path',
+					'Supprimer' => 'path'
+				]
+			];
 		}
 
 		/**
@@ -45,30 +66,8 @@
 		 */
 		protected function toData() {
 			return [
-				'menu'       => $this->_menu,
-				'pathLogout' => BASE_URL . 'logoutUser',
-				'subNav'     => $this->_subNav
-			];
-		}
-
-
-
-		// ---------------------------------------------------------------------------------------------- Maker
-		/**
-		 * Génération des données du contenu
-		 */
-		protected function makeContent() {
-			$this->_subNav = [
-				'Album' => [
-					'Créer'     => 'path',
-					'Modifier'  => 'path',
-					'Supprimer' => 'path'
-				],
-				'Image' => [
-					'Créer'     => 'path',
-					'Modifier'  => 'path',
-					'Supprimer' => 'path'
-				]
+				'menu'   => $this->_menu,
+				'subNav' => $this->_subNav
 			];
 		}
 	}

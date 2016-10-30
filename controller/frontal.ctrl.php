@@ -22,6 +22,7 @@
 	require __DIR__ . '/../model/UserSessionManager.class.php';
 	require __DIR__ . '/../model/DAO.class.php';
 	require __DIR__ . '/commons.php';
+	require __DIR__ . '/../model/IValidatorVisu.class.php';
 
 	UserSessionManager::init();
 	UserSessionManager::start();
@@ -58,6 +59,10 @@
 
 		case 'nextPhoto':
 			$controller->nextPhotoAction();
+			break;
+
+		case 'addPhoto':
+			$controller->addPhotoAction();
 			break;
 
 

@@ -76,7 +76,14 @@ class ModifierController extends Controller
 
                 $this->getDAO()->updateImage($newCategory, $newCommentaire, $imgId);
 
-                echo "Mise à jour réussie";
+                echo toAjax(
+                    TYPE_FEEDBACK_SUCCESS,
+                    [
+                        'Titre' => 'Mise à jour réussie',
+                        'Message' => 'Vous pouvez continuer vos modifications !',
+                    ]
+
+                );
             } catch (Exception $exc) {
 
                 echo var_dump($exc->getMessage());

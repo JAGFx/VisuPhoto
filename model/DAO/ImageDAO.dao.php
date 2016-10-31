@@ -68,42 +68,27 @@
 			return ( !empty( $data ) ) ? $data : null;
 		}
 
-        /**
-         *
-         * Met à jour la catégorie et le commentaire d'une photo
-         *
-         * @param string $category
-         * @param string $commentaire
-         * @param int $imgId
-         */
+		/**
+		 *
+		 * Met à jour la catégorie et le commentaire d'une photo
+		 *
+		 * @param string $category
+		 * @param string $commentaire
+		 * @param int    $imgId
+		 */
 
-        public function updateImage($category, $commentaire, $imgId)
-        {
+		public function updateImage( $category, $commentaire, $imgId ) {
 
-            $pQuery = "UPDATE image set category=?,comment=? WHERE id=?";
+			$pQuery = "UPDATE image set category=?,comment=? WHERE id=?";
 
-            $param = [
-                $category,
-                $commentaire,
-                $imgId
-            ];
+			$param = [
+				$category,
+				$commentaire,
+				$imgId
+			];
 
-            $this->execQuery($pQuery, $param);
-            /*
-                        try {
-                            $pQuery->execute(
-                                [
-                                    $category,
-                                    $commentaire,
-                                    $imgId
-                                ]
-                            );
-                        } catch (Exception $exc) {
-                            var_dump($exc->getMessage());
-                        }
-            */
-
-        }
+			$this->execQuery( $pQuery, $param );
+		}
 
 
 		/**
@@ -160,8 +145,7 @@
 		}
 
 
-        public function getRandomFilter($filter)
-        {
+		public function getRandomFilter( $filter ) {
 			$query  = 'SELECT * FROM image WHERE category = ?';
 			$params = [
 				$filter
@@ -245,15 +229,17 @@
 		 * @return null|Image
 		 */
 		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
-			$firstFiltredImg = $this->filtreImage( $img, $filter, $nb )[ 0 ];
+			$filtredImg = $this->filtreImage( $img, $filter, $nb );
 
 			$query  = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
 			$params = [
-				$firstFiltredImg->getId(),
+				$filtredImg[ 0 ]->getId(),
 				$filter
 			];
 
-			return $this->findOne( $query, $params, 'Image' );
+			$result = $this->findOne( $query, $params, 'Image' );
+
+			return ( is_null( $result ) ) ? $filtredImg[ 0 ] : $result;
 		}
 		
 

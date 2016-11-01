@@ -10,3 +10,10 @@ CREATE TABLE user (
 	password  VARCHAR(1024) NOT NULL,
 	privilege INT DEFAULT 0
 );
+
+CREATE TABLE note (
+	id	 INTEGER PRIMARY KEY AUTOINCREMENT,
+	pseudo	 VARCHAR(1024) NOT NULL,
+	idPhoto	 INT NOT NULL,
+	valueJug INT NOT NULL
+);

@@ -111,6 +111,10 @@ class ModifierController extends Controller
             "list" => $this->getDAO()->getListCategory()
         ];
 
+        $this->_dataContent['listCategoty'] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
+            $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
+            . "&flt=";
+
         $this->_dataContent['modifier'] = [
             "Button" => BASE_URL . 'viewModifier&imgId=' .
                 ($this->getImg()->getId()) . '&size=' . $this->getSize()

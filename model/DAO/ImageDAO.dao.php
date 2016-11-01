@@ -89,20 +89,42 @@
             ];
 
             $this->execQuery($pQuery, $param);
-            /*
-                        try {
-                            $pQuery->execute(
-                                [
-                                    $category,
-                                    $commentaire,
-                                    $imgId
-                                ]
-                            );
-                        } catch (Exception $exc) {
-                            var_dump($exc->getMessage());
-                        }
-            */
+        }
 
+        /**
+         * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
+         *
+         * @param $imgId
+         * @param $valueJug
+         * @param $pseudo
+         */
+
+        public function voteImage($imgId, $valueJug, $pseudo)
+        {
+
+            $pQuery = "INSERT INTO note(idPhoto,valueJug,pseudo) VALUES (?,?,?)";
+
+            $params = [
+                $imgId,
+                $valueJug,
+                $pseudo
+            ];
+
+            $this->execQuery($pQuery, $params);
+        }
+
+        public function checkvoteImage($imgId, $pseudo)
+        {
+
+            $pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
+
+            $params = [
+                $pseudo,
+                $imgId
+            ];
+
+
+            return $this->findOne($pQuery, $params);
         }
 
 

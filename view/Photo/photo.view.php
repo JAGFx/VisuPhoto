@@ -24,9 +24,16 @@
 				</p >
 			</div >
             <div class="caption">
+                <div class="messageForm"></div>
 
                 <a href=<?php echo $data->modifier["Button"]; ?>>
                     <button>Modifier</button>
+                </a>
+                <a href=<?php echo $data->note["Dislike"]; ?>>
+                    <button>Dislike</button>
+                </a>
+                <a href=<?php echo $data->note["Like"]; ?>>
+                    <button>Like</button>
                 </a>
             </div>
 		</div >

@@ -114,6 +114,73 @@
 			$this->photoAction();
 		}
 
+        /*
+         *
+         * Traitement pour voter sur une photo
+         *
+         */
+
+        public function votePhotoAction()
+        {
+            $privilege = UserSessionManager::getSession()->getPrivilege();
+
+            $valueJug = $_GET["jug"];
+            $imgId = $this->getImg()->getId();
+
+            if (!isset($_COOKIE['votePhoto' . $imgId])) {
+
+                $pseudo = UserSessionManager::getSession()->getPseudo();
+
+                if ($privilege == UserSessionManager::ADMIN_PRIVILEGE || $privilege == UserSessionManager::USER_PRIVILEGE) {
+                    $retour = $this->getDAO()->checkvoteImage($imgId, $pseudo);
+                } else {
+                    $retour = null;
+                }
+
+                if ($retour == null) {
+
+                    if ($valueJug == LIKE_BUTTON or $valueJug == DISLIKE_BUTTON) {
+
+                        try {
+                            $this->getDAO()->voteImage($imgId, $valueJug, $pseudo);
+                            setcookie("votePhoto" . $imgId, "A vote" . $valueJug, time() + 365 * 24 * 3600, null, null, false, true);
+
+                            echo toAjax(
+                                TYPE_FEEDBACK_SUCCESS,
+                                [
+                                    'Titre' => 'Merci pour votre vote',
+                                    'Message' => "Vous pouvez continuer de parcourir notre album",
+                                ]
+                            );
+
+                        } catch (Exception $exp) {
+
+                            echo $exp->getMessage();
+                        }
+                    }
+                } else {
+                    echo toAjax(
+                        TYPE_FEEDBACK_ERROR,
+                        [
+                            'Titre' => 'Vous avez déjà voté pour cette photo',
+                            'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
+                        ]
+                    );
+
+                }
+            } else {
+                echo toAjax(
+                    TYPE_FEEDBACK_ERROR,
+                    [
+                        'Titre' => 'Vous avez déjà voté pour cette photo',
+                        'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
+                    ]
+                );
+
+            }
+            $this->photoAction();
+        }
+
 		/**
 		 * Traitement pour accèder à l'image suivante
 		 */
@@ -203,6 +270,14 @@
             $this->_dataContent['modifier'] = [
                 "Button" => '?a=viewModifier&imgId=' .
                     ($this->getImg()->getId()) . '&size=' . $this->getSize()
+            ];
+
+            $this->_dataContent['note'] = [
+                "Like" => BASE_URL . "votePhoto&imgId=" .
+                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . LIKE_BUTTON,
+                "Dislike" => BASE_URL . "votePhoto&imgId=" .
+                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . DISLIKE_BUTTON
+
             ];
 		}
 

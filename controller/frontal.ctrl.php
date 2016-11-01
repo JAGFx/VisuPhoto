@@ -65,6 +65,9 @@
 			$controller->addPhotoAction();
 			break;
 
+        case 'votePhoto':
+            $controller->votePhotoAction();
+            break;
 
 		// ----------------------------------------------------------------------------------------------Photo Matrix
 		case 'viewPhotoMatrix' :

@@ -8,6 +8,8 @@
 
 	// ----------------------------------------------------------------------------------------------Constants
 	define( 'BASE_URL', '?a=' );
+define('LIKE_BUTTON', 1);
+define('DISLIKE_BUTTON', 0);
 	define( 'MORE_RATIO', 1.25 );
 	define( 'LESS_RATIO', 0.75 );
 	define( 'MIN_WIDTH_PIC', 480 );

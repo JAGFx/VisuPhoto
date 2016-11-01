@@ -101,10 +101,29 @@
 			throw new Exception( ERR_INVALID_CTRL_NAME );
 
 		require_once __DIR__ . '/../model/Controller.class.php';
-		require $path;
+		require_once $path;
 
 		// Création et retour du contrôleur
 		return new  $ctrl();
+	}
+
+	/**
+	 * Charge un DAO spécifique
+	 *
+	 * @param string $name
+	 *
+	 * @return DAO
+	 * @throws Exception
+	 */
+	function loadDAO( $name ) {
+		$path = __DIR__ . '/../model/DAO/' . $name . '.dao.php';
+
+		if ( !is_file( $path ) )
+			throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
+
+		require_once $path;
+
+		return new $name();
 	}
 
 	/**

@@ -32,8 +32,38 @@
 		 */
 		public function dashboardAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
-				$photoCtrl                         = loadController( 'aPhoto' );
-				$this->_dataContent[ 'listeCtge' ] = $photoCtrl->getDAO()->getListCategory();
+				$photoDAO = loadDAO( 'ImageDAO' );
+				$albumDAO = loadDAO( 'AlbumDAO' );
+
+				$this->_dataContent[ 'listeCtge' ]   = $photoDAO->getListCategory();
+				$this->_dataContent[ 'listImg' ]     = $photoDAO->getFullImageList();
+				$this->_dataContent[ 'listImgUser' ] = $albumDAO->findListAlbumByUser(
+					UserSessionManager::getSession()
+				);
+				$this->renderView( __FUNCTION__ );
+
+			} else
+				$this->redirectToRoute( 'loginUser' );
+		}
+
+		public function editionDashboardAction() {
+			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				$entity = ( isset( $_GET[ 'e' ] ) && !empty( $_GET[ 'e' ] ) )
+					? htmlentities( $_GET[ 'e' ] )
+					: null;
+				$id     = ( isset( $_GET[ 'i' ] ) && !empty( $_GET[ 'i' ] ) )
+					? htmlentities( $_GET[ 'i' ] )
+					: null;
+
+				$albumDAO = loadDAO( 'AlbumDAO' );
+				$photoDAO = loadDAO( 'ImageDAO' );
+				if ( $entity === 'Album' ) {
+
+					$this->_dataContent[ 'albumToEdit' ] = $albumDAO->findAlbumById( $id );
+					$this->_dataContent[ 'listImg' ]     = $photoDAO->getFullImageList();
+					$this->_dataContent[ 'pathInclude' ] = __DIR__ . '/../view/Album/editAlbum.view.php';
+				}
+
 				$this->renderView( __FUNCTION__ );
 
 			} else
@@ -47,14 +77,12 @@
 		protected function makeContent() {
 			$this->_subNav = [
 				'Album' => [
-					'Créer'     => '#addAlbum',
-					'Modifier'  => 'path',
-					'Supprimer' => 'path'
+					'Liste' => '#listAlbum',
+					'Créer' => '#addAlbum'
 				],
 				'Image' => [
-					'Créer'     => '#addImage',
-					'Modifier'  => 'path',
-					'Supprimer' => 'path'
+					'Liste' => '#listImage',
+					'Créer' => '#addImage'
 				]
 			];
 		}

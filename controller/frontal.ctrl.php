@@ -128,9 +128,22 @@
 			break;
 
 
+		// ----------------------------------------------------------------------------------------------Album
+		case 'addAlbum' :
+			$controller->addAlbumAction();
+			break;
+
+		case 'editAlbum' :
+			$controller->editAlbumAction();
+			break;
+
 		// ----------------------------------------------------------------------------------------------Dashboard
 		case 'homeDashboard' :
 			$controller->dashboardAction();
+			break;
+
+		case 'editionDashboard' :
+			$controller->editionDashboardAction();
 			break;
 
 		// ----------------------------------------------------------------------------------------------Home

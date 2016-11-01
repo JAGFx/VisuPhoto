@@ -270,6 +270,15 @@
 		}
 
 		/**
+		 * @return Image[]
+		 */
+		public function getFullImageList() {
+			$query = 'SELECT * FROM image ORDER BY id';
+
+			return $this->findAll( $query, [ ], 'Image' );
+		}
+
+		/**
 		 * @param $path
 		 * @param $ctge
 		 * @param $comment

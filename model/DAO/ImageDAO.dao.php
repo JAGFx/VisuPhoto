@@ -91,41 +91,39 @@
 		}
 
 
-        /**
-         * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
-         *
-         * @param $imgId
-         * @param $valueJug
-         * @param $pseudo
-         */
+		/**
+		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
+		 *
+		 * @param $imgId
+		 * @param $valueJug
+		 * @param $pseudo
+		 */
 
-        public function voteImage($imgId, $valueJug, $pseudo)
-        {
+		public function voteImage( $imgId, $valueJug, $pseudo ) {
 
-            $pQuery = "INSERT INTO note(idPhoto,valueJug,pseudo) VALUES (?,?,?)";
+			$pQuery = "INSERT INTO note(idPhoto,valueJug,pseudo) VALUES (?,?,?)";
 
-            $params = [
-                $imgId,
-                $valueJug,
-                $pseudo
-            ];
+			$params = [
+				$imgId,
+				$valueJug,
+				$pseudo
+			];
 
-            $this->execQuery($pQuery, $params);
-        }
+			$this->execQuery( $pQuery, $params );
+		}
 
-        public function checkvoteImage($imgId, $pseudo)
-        {
+		public function checkvoteImage( $imgId, $pseudo ) {
 
-            $pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
+			$pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
 
-            $params = [
-                $pseudo,
-                $imgId
-            ];
+			$params = [
+				$pseudo,
+				$imgId
+			];
 
 
-            return $this->findOne($pQuery, $params);
-        }
+			return $this->findOne( $pQuery, $params );
+		}
 
 
 		/**

@@ -13,6 +13,8 @@
 		<link rel="stylesheet" type="text/css" href="view/Default/assets/lib/formsJS/formJS.css" />
 		<link rel="stylesheet" type="text/css" href="view/Default/assets/css/ie10-viewport-bug-workaround.css" />
 		<link rel="stylesheet" type="text/css" href="view/Default/assets/css/dashboard.css" media="screen" title="Normal" />
+		<link rel="stylesheet" type="text/css" href="view/Default/assets/lib/selectize.js-master/dist/css/selectize.css" >
+		<link rel="stylesheet" type="text/css" href="view/Default/assets/lib/selectize.js-master/dist/css/selectize.default.css" >
 	</head >
 
 	<body >
@@ -79,6 +81,8 @@
 		<script src="view/Default/assets/lib/formsJS/forms.js" ></script >
 		<script src="view/Default/assets/js/ie10-viewport-bug-workaround.js" ></script >
 		<script src="view/Default/assets/js/script.js" ></script >
+		<script src="view/Default/assets/lib/jquery-ui-1.12.1.custom/jquery-ui.min.js" ></script >
+		<script src="view/Default/assets/lib/selectize.js-master/dist/js/selectize.min.js" ></script >
 
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js" ></script >

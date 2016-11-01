@@ -52,9 +52,9 @@
 		 * Méthode factorisé à tous les Contrôleur. Indique les menu minimaux
 		 */
 		protected function makeMenu() {
-			$this->_menu[ 'Home' ]        = "./";
-			$this->_menu[ 'A propos' ]    = BASE_URL . "viewAPropos";
-			$this->_menu[ 'Photos' ]      = BASE_URL . "viewPhoto";
+			$this->_menu[ 'Home' ]     = "./";
+			$this->_menu[ 'A propos' ] = BASE_URL . "viewAPropos";
+			$this->_menu[ 'Photos' ]   = BASE_URL . "viewPhoto";
 		}
 
 		/**
@@ -112,25 +112,6 @@
 		}
 
 		/**
-		 * Charge un DAO spécifique
-		 *
-		 * @param string $name
-		 *
-		 * @return DAO
-		 * @throws Exception
-		 */
-		private function loadDAO( $name ) {
-			$path = __DIR__ . '/DAO/' . $name . '.dao.php';
-
-			if ( !is_file( $path ) )
-				throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
-
-			require $path;
-
-			return new $name();
-		}
-
-		/**
 		 * Redirige vers une route
 		 *
 		 * @param string|null $route
@@ -157,7 +138,7 @@
 		 */
 		private function setDAO( $nameDAO ) {
 			return ( !is_null( $nameDAO ) )
-				? $this->loadDAO( $nameDAO )
+				? loadDAO( $nameDAO )
 				: null;
 		}
 

@@ -30,6 +30,8 @@
 		 * @var string Nom du paramètre de filtrage (Catégorie)
 		 */
 		private $_filtre;
+
+        private $_popularite;
 		
 
 		/**
@@ -46,6 +48,7 @@
 			$this->setSize( $_GET[ "size" ] );
 			$this->setNbImg( $_GET[ "nbImg" ] );
 			$this->setFiltre( $_GET[ "flt" ] );
+            $this->setPopularite($_GET["popularite"]);
 		}
 
 
@@ -96,6 +99,24 @@
 
 			$this->renderView( __FUNCTION__ );
 		}
+
+
+        public function populariteAction()
+        {
+
+            $this->_dataContent['matrix'] = [];
+
+            $filtreImages = $this->getDAO()->populariteImage($this->getImg(), $this->getNbImg());
+
+            foreach ($filtreImages as $image)
+                $this->_dataContent['matrix'][] = [
+                    $image,
+                    BASE_URL . "viewPhoto&imgId=" . $image->getId()
+                ];
+
+            $this->renderView(__FUNCTION__);
+
+        }
 
 		/**
 		 * Traitement pour accèder à la première image
@@ -166,9 +187,16 @@
 			$this->setImg( $prevImg );
 
 			// Génération de la vue
-			( is_null( $this->getFiltre() ) )
-				? $this->photoMatrixAction()
-				: $this->filtreByCategoryAction();
+
+            if (!is_null($this->getFiltre())) {
+                $this->filtreByCategoryAction();
+            } elseif (!is_null($this->getPopularite())) {
+                $this->populariteAction();
+            } else {
+                $this->photoMatrixAction();
+            }
+
+
 		}
 
 		/**
@@ -182,9 +210,15 @@
 			$this->setImg( $nextImg );
 
 			// Génération de la vue
-			( is_null( $this->getFiltre() ) )
-				? $this->photoMatrixAction()
-				: $this->filtreByCategoryAction();
+            if (!is_null($this->getFiltre())) {
+                $this->filtreByCategoryAction();
+            } elseif (!is_null($this->getPopularite())) {
+                $this->populariteAction();
+            } else {
+                $this->photoMatrixAction();
+            }
+
+
 		}
 
 
@@ -208,12 +242,12 @@
 				"Previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
 					      ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
 					      $this->getNbImg() . '&size=' . $this->getSize()
-					      . "&flt=" . $this->getFiltre(),
+                    . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
 				"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
 					  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
 					  $this->getNbImg() . '&size=' . $this->getSize()
-					  . "&flt=" . $this->getFiltre(),
+                    . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
 				"First" => BASE_URL . "firstPhotoMatrix&imgId=" .
 					   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
@@ -231,7 +265,10 @@
 					  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
 					) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
-				"list" => $this->getDAO()->getListCategory()
+                "list" => $this->getDAO()->getListCategory(),
+
+                "Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
+                    $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . "&popularite=true"
 			];
 
 			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
@@ -301,6 +338,25 @@
 				? htmlentities( $filtre )
 				: null;
 		}
+
+
+        /**
+         * @return string
+         */
+        public function getPopularite()
+        {
+            return $this->_popularite;
+        }
+
+        /**
+         * @param &string $popularite
+         */
+        public function setPopularite(&$popularite)
+        {
+            $this->_popularite = (isset($popularite) && !empty($popularite))
+                ? htmlentities($popularite)
+                : null;
+        }
 
 
 		/**

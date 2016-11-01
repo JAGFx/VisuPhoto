@@ -102,6 +102,10 @@
 			$controller->filtreByCategoryAction();
 			break;
 
+        case 'popularitePhotoMatrix':
+            $controller->populariteAction();
+            break;
+
 
 		// ----------------------------------------------------------------------------------------------A Propos
 		case 'viewAPropos' :

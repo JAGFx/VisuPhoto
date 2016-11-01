@@ -29,12 +29,24 @@
                 <a href=<?php echo $data->modifier["Button"]; ?>>
                     <button>Modifier</button>
                 </a>
+
                 <a href=<?php echo $data->note["Dislike"]; ?>>
                     <button>Dislike</button>
                 </a>
                 <a href=<?php echo $data->note["Like"]; ?>>
                     <button>Like</button>
+                    <br>
                 </a>
+                <?php
+                foreach ($data->note["infoNote"] as $key => $note) {
+                    ?>
+                    <span><?php echo $key ?> : <?php echo $note ?></span><br>
+
+                    <?php
+                }
+                ?>
+
+
             </div>
 		</div >
 	</div >

@@ -131,7 +131,7 @@
 
                 $pseudo = UserSessionManager::getSession()->getPseudo();
 
-                if ($privilege == UserSessionManager::ADMIN_PRIVILEGE || $privilege == UserSessionManager::USER_PRIVILEGE) {
+                if ($privilege == UserSessionManager::USER_PRIVILEGE) {
                     $retour = $this->getDAO()->checkvoteImage($imgId, $pseudo);
                 } else {
                     $retour = null;
@@ -153,9 +153,9 @@
                                 ]
                             );
 
-                        } catch (Exception $exp) {
+                        } catch (InputValidatorExceptions $ive) {
 
-                            echo $exp->getMessage();
+                            echo ivExceptionToAjax((object)$ive->getError());
                         }
                     }
                 } else {
@@ -260,7 +260,10 @@
 				"Zoom -" => BASE_URL . "zoomlessPhoto&imgId=" .
 					    $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-				"list" => $this->getDAO()->getListCategory()
+                "list" => $this->getDAO()->getListCategory(),
+
+                "Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
+                    $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize() . "&flt=" . "&popularite=true"
 			];
 
 			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
@@ -276,7 +279,8 @@
                 "Like" => BASE_URL . "votePhoto&imgId=" .
                     $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . LIKE_BUTTON,
                 "Dislike" => BASE_URL . "votePhoto&imgId=" .
-                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . DISLIKE_BUTTON
+                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . DISLIKE_BUTTON,
+                "infoNote" => $this->getDAO()->infovoteImage($this->getImg()->getId())
 
             ];
 		}

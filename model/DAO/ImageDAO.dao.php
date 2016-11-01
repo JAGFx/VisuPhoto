@@ -125,6 +125,44 @@
 			return $this->findOne( $pQuery, $params );
 		}
 
+        public function populariteImage(Image $img, $nbImage)
+        {
+
+            $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ?, ?");
+
+            try {
+                $pQuery->execute([$img->getId() - 1,
+                    $nbImage]);
+                $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
+            } catch (Exception $exc) {
+                var_dump($exc->getMessage());
+                $data = [];
+            }
+
+            return (!empty($data)) ? $data : [];
+
+        }
+
+        /**
+         * Retounrne le nombre de like / dislike d'une photo
+         * @param $imgId
+         * @return null|object
+         */
+
+
+        public function infovoteImage($imgId)
+        {
+
+            $pQuery = "SELECT (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=0) as Dislike, (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=1) as Like";
+
+            $param = [
+                $imgId,
+                $imgId
+            ];
+
+            return $this->findOne($pQuery, $param);
+        }
+
 
 		/**
 		 * @param Image  $img

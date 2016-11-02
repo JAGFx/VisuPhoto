@@ -16,6 +16,8 @@
 				<td >
 					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'editionDashboard&e=Album&i=' . $album->getId(
 					); ?>" >Modifier</a >
+					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'removeAlbum&id=' . $album->getId(
+					); ?>" >Supprimer</a >
 				</td >
 			</tr >
 		<?php endforeach; ?>

@@ -144,6 +144,10 @@
 			$controller->editAlbumAction();
 			break;
 
+		case 'removeAlbum' :
+			$controller->removeAlbumAction();
+			break;
+
 		// ----------------------------------------------------------------------------------------------Dashboard
 		case 'homeDashboard' :
 			$controller->dashboardAction();

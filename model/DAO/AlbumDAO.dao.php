@@ -104,6 +104,13 @@
 			$imgDAO  = loadDAO( 'ImageDAO' );
 			$userDAO = loadDAO( 'UserDAO' );
 
+			if ( is_null( $result ) )
+				throw new InputValidatorExceptions(
+					"Impossible de supprimer l'album",
+					"L'album est déjà supprimé",
+					TYPE_FEEDBACK_DANGER
+				);
+
 			$alb = new Album( $result->id, $result->name, $userDAO->findUser( $result->owner ) );
 
 			foreach ( explode( ',', $result->images ) as $imgID )

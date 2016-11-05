@@ -1,0 +1,5 @@
+##############################################
+#### Configuration relatif aux fichiers
+
+	order allow,deny
+	deny from all

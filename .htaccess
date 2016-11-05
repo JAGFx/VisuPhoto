@@ -25,14 +25,8 @@
 			deny from all
 	</Files>
 
-	# Deny access Components
-	<Directory /components>
-        Order Deny,Allow
-        deny from all
-    </Directory>
-
 ##############################################
 #### Configuration relatif à l'URL
 
 	# Impossible d'afficher la liste des fichiers
-	Options -Indexes
+	Options All -Indexes

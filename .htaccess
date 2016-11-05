@@ -1,0 +1,38 @@
+##############################################
+#### Configuration relatif aux fichiers
+
+	# HTACCESS
+	<Files .htaccess>
+		order allow,deny
+		deny from all
+	</Files>
+
+	# Deny all app process files
+	<Files ~ "(view|ctrl|dao|class|partials)\.(html|php)$">
+			order allow,deny
+			deny from all
+	</Files>
+
+	# Deny access SQL files
+	<Files ~ "\.sql$">
+			order allow,deny
+			deny from all
+	</Files>
+
+	# Deny access Database
+	<Files ~ "\.db$">
+			order allow,deny
+			deny from all
+	</Files>
+
+	# Deny access Components
+	<Directory /components>
+        Order Deny,Allow
+        deny from all
+    </Directory>
+
+##############################################
+#### Configuration relatif à l'URL
+
+	# Impossible d'afficher la liste des fichiers
+	Options -Indexes

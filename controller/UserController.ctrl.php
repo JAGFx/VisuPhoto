@@ -36,6 +36,9 @@
 		 * Rendue et traitement de la page de Connexion
 		 */
 		public function loginUserAction() {
+			$this->makeMenu();
+			$this->makeContent();
+
 			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
 				$inputValidator = new IValidatorVisu();
@@ -84,7 +87,7 @@
 
 			// Sinon génération de la page de connexion
 			else
-				$this->renderView( __FUNCTION__ );
+				$this->getViewManager()->render( 'User/loginUser' );
 		}
 
 		/**
@@ -99,6 +102,9 @@
 		 * Rendue et traitement de la page d'Inscription
 		 */
 		public function registerUserAction() {
+			$this->makeMenu();
+			$this->makeContent();
+
 			// Si Données envoyé, traitement
 			if ( !empty( $_POST ) ) {
 				$inputValidator = new IValidatorVisu();
@@ -119,7 +125,7 @@
 					$inputValidator->validateSameString( $pswd, $confirmPswd );
 
 					// Insertion de l'utilisateur dans le BDD
-					$user   = new User( $pseudo, encrypt( $pswd ) );
+					$user = new User( $pseudo, encrypt( $pswd ) );
 					$this->getDAO()->addUser( $user );
 
 					// Création d'une session utilisateur
@@ -146,7 +152,7 @@
 
 			// Sinon génération de la page d'inscription
 			else
-				$this->renderView( __FUNCTION__ );
+				$this->getViewManager()->render( 'User/registerUser' );
 		}
 
 
@@ -162,8 +168,14 @@
 		 */
 		protected function makeMenu() {
 			parent::makeMenu();
-			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
-			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
+
+			$this->getViewManager()->setValue(
+				'menuAdmin',
+				[
+					'Connexion'   => BASE_URL . "loginUser",
+					'Inscription' => BASE_URL . "registerUser"
+				]
+			);
 		}
 
 

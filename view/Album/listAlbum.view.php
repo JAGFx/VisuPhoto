@@ -8,15 +8,15 @@
 			<th >Nombre d'image</th >
 			<th >Action</th >
 		</tr >
-		<?php foreach ( $data->listImgUser as $album ) : ?>
+		<?php foreach ( $data->listAlbum as $album ) : ?>
 			<tr >
 				<td ><?= $album->getId(); ?></td >
 				<td ><?= $album->getName(); ?></td >
 				<td ><?= count( $album->getImages() ); ?></td >
 				<td >
-					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'editionDashboard&e=Album&i=' . $album->getId(
+					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'editAlbum&albumID=' . $album->getId(
 					); ?>" >Modifier</a >
-					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'removeAlbum&id=' . $album->getId(
+					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'removeAlbum&albumID=' . $album->getId(
 					); ?>" >Supprimer</a >
 				</td >
 			</tr >

@@ -47,11 +47,18 @@
 		 */
 		public function photoAction() {
 			// Création des variables de contenu
-			$this->_dataContent[ 'url' ] = BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
-				) . "&size=" . $this->getSize();
+			$this->makeMenu();
+			$this->makeContent();
+
+			$this->getViewManager()->setValue(
+				'url',
+				BASE_URL . "zoommorePhoto&imgId=" . $this->getImg()->getId(
+				) . "&size=" . $this->getSize()
+			);
+
 
 			// Génération de la vue
-			$this->renderView( __FUNCTION__ );
+			$this->getViewManager()->render( 'Photo/photo' );
 		}
 
 		/**
@@ -114,72 +121,74 @@
 			$this->photoAction();
 		}
 
-        /*
-         *
-         * Traitement pour voter sur une photo
-         *
-         */
+		/*
+		 *
+		 * Traitement pour voter sur une photo
+		 *
+		 */
 
-        public function votePhotoAction()
-        {
-            $privilege = UserSessionManager::getSession()->getPrivilege();
+		public function votePhotoAction() {
+			$privilege = UserSessionManager::getSession()->getPrivilege();
 
-            $valueJug = $_GET["jug"];
-            $imgId = $this->getImg()->getId();
+			$valueJug = $_GET[ "jug" ];
+			$imgId    = $this->getImg()->getId();
 
-            if (!isset($_COOKIE['votePhoto' . $imgId])) {
+			if ( !isset( $_COOKIE[ 'votePhoto' . $imgId ] ) ) {
 
-                $pseudo = UserSessionManager::getSession()->getPseudo();
+				$pseudo = UserSessionManager::getSession()->getPseudo();
 
-                if ($privilege == UserSessionManager::USER_PRIVILEGE) {
-                    $retour = $this->getDAO()->checkvoteImage($imgId, $pseudo);
-                } else {
-                    $retour = null;
-                }
+				if ( $privilege == UserSessionManager::USER_PRIVILEGE ) {
+					$retour = $this->getDAO()->checkvoteImage( $imgId, $pseudo );
+				} else {
+					$retour = null;
+				}
 
-                if ($retour == null) {
+				if ( $retour == null ) {
 
-                    if ($valueJug == LIKE_BUTTON or $valueJug == DISLIKE_BUTTON) {
+					if ( $valueJug == LIKE_BUTTON or $valueJug == DISLIKE_BUTTON ) {
 
-                        try {
-                            $this->getDAO()->voteImage($imgId, $valueJug, $pseudo);
-                            setcookie("votePhoto" . $imgId, "A vote" . $valueJug, time() + 365 * 24 * 3600, null, null, false, true);
+						try {
+							$this->getDAO()->voteImage( $imgId, $valueJug, $pseudo );
+							setcookie(
+								"votePhoto" . $imgId, "A vote" . $valueJug,
+								time() + 365 * 24 * 3600, null, null, false, true
+							);
 
-                            echo toAjax(
-                                TYPE_FEEDBACK_SUCCESS,
-                                [
-                                    'Titre' => 'Merci pour votre vote',
-                                    'Message' => "Vous pouvez continuer de parcourir notre album",
-                                ]
-                            );
+							echo toAjax(
+								TYPE_FEEDBACK_SUCCESS,
+								[
+									'Titre'   => 'Merci pour votre vote',
+									'Message' => "Vous pouvez continuer de parcourir notre album",
+								]
+							);
 
-                        } catch (InputValidatorExceptions $ive) {
+						} catch ( InputValidatorExceptions $ive ) {
 
-                            echo ivExceptionToAjax((object)$ive->getError());
-                        }
-                    }
-                } else {
-                    echo toAjax(
-                        TYPE_FEEDBACK_ERROR,
-                        [
-                            'Titre' => 'Vous avez déjà voté pour cette photo',
-                            'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
-                        ]
-                    );
+							echo ivExceptionToAjax( (object) $ive->getError() );
+						}
+					}
+				} else {
+					echo toAjax(
+						TYPE_FEEDBACK_ERROR,
+						[
+							'Titre'   => 'Vous avez déjà voté pour cette photo',
+							'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
+						]
+					);
 
-                }
-            } else {
-                echo toAjax(
-                    TYPE_FEEDBACK_ERROR,
-                    [
-                        'Titre' => 'Vous avez déjà voté pour cette photo',
-                        'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
-                    ]
-                );
+				}
+			} else {
+				echo toAjax(
+					TYPE_FEEDBACK_ERROR,
+					[
+						'Titre'   => 'Vous avez déjà voté pour cette photo',
+						'Message' => "Vous ne pouvez donc pas revoter pour celle-ci",
+					]
+				);
 
-            }
-            $this->photoAction();
-        }
+			}
+			$this->photoAction();
+		}
 
 		/**
 		 * Traitement pour accèder à l'image suivante
@@ -194,34 +203,43 @@
 		}
 
 		public function addPhotoAction() {
-			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE )
-			     && !empty( $_POST )
-			) {
-				$iv = new IValidatorVisu();
+			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				if ( !empty( $_POST ) ) {
+					$iv = new IValidatorVisu();
 
-				try {
-					$comment = $iv->validateString( $_POST[ 'comment' ] );
-					$ctge    = $iv->validateString( $_POST[ 'category' ] );
-					$path    = 'uploads/';
+					try {
+						$comment = $iv->validateString( $_POST[ 'comment' ] );
+						$ctge    = $iv->validateString( $_POST[ 'category' ] );
+						$path    = 'uploads/';
 
-					$file = $iv->moveFileUpload( $_FILES[ 'image' ], $path );
-					$this->getDAO()->addImage( $path . $file[ 'name' ], $ctge, $comment );
+						$file = $iv->moveFileUpload( $_FILES[ 'image' ], $path );
+						$this->getDAO()->addImage( $path . $file[ 'name' ], $ctge, $comment );
 
-					// Notification de succès et redirection vers le tableau de bord
-					echo toAjax(
-						TYPE_FEEDBACK_SUCCESS,
-						[
-							'Titre'   => 'Ajout réussie',
-							'Message' => "L'ajout de l'image à été effectué avec succès",
-						]
-					);
+						// Notification de succès et redirection vers le tableau de bord
+						echo toAjax(
+							TYPE_FEEDBACK_SUCCESS,
+							[
+								'Titre'   => 'Ajout réussie',
+								'Message' => "L'ajout de l'image à été effectué avec succès",
+							]
+						);
 
-				} catch ( InputValidatorExceptions $ive ) {
-					// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
-					echo ivExceptionToAjax( (object) $ive->getError() );
+					} catch ( InputValidatorExceptions $ive ) {
+						// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
+						echo ivExceptionToAjax( (object) $ive->getError() );
+					}
+
+				} else {
+					$this->makeMenu();
+
+					$this->getViewManager()
+					     ->setPageView( 'Dashboard/base' )
+					     ->setValue( 'listeCtge', $this->getDAO()->getListCategory() )
+					     ->render( 'Photo/addPhoto' );
 				}
+
 			} else
-				$this->redirectToRoute( BASE_URL . PATH_TO_DASH );
+				$this->redirectToRoute( 'loginUser' );
 		}
 
 
@@ -231,71 +249,82 @@
 		 */
 		protected function makeMenu() {
 			parent::makeMenu();
-			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
-			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
+
+			$this->getViewManager()->setValue(
+				'menuAdmin',
+				[
+					'Connexion'   => BASE_URL . "loginUser",
+					'Inscription' => BASE_URL . "registerUser"
+				]
+			);
 		}
 
 		/**
 		 * Génération des données du contenu
 		 */
 		protected function makeContent() {
-			$this->_dataContent[ 'navBar' ] = [
-				"Previous" => BASE_URL . 'prevPhoto&imgId=' .
-					      ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
+			$this->getViewManager()->setValue(
+				'navBar',
+				[
+					"Previous" => BASE_URL . 'prevPhoto&imgId=' .
+						      ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
 
-				"Next"  => BASE_URL . 'nextPhoto&imgId=' .
-					   ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
-				"First" => BASE_URL . "firstPhoto&imgId=" .
-					   $this->getImg()->getId() . "&size=" . $this->getSize(),
+					"Next"  => BASE_URL . 'nextPhoto&imgId=' .
+						   ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
+					"First" => BASE_URL . "firstPhoto&imgId=" .
+						   $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-				"Random" => BASE_URL . "randomPhoto&imgId=" .
-					    $this->getImg()->getId() . "&size=" . $this->getSize(),
+					"Random" => BASE_URL . "randomPhoto&imgId=" .
+						    $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-				"More" => BASE_URL . "morePhotoMatrix&imgId=" .
-					  $this->getImg()->getId() . "&size=" . $this->getSize(),
+					"More" => BASE_URL . "morePhotoMatrix&imgId=" .
+						  $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-				"Zoom +" => BASE_URL . "zoommorePhoto&imgId=" .
-					    $this->getImg()->getId() . "&size=" . $this->getSize(),
+					"Zoom +" => BASE_URL . "zoommorePhoto&imgId=" .
+						    $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-				"Zoom -" => BASE_URL . "zoomlessPhoto&imgId=" .
-					    $this->getImg()->getId() . "&size=" . $this->getSize(),
+					"Zoom -" => BASE_URL . "zoomlessPhoto&imgId=" .
+						    $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-                "list" => $this->getDAO()->getListCategory(),
+					"list" => $this->getDAO()->getListCategory(),
 
-                "Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
-                    $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize() . "&flt=" . "&popularite=true"
-			];
+					"Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
+							$this->getImg()->getId(
+							) . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize(
+						) . "&flt=" . "&popularite=true"
+				]
+			);
 
-			$this->_dataContent[ 'listCategoty' ] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
-								$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
-								. "&flt=";
+			$this->getViewManager()->setValue(
+				'listCategoty', BASE_URL .
+						"filtrebycategoryPhotoMatrix&imgId=" .
+						$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
+						. "&flt="
+			);
 
-            $this->_dataContent['modifier'] = [
-                "Button" => '?a=viewModifier&imgId=' .
-                    ($this->getImg()->getId()) . '&size=' . $this->getSize()
-            ];
+			$this->getViewManager()->setValue(
+				'modifier',
+				[
+					"Button" => '?a=viewModifier&imgId=' .
+						    ( $this->getImg()->getId() ) . '&size=' . $this->getSize()
+				]
+			);
 
-            $this->_dataContent['note'] = [
-                "Like" => BASE_URL . "votePhoto&imgId=" .
-                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . LIKE_BUTTON,
-                "Dislike" => BASE_URL . "votePhoto&imgId=" .
-                    $this->getImg()->getId() . "&size=" . $this->getSize() . "&jug=" . DISLIKE_BUTTON,
-                "infoNote" => $this->getDAO()->infovoteImage($this->getImg()->getId())
+			$this->getViewManager()->setValue(
+				'note',
+				[
+					"Like"     => BASE_URL . "votePhoto&imgId=" .
+						      $this->getImg()->getId() . "&size=" . $this->getSize(
+						) . "&jug=" . LIKE_BUTTON,
+					"Dislike"  => BASE_URL . "votePhoto&imgId=" .
+						      $this->getImg()->getId() . "&size=" . $this->getSize(
+						) . "&jug=" . DISLIKE_BUTTON,
+					"infoNote" => $this->getDAO()->infovoteImage( $this->getImg()->getId() )
+				]
+			);
 
-            ];
-		}
-
-		/**
-		 * Convertis les données de class en un tableau
-		 *
-		 * @return array
-		 */
-		protected function toData() {
-			return [
-				'img'  => $this->_img,
-				'menu' => $this->_menu,
-				'size' => $this->_size
-			];
+			$this->getViewManager()->setValue( 'img', $this->_img );
+			$this->getViewManager()->setValue( 'size', $this->_size );
 		}
 
 
@@ -340,6 +369,4 @@
 		protected function getDAO() {
 			return parent::getDAO();
 		}
-
-
 	}

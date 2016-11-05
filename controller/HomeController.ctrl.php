@@ -33,8 +33,11 @@
 		 * Rendue de page par défaut
 		 */
 		public function homeAction() {
+			$this->makeMenu();
+			$this->makeContent();
+
 			// Génération de la vue
-			$this->renderView( __FUNCTION__ );
+			$this->getViewManager()->render( 'Home/home' );
 		}
 
 		// ---------------------------------------------------------------------------------------------- Maker
@@ -49,8 +52,14 @@
 		 */
 		protected function makeMenu() {
 			parent::makeMenu();
-			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
-			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
+
+			$this->getViewManager()->setValue(
+				'menuAdmin',
+				[
+					'Connexion'   => BASE_URL . "loginUser",
+					'Inscription' => BASE_URL . "registerUser"
+				]
+			);
 		}
 
 

@@ -15,10 +15,10 @@
 		<h1 class="col-xs-12 page-header" >Album > Modifier > <?= $data->albumToEdit->getName(); ?>
 			<!--<span class="label label-primary" ><? /*= $data->albumToEdit->getCategory(); */ ?></span >--></h1 >
 
-		<form method="POST" action="?a=editAlbum" data-preventDefault="yes" class="col-xs-12" >
+		<form method="POST" action="?a=editAlbum&albumID=<?= $data->albumToEdit->getId(
+		); ?>" data-preventDefault="yes" class="col-xs-12" >
 			<div class="messageForm" ></div >
-			<input type="hidden" name="id" value="<?= $data->albumToEdit->getId(); ?>" >
-			
+
 			<div class="form-group" >
 				<label for="name" >Nom</label >
 				<input type="text" class="form-control" name="name" id="name" placeholder="Ex: Paysage" required

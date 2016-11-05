@@ -18,54 +18,15 @@
 	</head >
 
 	<body >
-		<nav class="navbar navbar-inverse navbar-fixed-top" >
-			<div class="container" >
-				<div class="navbar-header" >
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" >
-						<span class="sr-only" >Toggle navigation</span >
-						<span class="icon-bar" ></span >
-						<span class="icon-bar" ></span >
-						<span class="icon-bar" ></span >
-					</button >
-					<a class="navbar-brand" href="./" >VisuPhoto</a >
-				</div >
-				<div id="navbar" class="navbar-collapse collapse" >
-					<ul class="nav navbar-nav navbar-right" >
-						<?php foreach ( $data->menu as $item => $act ) : ?>
-							<li ><a href="<?= $act ?>" ><?= $item ?></a ></li >
-						<?php endforeach; ?>
-						<li class="dropdown user active" >
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-								<img src="view/Default/assets/pics/nouser.png" width="30" height="30" class="img-circle" > <?= UserSessionManager::getSession(
-								)->getPseudo() ?> <span class="caret" ></span >
-							</a >
-							<ul class="dropdown-menu" >
-								<li >
-									<a href="<?= BASE_URL . PATH_TO_DASH ?>" >Dashboard</a >
-								</li >
-								<li role="separator" class="divider" ></li >
-								<li >
-									<a href="<?= BASE_URL . 'logoutUser' ?>" >Déconnexion</a >
-								</li >
-							</ul >
-						</li >
-					</ul >
-				</div >
-			</div >
-		</nav >
+		<?php
+			require __DIR__ . '/../Default/partials/menu.partials.php';
+		?>
 
 		<div class="container-fluid" >
 			<div class="row" >
-				<div class="col-sm-3 col-md-2 sidebar subNavTab" role="tablist" >
-					<ul class="nav nav-sidebar" >
-					<?php foreach ( $data->subNav as $groupe => $items ) : ?>
-						<h3 ><?= $groupe ?></h3 >
-							<?php foreach ( $items as $item => $link ) : ?>
-								<li ><a href="<?= $link ?>" ><?= $item ?></a ></li >
-							<?php endforeach; ?>
-					<?php endforeach; ?>
-					</ul >
-				</div >
+				<?php
+					require __DIR__ . '/partials/menu.partials.php';
+				?>
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
 					<div class="row" >
 						<?php

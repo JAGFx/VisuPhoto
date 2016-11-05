@@ -42,6 +42,13 @@
 		}
 
 		/**
+		 * @param string $name
+		 */
+		public function setName( $name ) {
+			$this->_name = $name;
+		}
+
+		/**
 		 * @return int
 		 */
 		public function getId() {
@@ -90,6 +97,10 @@
 					unset( $this->_images[ $k ] );
 					break;
 				}
+		}
+
+		public function emptyImage() {
+			$this->_images = [ ];
 		}
 
 		/**

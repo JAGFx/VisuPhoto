@@ -45,9 +45,12 @@ class ModifierController extends Controller
      */
     public function modifierAction()
     {
+	    $this->makeMenu();
+	    $this->makeContent();
+
         // Génération de la vue
-        if (UserSessionManager::hasPrivilege(UserSessionManager::USER_PRIVILEGE) or UserSessionManager::hasPrivilege(UserSessionManager::ADMIN_PRIVILEGE)) {
-            $this->renderView(__FUNCTION__);
+	    if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+		    $this->getViewManager()->render( 'Modifier/modifier' );
         } else {
             echo "Merci de vous connecter";
         }
@@ -96,44 +99,41 @@ class ModifierController extends Controller
      */
     protected function makeContent()
     {
-        $this->_dataContent['navBar'] = [
-            "Previous" => BASE_URL . 'prevPhoto&imgId=' .
-                ($this->getImg()->getId()) . '&size=' . $this->getSize(),
+	    $this->getViewManager()->setValue(
+		    'navBar',
+		    [
+			    "Previous" => BASE_URL . 'prevPhoto&imgId=' .
+					  ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
 
-            "Next" => BASE_URL . 'nextPhoto&imgId=' .
-                ($this->getImg()->getId()) . '&size=' . $this->getSize(),
-            "First" => BASE_URL . "firstPhoto&imgId=" .
-                $this->getImg()->getId() . "&size=" . $this->getSize(),
+			    "Next"  => BASE_URL . 'nextPhoto&imgId=' .
+				       ( $this->getImg()->getId() ) . '&size=' . $this->getSize(),
+			    "First" => BASE_URL . "firstPhoto&imgId=" .
+				       $this->getImg()->getId() . "&size=" . $this->getSize(),
 
-            "Random" => BASE_URL . "randomPhoto&imgId=" .
-                $this->getImg()->getId() . "&size=" . $this->getSize(),
+			    "Random" => BASE_URL . "randomPhoto&imgId=" .
+					$this->getImg()->getId() . "&size=" . $this->getSize(),
 
-            "list" => $this->getDAO()->getListCategory()
-        ];
+			    "list" => $this->getDAO()->getListCategory()
+		    ]
+	    );
 
-        $this->_dataContent['listCategoty'] = BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
-            $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
-            . "&flt=";
+	    $this->getViewManager()->setValue(
+		    'listCategoty',
+		    BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
+		    $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC
+		    . "&flt="
+	    );
 
-        $this->_dataContent['modifier'] = [
-            "Button" => BASE_URL . 'viewModifier&imgId=' .
-                ($this->getImg()->getId()) . '&size=' . $this->getSize()
-        ];
+	    $this->getViewManager()->setValue(
+		    'modifier',
+		    [
+			    "Button" => BASE_URL . 'viewModifier&imgId=' .
+					( $this->getImg()->getId() ) . '&size=' . $this->getSize()
+		    ]
+	    );
 
-    }
-
-    /**
-     * Convertis les données de class en un tableau
-     *
-     * @return array
-     */
-    protected function toData()
-    {
-        return [
-            'img' => $this->_img,
-            'menu' => $this->_menu,
-            'size' => $this->_size
-        ];
+	    $this->getViewManager()->setValue( 'img', $this->_img );
+	    $this->getViewManager()->setValue( 'size', $this->_size );
     }
 
 

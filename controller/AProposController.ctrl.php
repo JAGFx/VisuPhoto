@@ -30,7 +30,11 @@
 		 */
 		public function aProposAction() {
 			// Génération de la vue
-			$this->renderView( __FUNCTION__ );
+			$this->makeMenu();
+			$this->makeContent();
+
+			// Génération de la vue
+			$this->getViewManager()->render( 'APropos/aPropos' );
 		}
 
 		// ---------------------------------------------------------------------------------------------- Maker
@@ -39,24 +43,25 @@
 		 */
 		protected function makeMenu() {
 			parent::makeMenu();
-			$this->_menu[ 'Voir photos' ] = BASE_URL . 'viewPhoto';
-			$this->_menu[ 'Connexion' ]   = BASE_URL . "loginUser";
-			$this->_menu[ 'Inscription' ] = BASE_URL . "registerUser";
+
+			$this->getViewManager()->setValue(
+				'menuAdmin',
+				[
+					'Connexion'   => BASE_URL . "loginUser",
+					'Inscription' => BASE_URL . "registerUser"
+				]
+			);
+
+			$this->getViewManager()->setValue(
+				'menu',
+				[
+					'Photos' => BASE_URL . "viewPhoto"
+				]
+			);
 		}
 
 		/**
 		 * Génération des données du contenu
 		 */
 		protected function makeContent() { }
-
-		/**
-		 * Convertis les données de class en un tableau
-		 *
-		 * @return array
-		 */
-		protected function toData() {
-			return [
-				'menu' => $this->_menu
-			];
-		}
 	}

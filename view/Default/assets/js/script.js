@@ -3,12 +3,6 @@
  */
 
 $( function () {
-	$( '.subNavTab a' ).click( function ( e ) {
-		e.preventDefault()
-		$( this ).tab( 'show' )
-	} );
-
-
 	$( '.selectizeListImg' ).selectize( {
 		plugins:     [ 'remove_button', 'drag_drop' ],
 		delimiter:   ',',

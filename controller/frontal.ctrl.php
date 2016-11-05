@@ -135,7 +135,11 @@
 			break;
 
 
-		// ----------------------------------------------------------------------------------------------Album
+		// ----------------------------------------------------------------------------------------------Album viewListAlbum
+		case 'viewlistAlbum' :
+			$controller->viewListAlbumAction();
+			break;
+
 		case 'addAlbum' :
 			$controller->addAlbumAction();
 			break;

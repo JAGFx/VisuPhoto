@@ -1,3 +1,18 @@
 header { height: 52px; }
 
 .label { font-size: .85em; }
+
+
+.user { position: relative; }
+
+
+.nav > li.user > a {
+	padding-left: 55px;
+}
+
+
+.user > a > img {
+	top:      10px;
+	left:     15px;
+	position: absolute;
+}

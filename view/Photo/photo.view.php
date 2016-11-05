@@ -9,7 +9,7 @@
 		</ul >
 	</nav >
 
-    <div class="col-xs-12 col-md-8 col-md-offset-2">
+	<div class="col-xs-12 col-md-8 col-md-offset-2" >
 		<div class="thumbnail" >
 			<a href="<?= $data->url; ?>" >
 				<img src="<?= $data->img->getPath(); ?>" alt="<?= $data->img->getComment(
@@ -22,32 +22,23 @@
 						<?= $data->img->getCategory(); ?>
 					</span >
 				</p >
+				<p >
+					<a href="<?php echo $data->modifier[ "Button" ]; ?>" class="btn btn-primary btn-sm" >
+						Modifier
+					</a >
+
+					<a href="<?php echo $data->note[ "Dislike" ]; ?>" class="btn btn-danger btn-sm" >
+						Dislike
+						<span class="badge" ><?= $data->note[ "infoNote" ]->Dislike ?></span >
+					</a >
+					<a href="<?php echo $data->note[ "Like" ]; ?>" class="btn btn-success btn-sm" >
+						Like <span class="badge" ><?= $data->note[ "infoNote" ]->Like ?></span >
+					</a ><br />
+					<?php /*foreach ( $data->note[ "infoNote" ] as $key => $note ) : */ ?><!--
+						<span ><?php /*echo $key */ ?> : <?php /*echo $note */ ?></span ><br >
+					--><?php /*endforeach; */ ?>
+				</p >
 			</div >
-            <div class="caption">
-                <div class="messageForm"></div>
-
-                <a href=<?php echo $data->modifier["Button"]; ?>>
-                    <button>Modifier</button>
-                </a>
-
-                <a href=<?php echo $data->note["Dislike"]; ?>>
-                    <button>Dislike</button>
-                </a>
-                <a href=<?php echo $data->note["Like"]; ?>>
-                    <button>Like</button>
-                    <br>
-                </a>
-                <?php
-                foreach ($data->note["infoNote"] as $key => $note) {
-                    ?>
-                    <span><?php echo $key ?> : <?php echo $note ?></span><br>
-
-                    <?php
-                }
-                ?>
-
-
-            </div>
 		</div >
 	</div >
 </section >

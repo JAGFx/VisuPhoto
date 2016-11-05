@@ -16,7 +16,7 @@
 	elseif ( $text == 'list' ) : ?>
 		<li >
 			<select name="selectList" onChange="window.location.href=this.value" >
-				<option value="default" >Selectionner une categorie</option >
+				<option value="default" >Catégorie</option >
 				<?php foreach ( $data->navBar[ 'list' ] as $list ) : ?>
 					<option value="<?= $data->listCategoty; ?><?php echo $list[ 0 ]; ?>" ><?php echo $list[ 0 ]; ?> </option >
 				<?php endforeach; ?>

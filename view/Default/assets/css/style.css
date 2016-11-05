@@ -1,5 +1,6 @@
 header { height: 52px; }
 
+
 .label { font-size: .85em; }
 
 
@@ -15,4 +16,14 @@ header { height: 52px; }
 	top:      10px;
 	left:     15px;
 	position: absolute;
+}
+
+
+.pager li > select {
+	display:          inline-block;
+	padding:          5px 14px;
+	background-color: #FFF;
+	border:           1px solid #DDD;
+	border-radius:    0;
+	color:            #2780E3;
 }

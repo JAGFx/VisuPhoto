@@ -116,8 +116,8 @@ Voir `execQuery()`
 
 
 ### FormJS
-Voir le `README` dans [`/view/Default/assets/lib/formJS`](https://github.com/JAGFx/VisuPhoto/tree/master/view/Default/assets/lib/formsJS)
+Voir le `README` dans [`https://github.com/JAGFx/FormJS`](https://github.com/JAGFx/VisuPhoto/tree/master/view/Default/assets/lib/formsJS)
 
 
 ### InputValidator
-Voir le `README` dans [`/components/InputValidator`](https://github.com/JAGFx/VisuPhoto/tree/master/components/InputValidator/dist)
+Voir le `README` dans [`https://github.com/JAGFx/InputValidator`](https://github.com/JAGFx/VisuPhoto/tree/master/components/InputValidator/dist)

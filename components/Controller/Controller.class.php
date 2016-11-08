@@ -7,7 +7,7 @@
 	 * Time: 20:55
 	 */
 
-	require __DIR__ . '/ViewManager.class.php';
+	require __DIR__ . '/../ViewManager/ViewManager.class.php';
 
 	/**
 	 * Class Controller

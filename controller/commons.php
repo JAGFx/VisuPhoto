@@ -102,7 +102,7 @@ define('DISLIKE_BUTTON', 0);
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_CTRL_NAME );
 
-		require_once __DIR__ . '/../model/Controller.class.php';
+		require_once __DIR__ . '/../components/Controller/Controller.class.php';
 		require_once $path;
 
 		// Création et retour du contrôleur

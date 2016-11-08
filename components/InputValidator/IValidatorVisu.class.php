@@ -1,5 +1,5 @@
 <?php
-	require_once __DIR__ . '/../components/InputValidator/dist/InputValidator.php';
+	require_once __DIR__ . '/dist/InputValidator.php';
 	use InputValidator\InputValidator;
 	use InputValidator\InputValidatorExceptions;
 	

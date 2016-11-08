@@ -19,10 +19,10 @@
 	 *        - Deuxième partie : Nom du controller associé (Ici "PhotoMatrix")
 	 */
 
-	require __DIR__ . '/../model/UserSessionManager.class.php';
-	require __DIR__ . '/../model/DAO.class.php';
+	require __DIR__ . '/../components/UserSessionManager/UserSessionManager.class.php';
+	require __DIR__ . '/../components/DAO/DAO.class.php';
 	require __DIR__ . '/commons.php';
-	require __DIR__ . '/../model/IValidatorVisu.class.php';
+	require __DIR__ . '/../components/InputValidator/IValidatorVisu.class.php';
 
 	UserSessionManager::init();
 	UserSessionManager::start();

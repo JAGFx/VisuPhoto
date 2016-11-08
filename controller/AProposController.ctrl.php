@@ -51,13 +51,6 @@
 					'Inscription' => BASE_URL . "registerUser"
 				]
 			);
-
-			$this->getViewManager()->setValue(
-				'menu',
-				[
-					'Photos' => BASE_URL . "viewPhoto"
-				]
-			);
 		}
 
 		/**

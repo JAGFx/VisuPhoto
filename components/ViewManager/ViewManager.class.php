@@ -42,11 +42,11 @@
 		 * @throws Exception
 		 */
 		public function render( $contentView ) {
-			$pathContentView = __DIR__ . '/../view/' . $contentView . '.view.php';
+			$pathContentView = __DIR__ . '/../../view/' . $contentView . '.view.php';
 			if ( !is_file( $pathContentView ) )
 				throw new Exception( ERR_INVALID_VIEW_NAME . ' : ' . $contentView );
 
-			$pathPageView = __DIR__ . '/../view/' . $this->_pageView . '.view.php';
+			$pathPageView = __DIR__ . '/../../view/' . $this->_pageView . '.view.php';
 			if ( !is_file( $pathContentView ) )
 				throw new Exception( ERR_INVALID_VIEW_NAME . ' : ' . $this->_pageView );
 

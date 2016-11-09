@@ -10,6 +10,13 @@
 	 *        Time: 18:03
 	 */
 	class AlbumDAO extends DAO {
+
+        /**
+         * Methode pour ajouter des albums dans la base de données
+         *
+         * @param Album $album
+         * @throws InputValidatorExceptions
+         */
 		public function addAlbum( Album $album ) {
 			$query = 'INSERT INTO album( name, owner, images ) VALUES ( ?, ?, ? )';
 			$params = [
@@ -28,6 +35,12 @@
 				);
 		}
 
+        /**
+         *
+         * Mise à jour d'un album dans la base de données
+         * @param Album $album
+         * @throws InputValidatorExceptions
+         */
 		public function editAlbum( Album $album ) {
 			$query = 'UPDATE album SET name = ?, owner = ?, images = ? WHERE id = ?';
 			$params = [
@@ -47,6 +60,13 @@
 				);
 		}
 
+        /**
+         *
+         * Suppression d'un album de la base de données
+         *
+         * @param Album $album
+         * @throws InputValidatorExceptions
+         */
 		public function removeAlbum( Album $album ) {
 			$query = 'DELETE FROM album WHERE id = ?';
 			$params = [
@@ -94,6 +114,14 @@
 			return $albums;
 		}
 
+        /**
+         *
+         * Fonction de recherche d'album pour un id donné ( retourne album)
+         *
+         * @param $id
+         * @return Album
+         * @throws InputValidatorExceptions
+         */
 		public function findAlbumById( $id ) {
 			$query = 'SELECT * FROM album WHERE id = ?';
 			$params = [

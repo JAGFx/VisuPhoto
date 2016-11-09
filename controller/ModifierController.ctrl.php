@@ -71,6 +71,7 @@ class ModifierController extends Controller
                 $imgId = $this->getImg()->getId();
                 $newCommentaire = htmlentities($inputValidator->validateString($_POST['commentaire']));
 
+                //On regarde si l'utilisateur veur ajouter une catégorie
                 if (empty($_POST['nouvelleCategorie'])) {
                     $newCategory = htmlentities($inputValidator->validateString($_POST['selectList']));
                 } else {
@@ -99,6 +100,7 @@ class ModifierController extends Controller
      */
     protected function makeContent()
     {
+        //Création des données pour la navBar
 	    $this->getViewManager()->setValue(
 		    'navBar',
 		    [
@@ -117,7 +119,8 @@ class ModifierController extends Controller
 		    ]
 	    );
 
-	    $this->getViewManager()->setValue(
+
+        $this->getViewManager()->setValue(
 		    'listCategoty',
 		    BASE_URL . "filtrebycategoryPhotoMatrix&imgId=" .
 		    $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC

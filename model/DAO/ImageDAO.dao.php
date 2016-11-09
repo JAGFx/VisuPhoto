@@ -112,6 +112,13 @@
 			$this->execQuery( $pQuery, $params );
 		}
 
+        /**
+         * Methode permettant de regarder si une personne a voté sur une photo
+         *
+         * @param int $imgId
+         * @param String $pseudo
+         * @return null|object
+         */
 		public function checkvoteImage( $imgId, $pseudo ) {
 
 			$pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
@@ -125,28 +132,30 @@
 			return $this->findOne( $pQuery, $params );
 		}
 
-		public function populariteImage( Image $img, $nbImage ) {
+        /**
+         * Methode qui permet de trier les photos par la popularité ( moyenne des votes)
+         *
+         * @param Image $img
+         * @param int $nbImage
+         * @return array
+         */
+        public function populariteImage(Image $img, $nbImage)
+        {
 
-			$pQuery = $this->pdo->prepare(
-				"SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ?, ?"
-			);
+            $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ? ,?");
 
-			try {
-				$pQuery->execute(
-					[
-						$img->getId() - 1,
-						$nbImage
-					]
-				);
-				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
-			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
-				$data = [ ];
-			}
+            try {
 
-			return ( !empty( $data ) ) ? $data : [ ];
+                $pQuery->execute([$img->getId() - 1, $nbImage]);
+                $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
+            } catch (Exception $exc) {
+                var_dump($exc->getMessage());
+                $data = [];
+            }
 
-		}
+            return (!empty($data)) ? $data : [];
+
+        }
 
 		/**
 		 * Retounrne le nombre de like / dislike d'une photo
@@ -157,7 +166,8 @@
 		 */
 
 
-		public function infovoteImage( $imgId ) {
+        public function infovoteImage($imgId)
+        {
 
 			$pQuery = "SELECT (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=0) as Dislike, (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=1) as Like";
 
@@ -225,12 +235,12 @@
 
 
 		public function getRandomFilter( $filter ) {
-			$query = 'SELECT * FROM image WHERE category = ?';
+			$query  = 'SELECT * FROM image WHERE category = ?';
 			$params = [
 				$filter
 			];
 
-			$result = $this->findAll( $query, $params, 'Image' );
+			$result  = $this->findAll( $query, $params, 'Image' );
 			$keyRand = array_rand( $result );
 
 			return $result[ $keyRand ];
@@ -317,7 +327,7 @@
 		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
 			$filtredImg = $this->filtreImage( $img, $filter, $nb );
 
-			$query = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
+			$query  = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
 			$params = [
 				$filtredImg[ 0 ]->getId(),
 				$filter
@@ -345,7 +355,7 @@
 				debug_print_backtrace();
 				trigger_error( "Erreur dans ImageDAO.getImageList: nombre d'images nul" );
 			}
-			$id = $img->getId();
+			$id  = $img->getId();
 			$max = $id + $nb;
 			while ( $id < $this->size() && $id < $max ) {
 				$res[] = $this->getImage( $id );
@@ -372,7 +382,7 @@
 		 * @throws InputValidatorExceptions
 		 */
 		public function addImage( $path, $ctge, $comment ) {
-			$query = 'INSERT INTO image( path, category, comment ) VALUES ( ?, ?, ? )';
+			$query  = 'INSERT INTO image( path, category, comment ) VALUES ( ?, ?, ? )';
 			$params = [
 				$path,
 				$ctge,

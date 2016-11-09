@@ -38,6 +38,9 @@
 				->render( 'Album/viewAlbum' );
 		}
 
+        /**
+         * Permet de visualiser la liste des albums dans le dashboard de l'utilisateur
+         */
 		public function viewListAlbumAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				$this->makeMenu();
@@ -56,6 +59,10 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
+        /**
+         * Methode pour créer un album si l'utilisateur est connecté
+         * Affiche en retour succès ou echec avec la fonction toAjax
+         */
 		public function addAlbumAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				if ( !empty( $_POST ) ) {
@@ -104,6 +111,10 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
+
+        /**
+         * Methode pour éditer un album déjà créé
+         */
 		public function editAlbumAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				if ( !empty( $_POST ) ) {
@@ -127,8 +138,8 @@
 						echo toAjax(
 							TYPE_FEEDBACK_SUCCESS,
 							[
-								'Titre'   => 'Ajout réussie',
-								'Message' => "L'ajout de l'album à été effectué avec succès",
+                                'Titre' => 'Edition réussie',
+                                'Message' => "La modification de l'album à été effectué avec succès",
 							]
 						);
 
@@ -156,6 +167,9 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
+        /**
+         * Suppression d'un album par un utilisateur
+         */
 		public function removeAlbumAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				try {

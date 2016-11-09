@@ -112,6 +112,13 @@
 			$this->execQuery( $pQuery, $params );
 		}
 
+        /**
+         * Methode permettant de regarder si une personne a voté sur une photo
+         *
+         * @param int $imgId
+         * @param String $pseudo
+         * @return null|object
+         */
 		public function checkvoteImage( $imgId, $pseudo ) {
 
 			$pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
@@ -125,19 +132,28 @@
 			return $this->findOne( $pQuery, $params );
 		}
 
+        /**
+         * Methode qui permet de trier les photos par la popularité ( moyenne des votes)
+         *
+         * @param Image $img
+         * @param int $nbImage
+         * @return array
+         */
         public function populariteImage(Image $img, $nbImage)
         {
 
-            $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ?, ?");
+            $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ? ,?");
 
             try {
-                $pQuery->execute([$img->getId() - 1,
-                    $nbImage]);
+
+                $pQuery->execute([$img->getId() - 1, $nbImage]);
                 $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
             } catch (Exception $exc) {
                 var_dump($exc->getMessage());
                 $data = [];
             }
+
+            var_dump($data);
 
             return (!empty($data)) ? $data : [];
 

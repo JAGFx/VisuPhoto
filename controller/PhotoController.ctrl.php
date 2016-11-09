@@ -123,32 +123,36 @@
 
 		/*
 		 *
-		 * Traitement pour voter sur une photo
+		 * Traitement pour voter sur une photo (si utilisateur connecté ou non)
+		 * Si non connecté on regarde ses cookies et on l'autorise si il n'a pas voté
+		 * Si connecté on regardé dans la base s'il n'a pas encore voté et on ajoute un cookie
 		 *
 		 */
 
 		public function votePhotoAction() {
-			$privilege = UserSessionManager::getSession()->getPrivilege();
-
 			$valueJug = $_GET[ "jug" ];
 			$imgId    = $this->getImg()->getId();
 
+            //Si l'utilisateur n'a pas de cookie
 			if ( !isset( $_COOKIE[ 'votePhoto' . $imgId ] ) ) {
 
 				$pseudo = UserSessionManager::getSession()->getPseudo();
 
-				if ( $privilege == UserSessionManager::USER_PRIVILEGE ) {
+                //Si l'utilisateur est connecté on regarde s'il n'a pas voté
+                if (UserSessionManager::hasPrivilege(UserSessionManager::USER_PRIVILEGE)) {
 					$retour = $this->getDAO()->checkvoteImage( $imgId, $pseudo );
 				} else {
 					$retour = null;
 				}
 
+                //Si l'utilisateur n'a pas encore voté
 				if ( $retour == null ) {
 
 					if ( $valueJug == LIKE_BUTTON or $valueJug == DISLIKE_BUTTON ) {
 
 						try {
 							$this->getDAO()->voteImage( $imgId, $valueJug, $pseudo );
+                            //Création d'un cookie
 							setcookie(
 								"votePhoto" . $imgId, "A vote" . $valueJug,
 								time() + 365 * 24 * 3600, null, null, false, true
@@ -187,6 +191,7 @@
 				);
 
 			}
+            //Chargement de la vue
 			$this->photoAction();
 		}
 
@@ -202,6 +207,9 @@
 			$this->photoAction();
 		}
 
+        /**
+         * Methode pour ajouter des photos dans la base si l'utilisateur est connecté
+         */
 		public function addPhotoAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				if ( !empty( $_POST ) ) {

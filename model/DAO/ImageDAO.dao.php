@@ -261,6 +261,34 @@
 			else
 				return $this->getImage( 1 );
 		}
+
+        public function getLastImage()
+        {
+            $query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1';
+
+            return $this->findOne($query, [], 'Image');
+
+        }
+
+        public function getLastImageFiltre($filtre)
+        {
+            $query = 'SELECT * FROM image WHERE category = ?';
+            $params = [
+                $filtre
+            ];
+
+            return $this->findOne($query, $params, 'Image');
+
+        }
+
+        public function getLastImagePop()
+        {
+            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote ASC LIMIT 1';
+
+            return $this->findOne($query, [], 'Image');
+
+
+        }
 		
 		/**
 		 * Retourne l'image suivante d'une image
@@ -348,6 +376,7 @@
 		 * @return Image[]
 		 */
 		public function getImageList( image $img, $nb ) {
+            // TODO MODIFER FONCTION
 			$res = [ ];
 
 			# Verifie que le nombre d'image est non nul
@@ -357,8 +386,10 @@
 			}
 			$id  = $img->getId();
 			$max = $id + $nb;
+            var_dump($this->size(), $id);
 			while ( $id < $this->size() && $id < $max ) {
-				$res[] = $this->getImage( $id );
+
+                $res[] = $this->getImage( $id );
 				$id++;
 			}
 

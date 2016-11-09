@@ -78,6 +78,10 @@
 			$controller->firstPhotoMatrixAction();
 			break;
 
+        case 'lastPhotoMatrix' :
+            $controller->lastPhotoMatrixAction();
+            break;
+
 		case 'randomPhotoMatrix' :
 			$controller->randomPhotoMatrixAction();
 			break;

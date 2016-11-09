@@ -15,8 +15,8 @@
             <img src="<?= $data->img->getPath(); ?>" alt="<?= $data->img->getComment(); ?>" width="<?= $data->size; ?>">
 
             <div class="caption">
-
-                <form method="POST" action="?a=updateModifier" data-preventDefault="yes" class="col-xs-12">
+                <form method="POST" action="?a=updateModifier&imgId=<?php echo $data->img->getId() ?>"
+                      data-preventDefault="yes" class="col-xs-12">
 
                     <div class="messageForm"></div>
 

@@ -65,6 +65,7 @@
 			# Calcul la liste des images à afficher
 			$imgLst = $this->getDAO()->getImageList( $this->getImg(), $this->_nbImg );
 
+
 			# Transforme cette liste en liste de couples (tableau a deux valeurs)
 			# contenant l'URL de l'image et l'URL de l'action sur cette image
 			foreach ( $imgLst as $i ) {
@@ -144,6 +145,19 @@
 				? $this->photoMatrixAction()
 				: $this->filtreByCategoryAction();
 		}
+
+        public function lastPhotoMatrixAction()
+        {
+            // Traitement
+            $lastImg = $this->getDAO()->getLastImage();
+
+            $this->setImg($lastImg);
+
+            // Génération de la vue
+            (is_null($this->getFiltre()))
+                ? $this->photoMatrixAction()
+                : $this->filtreByCategoryAction();
+        }
 
 		/**
 		 * Traitement pour afficher plus d'image dans la matrice
@@ -260,39 +274,34 @@
 			$this->getViewManager()->setValue(
 				'navBar',
 				[
-					"Previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
-						      ( $this->getImg()->getId() - $this->getNbImg() ) . '&nbImg=' .
-						      $this->getNbImg() . '&size=' . $this->getSize()
-						      . "&flt=" . $this->getFiltre(
-						) . "&popularite=" . $this->getPopularite(),
+                    "Previous" => BASE_URL . 'prevPhotoMatrix&imgId=' .
+                        ($this->getImg()->getId() - $this->getNbImg()) . '&nbImg=' .
+                        $this->getNbImg() . '&size=' . $this->getSize()
+                        . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
+                    "Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
+                        ($this->getImg()->getId() + $this->getNbImg()) . '&nbImg=' .
+                        $this->getNbImg() . '&size=' . $this->getSize()
+                        . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
-					"Next" => BASE_URL . 'nextPhotoMatrix&imgId=' .
-						  ( $this->getImg()->getId() + $this->getNbImg() ) . '&nbImg=' .
-						  $this->getNbImg() . '&size=' . $this->getSize()
-						  . "&flt=" . $this->getFiltre(
-						) . "&popularite=" . $this->getPopularite(),
+                    "First" => BASE_URL . "firstPhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
-					"First" => BASE_URL . "firstPhotoMatrix&imgId=" .
-						   $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
+                    "Random" => BASE_URL . "randomPhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
 
-					"Random" => BASE_URL . "randomPhotoMatrix&imgId=" .
-						    $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
+                    "More" => BASE_URL . "morePhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
-					"More" => BASE_URL . "morePhotoMatrix&imgId=" .
-						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
+                    "Less" => BASE_URL . "lessPhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 
-					"Less" => BASE_URL . "lessPhotoMatrix&imgId=" .
-						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre(),
+                    "list" => $this->getDAO()->getListCategory(),
 
-					"list" => $this->getDAO()->getListCategory(),
+                    "Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&popularite=" . $this->getPopularite(),
 
-					"Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
-							$this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&flt=" . "&popularite=true"
+                    "Last" => BASE_URL . "lastPhotoMatrix&imgId=" .
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),
 				]
 			);
 

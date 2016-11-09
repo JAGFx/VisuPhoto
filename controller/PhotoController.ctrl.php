@@ -318,6 +318,10 @@
 				]
 			);
 
+            $this->getViewManager()->setValue(
+                'currentCategory', ""
+            );
+
 			$this->getViewManager()->setValue(
 				'note',
 				[

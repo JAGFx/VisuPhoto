@@ -33,7 +33,7 @@
 
 		public function &moveFileUpload( &$file, &$path, array &$type = [ ], &$size = -1 ) {
 			$path = $this->validateString( $path );
-			$base = __DIR__ . '/../model/imgs/';
+			$base = __DIR__ . '/../../model/imgs/';
 
 			$file = parent::validateFileUploaded( $file, $type, $size );
 			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $path . $file[ 'name' ] );

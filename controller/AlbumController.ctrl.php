@@ -29,6 +29,15 @@
 		}
 
 		// ---------------------------------------------------------------------------------------------- Actions
+		public function viewAlbum() {
+			$this->makeMenu();
+			$this->makeContent();
+
+			$this->getViewManager()
+				->setValue( 'listAlbum', $this->_album )
+				->render( 'Album/viewAlbum' );
+		}
+
 		public function viewListAlbumAction() {
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				$this->makeMenu();

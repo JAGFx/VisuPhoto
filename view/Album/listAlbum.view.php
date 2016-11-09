@@ -11,7 +11,8 @@
 		<?php foreach ( $data->listAlbum as $album ) : ?>
 			<tr >
 				<td ><?= $album->getId(); ?></td >
-				<td ><?= $album->getName(); ?></td >
+				<td ><a href="<?= BASE_URL . 'viewAlbum&albumID=' . $album->getId(
+					) ?>" ><?= $album->getName(); ?></a ></td >
 				<td ><?= count( $album->getImages() ); ?></td >
 				<td >
 					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'editAlbum&albumID=' . $album->getId(

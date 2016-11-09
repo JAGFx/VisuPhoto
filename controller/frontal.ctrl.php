@@ -140,6 +140,10 @@
 			$controller->viewListAlbumAction();
 			break;
 
+		case 'viewAlbum' :
+			$controller->viewAlbum();
+			break;
+
 		case 'addAlbum' :
 			$controller->addAlbumAction();
 			break;

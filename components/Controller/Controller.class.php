@@ -16,12 +16,12 @@
 	 */
 	abstract class Controller {
 		/**
-		 * @var DAO
+		 * @var DAO DAO associé au contrôleur (Entité)
 		 */
 		private $_dao = null;
 
 		/**
-		 * @var ViewManager
+		 * @var ViewManager Gestionnaire de vue pour le contrôleur
 		 */
 		private $_viewManager;
 

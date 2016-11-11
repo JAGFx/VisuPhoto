@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	 * Created by PhpStorm.
 	 * User: emsm
@@ -31,7 +31,7 @@
 		 * @param string $nameDAO Nom du DAO à charger
 		 */
 		protected function __construct( $nameDAO = null ) {
-			$this->_dao         = $this->setDAO( $nameDAO );
+			$this->_dao = $this->setDAO( $nameDAO );
 
 			$this->_viewManager = new ViewManager();
 			$this->_viewManager->setPageView( 'Default/default' );

@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	 * Created by PhpStorm.
 	 *
@@ -28,6 +28,7 @@
 		 * @throws Exception
 		 */
 		public function dashboardAction() {
+			// Accessible que si utilisateur connecté
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				$this->makeMenu();
 

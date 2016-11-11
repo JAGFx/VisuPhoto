@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	 * Created by PhpStorm.
 	 * User: emsm
@@ -84,7 +84,7 @@
 				$pQuery->execute( $aParams );
 				$data = ( !is_null( $className ) && class_exists( $className ) )
 					? $pQuery->fetchAll( PDO::FETCH_CLASS, $className )
-					: $pQuery->fetchAll();
+					: $pQuery->fetchAll( PDO::FETCH_CLASS );
 
 			} catch ( Exception $exc ) {
 				$data = [ ];

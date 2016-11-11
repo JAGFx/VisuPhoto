@@ -24,13 +24,14 @@
 	require __DIR__ . '/commons.php';
 	require __DIR__ . '/../components/InputValidator/IValidatorVisu.class.php';
 
+	// Initialisation de la session utilisateur
 	UserSessionManager::init();
 	UserSessionManager::start();
 
-	$action = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
-
+	$action     = ( isset( $_GET[ 'a' ] ) ) ? htmlentities( $_GET[ 'a' ] ) : null;
 	$controller = loadController( $action );
 
+	// Action demandé
 	switch ( $action ) {
 		// ----------------------------------------------------------------------------------------------Photo
 		case 'viewPhoto' :
@@ -65,9 +66,10 @@
 			$controller->addPhotoAction();
 			break;
 
-        case 'votePhoto':
-            $controller->votePhotoAction();
-            break;
+		case 'votePhoto':
+			$controller->votePhotoAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------Photo Matrix
 		case 'viewPhotoMatrix' :
@@ -78,9 +80,9 @@
 			$controller->firstPhotoMatrixAction();
 			break;
 
-        case 'lastPhotoMatrix' :
-            $controller->lastPhotoMatrixAction();
-            break;
+		case 'lastPhotoMatrix' :
+			$controller->lastPhotoMatrixAction();
+			break;
 
 		case 'randomPhotoMatrix' :
 			$controller->randomPhotoMatrixAction();
@@ -106,24 +108,27 @@
 			$controller->filtreByCategoryAction();
 			break;
 
-        case 'popularitePhotoMatrix':
-            $controller->populariteAction();
-            break;
+		case 'popularitePhotoMatrix':
+			$controller->populariteAction();
+			break;
 
 
 		// ----------------------------------------------------------------------------------------------A Propos
 		case 'viewAPropos' :
 			$controller->aProposAction();
 			break;
-        // ----------------------------------------------------------------------------------------------Modifier image
 
-        case 'viewModifier' :
-            $controller->modifierAction();
-            break;
 
-        case 'updateModifier' :
-            $controller->updateModifierAction();
-            break;
+		// ----------------------------------------------------------------------------------------------Modifier image
+
+		case 'viewModifier' :
+			$controller->modifierAction();
+			break;
+
+		case 'updateModifier' :
+			$controller->updateModifierAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------User
 		case 'loginUser' :
@@ -139,7 +144,7 @@
 			break;
 
 
-		// ----------------------------------------------------------------------------------------------Album viewListAlbum
+		// ----------------------------------------------------------------------------------------------Album
 		case 'viewlistAlbum' :
 			$controller->viewListAlbumAction();
 			break;
@@ -160,6 +165,7 @@
 			$controller->removeAlbumAction();
 			break;
 
+
 		// ----------------------------------------------------------------------------------------------Dashboard
 		case 'homeDashboard' :
 			$controller->dashboardAction();
@@ -168,6 +174,7 @@
 		case 'editionDashboard' :
 			$controller->editionDashboardAction();
 			break;
+
 
 		// ----------------------------------------------------------------------------------------------Home
 		default:

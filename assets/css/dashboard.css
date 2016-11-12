@@ -157,3 +157,20 @@ body {
 	display:       inline-block;
 	border-radius: 50%;
 }
+
+
+footer {
+	z-index:        1000;
+	position:       fixed;
+	bottom:         0;
+	left:           0;
+	width:          100vw;
+	padding:        10px;
+	text-align:     center;
+	background:     #38302E;
+	color:          #F5F5F5;
+	border-top:     3px solid #737373;
+	text-transform: uppercase;
+	font-size:      0.9em;
+	letter-spacing: 0.3em;
+}

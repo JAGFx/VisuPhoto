@@ -23,6 +23,7 @@
 	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
 	define( 'ERR_INVALID_VIEW_NAME', 'Nom de la Vue invalide ou introuvable' );
 	define( 'ERR_INVALID_CLASS_NAME', 'Nom de la Class invalide ou introuvable' );
+	define( 'ERR_INVALID_DAO_INSTANCE', "L'instance du DAO est invalide" );
 
 	// Alert
 	define( 'TYPE_FEEDBACK_SUCCESS', -1 );
@@ -39,6 +40,9 @@
 	define( 'DB_SGBD', DAO::_DAO_SGBD_SQLITE );
 	define( 'DB_PORT', null );
 	define( 'DB_CHARSET', null );
+
+	// UserSessionManager
+	define( 'ERR_UNSTART_SESSION', "La session utilisateur doit être démarré" );
 
 	// Routing
 	define( 'PATH_TO_DASH', 'homeDashboard' );
@@ -118,11 +122,11 @@
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_CTRL_NAME );
 
-		if ( !class_exists( $ctrl ) )
-			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $ctrl );
-
 		require_once __DIR__ . '/../components/Controller/Controller.class.php';
 		require_once $path;
+
+		if ( !class_exists( $ctrl ) )
+			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $ctrl );
 
 		// Création et retour du contrôleur
 		return new  $ctrl();
@@ -142,10 +146,10 @@
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
 
+		require_once $path;
+
 		if ( !class_exists( $name ) )
 			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $name );
-
-		require_once $path;
 
 		return new $name();
 	}

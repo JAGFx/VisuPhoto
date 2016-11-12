@@ -26,12 +26,18 @@
 		private $_viewManager;
 
 		/**
+		 * @var null|string Nom du DAO
+		 */
+		protected $_nameDAO;
+
+		/**
 		 * Controller constructor.
 		 *
 		 * @param string $nameDAO Nom du DAO à charger
 		 */
 		protected function __construct( $nameDAO = null ) {
-			$this->_dao = $this->setDAO( $nameDAO );
+			$this->_nameDAO = $nameDAO;
+			$this->_dao     = $this->setDAO( $this->_nameDAO );
 
 			$this->_viewManager = new ViewManager();
 			$this->_viewManager->setPageView( 'Default/default' );
@@ -70,9 +76,18 @@
 		}
 
 		/**
-		 * @return DAO|null
+		 * @return \DAO|null
+		 * @throws \Exception
 		 */
 		protected function getDAO() {
+
+			if ( !$this->_dao instanceof $this->_nameDAO )
+				throw new Exception(
+					ERR_INVALID_DAO_INSTANCE . ' : Instance [ ' . $this->_nameDAO . ' ] - DAO [ ' . get_class(
+						$this->_dao
+					) . ' ]'
+				);
+
 			return $this->_dao;
 		}
 

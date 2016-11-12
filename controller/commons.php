@@ -22,13 +22,14 @@
 	define( 'ERR_INVALID_DAO_NAME', 'Nom de DAO invalide ou introuvable' );
 	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
 	define( 'ERR_INVALID_VIEW_NAME', 'Nom de la Vue invalide ou introuvable' );
+	define( 'ERR_INVALID_CLASS_NAME', 'Nom de la Class invalide ou introuvable' );
 
 	// Alert
 	define( 'TYPE_FEEDBACK_SUCCESS', -1 );
-	define( 'TYPE_FEEDBACK_INFO', 1 );
-	define( 'TYPE_FEEDBACK_WARN', 2 );
-	define( 'TYPE_FEEDBACK_DANGER', 3 );
-	define( 'TYPE_FEEDBACK_ERROR', 4 );
+	define( 'TYPE_FEEDBACK_INFO', 0 );
+	define( 'TYPE_FEEDBACK_WARN', 1 );
+	define( 'TYPE_FEEDBACK_DANGER', 2 );
+	define( 'TYPE_FEEDBACK_ERROR', 3 );
 
 	// DAO
 	define( 'DB_HOST', null );
@@ -117,6 +118,9 @@
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_CTRL_NAME );
 
+		if ( !class_exists( $ctrl ) )
+			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $ctrl );
+
 		require_once __DIR__ . '/../components/Controller/Controller.class.php';
 		require_once $path;
 
@@ -137,6 +141,9 @@
 
 		if ( !is_file( $path ) )
 			throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
+
+		if ( !class_exists( $name ) )
+			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $name );
 
 		require_once $path;
 

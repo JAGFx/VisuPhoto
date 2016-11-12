@@ -30,7 +30,7 @@
 		/**
 		 * Image constructor.
 		 */
-		function __construct() { }
+		public function __construct() { }
 
 		# Retourne l'URL de cette image
 		/**

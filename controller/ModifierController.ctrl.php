@@ -150,7 +150,7 @@ class ModifierController extends Controller
     }
 
     /**
-     * @param &Image $img
+     * @param Image $img
      */
     private function setImg(&$img)
     {
@@ -168,7 +168,7 @@ class ModifierController extends Controller
     }
 
     /**
-     * @param &int $size
+     * @param int $size
      */
     private function setSize(&$size)
     {

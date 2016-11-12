@@ -169,7 +169,8 @@
 			/*var_dump( $aQuery );
 			var_dump( $aParams );*/
 
-			$pQuery = $this->pdo->prepare( $aQuery );
+			$pQuery     = $this->pdo->prepare( $aQuery );
+			$execResult = [ ];
 
 			try {
 				$pQuery->execute( $aParams );
@@ -180,7 +181,6 @@
 					$execResult[ 'message' ] = $pQuery->errorInfo()[ 2 ];
 
 			} catch ( Exception $exc ) {
-				//var_dump( $exc );
 				$rowCount = 0;
 			}
 
@@ -246,7 +246,6 @@
 			} catch ( Exception $exc ) {
 				$data = null;
 			}
-			//var_dump( $data );
 
 			$pQuery->closeCursor();
 

@@ -56,8 +56,6 @@
 
 			$user = $this->findOne( $query, $params );
 
-			//var_dump( $user );
-
 			if ( !is_null( $user ) )
 				$user = new User( $user->pseudo, $user->password, $user->privilege );
 

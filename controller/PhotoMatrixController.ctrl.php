@@ -62,19 +62,20 @@
 
 			$matrix = [ ];
 
-			# Calcul la liste des images à afficher
+			// Calcul la liste des images à afficher
 			$imgLst = $this->getDAO()->getImageList( $this->getImg(), $this->_nbImg );
 
 
-			# Transforme cette liste en liste de couples (tableau a deux valeurs)
-			# contenant l'URL de l'image et l'URL de l'action sur cette image
+			// Transforme cette liste en liste de couples (tableau a deux valeurs)
+			// contenant l'URL de l'image et l'URL de l'action sur cette image
 			foreach ( $imgLst as $i ) {
-				# l'identifiant de cette image $i
+				// l'identifiant de cette image $i
 				$iId = $i->getId();
 
-				# Ajoute à imgMatrixURL
-				#  0 : l'URL de l'image
-				#  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
+				/*  Ajoute à imgMatrixURL
+				  0 : l'URL de l'image
+				  1 : l'URL de l'action lorsqu'on clique sur l'image : la visualiser seul
+				*/
 				$matrix[] = [
 					$i,
 					BASE_URL . "viewPhoto&imgId=$iId" . '&nbImg=' .
@@ -343,7 +344,7 @@
 		}
 
 		/**
-		 * @param &Image $img
+		 * @param Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -359,7 +360,7 @@
 		}
 
 		/**
-		 * @param &int $size
+		 * @param int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )
@@ -375,7 +376,7 @@
 		}
 
 		/**
-		 * @param &string $filtre
+		 * @param string $filtre
 		 */
 		public function setFiltre( &$filtre ) {
 			$this->_filtre = ( isset( $filtre ) && !empty( $filtre ) )
@@ -392,7 +393,7 @@
 		}
 
 		/**
-		 * @param &string $popularite
+		 * @param string $popularite
 		 */
 		public function setPopularite( &$popularite ) {
             $this->_popularite = (isset($popularite) && (!empty($popularite) && $popularite == "true"))
@@ -409,7 +410,7 @@
 		}
 
 		/**
-		 * @param &int $nbImg
+		 * @param int $nbImg
 		 */
 		private function setNbImg( &$nbImg ) {
 			$this->_nbImg = ( isset( $nbImg ) )

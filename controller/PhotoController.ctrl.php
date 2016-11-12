@@ -321,7 +321,7 @@
 			$this->getViewManager()->setValue(
 				'modifier',
 				[
-					"Button" => '?a=viewModifier&imgId=' .
+					"Button" => BASE_URL . 'viewModifier&imgId=' .
 						    ( $this->getImg()->getId() ) . '&size=' . $this->getSize()
 				]
 			);
@@ -357,7 +357,7 @@
 		}
 
 		/**
-		 * @param &Image $img
+		 * @param Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -373,7 +373,7 @@
 		}
 
 		/**
-		 * @param &int $size
+		 * @param int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )

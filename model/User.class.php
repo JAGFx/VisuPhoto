@@ -71,7 +71,7 @@
 		 * @return array|NULL
 		 * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.sleep
 		 */
-		function __sleep() {
+		public function __sleep() {
 			return [ '_pseudo', '_privilege' ];
 		}
 

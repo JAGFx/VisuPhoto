@@ -20,7 +20,6 @@
 				$data = $pQuery->fetch()[ 0 ];
 
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = 0;
 			}
 
@@ -37,7 +36,6 @@
 				$data = $pQuery->fetchAll();
 
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = null;
 
 			}
@@ -61,7 +59,6 @@
 				$pQuery->execute( [ $imgId ] );
 				$data = $pQuery->fetchObject( 'Image' );
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = null;
 			}
 
@@ -128,7 +125,6 @@
 				$imgId
 			];
 
-
 			return $this->findOne( $pQuery, $params );
 		}
 
@@ -141,7 +137,6 @@
          */
         public function populariteImage(Image $img, $nbImage)
         {
-
             $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ? ,?");
 
             try {
@@ -149,7 +144,6 @@
                 $pQuery->execute([$img->getId() - 1, $nbImage]);
                 $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
             } catch (Exception $exc) {
-                var_dump($exc->getMessage());
                 $data = [];
             }
 
@@ -168,7 +162,6 @@
 
         public function infovoteImage($imgId)
         {
-
 			$pQuery = "SELECT (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=0) as Dislike, (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=1) as Like";
 
 			$param = [
@@ -188,9 +181,7 @@
 		 * @return Image[]
 		 */
 		public function filtreImage( Image $img, $filtre, $nbImage ) {
-
 			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id > ? AND category = ? LIMIT  ?" );
-
 
 			try {
 				$pQuery->execute(
@@ -202,7 +193,6 @@
 				);
 				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = [ ];
 			}
 
@@ -218,14 +208,10 @@
 		 * @return Image|null
 		 */
 		public function getRandomImage( $filter = null ) {
-
 			if ( is_null( $filter ) ) {
 
 				$nbFichiers = $this->size();
-
 				$rand = rand( 1, $nbFichiers );
-
-				//var_dump($nbFichiers, $rand);
 
 				return $this->getImage( $rand );
 
@@ -356,10 +342,6 @@
 		 * @return null|Image
 		 */
 		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
-			//var_dump($img);
-
-			//$filtredImg = $this->filtreImage( $img, $filter, $nb );
-
 			$query  = ( $nb >= 0 )
 				? 'SELECT * FROM image WHERE id > ? AND category = ? ORDER BY id LIMIT ?, 1'
 				: 'SELECT * FROM image WHERE id < ? AND category = ? ORDER BY id DESC LIMIT ?, 1';
@@ -371,7 +353,7 @@
 
 			$result = $this->findOne( $query, $params, 'Image' );
 
-			return $result;// ( is_null( $result ) ) ? $filtredImg[ 0 ] : $result;
+			return $result;
 		}
 		
 
@@ -394,7 +376,7 @@
 			}
 			$id  = $img->getId();
 			$max = $id + $nb;
-			// var_dump($this->size(), $id);
+
 			while ( $id < $this->size() && $id < $max ) {
 
                 $res[] = $this->getImage( $id );

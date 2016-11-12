@@ -34,9 +34,6 @@
 					<a href="<?php echo $data->note[ "Like" ]; ?>" class="btn btn-success btn-sm" >
 						Like <span class="badge" ><?= $data->note[ "infoNote" ]->Like ?></span >
 					</a ><br />
-					<?php /*foreach ( $data->note[ "infoNote" ] as $key => $note ) : */ ?><!--
-						<span ><?php /*echo $key */ ?> : <?php /*echo $note */ ?></span ><br >
-					--><?php /*endforeach; */ ?>
 				</p >
 			</div >
 		</div >

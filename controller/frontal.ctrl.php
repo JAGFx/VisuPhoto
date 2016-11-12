@@ -70,6 +70,10 @@
 			$controller->votePhotoAction();
 			break;
 
+		case 'lastPhoto':
+			$controller->lastPhotoMatrixAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------Photo Matrix
 		case 'viewPhotoMatrix' :

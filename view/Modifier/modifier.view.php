@@ -30,11 +30,11 @@
                     <select name="selectList">
                         <?php foreach ($data->navBar['list'] as $list) : ?>
                             <?php
-                            if ($list[0] == $data->img->getCategory()) { ?>
+                            if ( $list->category == $data->img->getCategory() ) { ?>
                                 <option selected="selected"
-                                        value="<?php echo $list[0]; ?>"><?php echo $list[0]; ?> </option>
+                                        value="<?php echo $list->category; ?>" ><?php echo $list->category; ?> </option >
                             <?php } else { ?>
-                                <option value="<?php echo $list[0]; ?>"><?php echo $list[0]; ?> </option>
+                                <option value="<?php echo $list->category; ?>" ><?php echo $list->category; ?> </option >
 
                             <?php } ?>
                         <?php endforeach; ?>

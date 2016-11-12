@@ -206,6 +206,19 @@
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour accèder à la dernière image
+		 */
+		public function lastPhotoMatrixAction() {
+			// Traitement
+			$lastImg = $this->getDAO()->getLastImage();
+
+			$this->setImg( $lastImg );
+
+			// Génération de la vue
+			$this->photoAction();
+		}
+
         /**
          * Methode pour ajouter des photos dans la base si l'utilisateur est connecté
          */
@@ -307,7 +320,11 @@
 					"Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
 							$this->getImg()->getId(
 							) . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize(
-						) . "&flt=" . "&popularite=true"
+						) . "&flt=" . "&popularite=true",
+
+					"Last" => BASE_URL . "lastPhoto&imgId=" .
+						  $this->getImg()->getId(
+						  ) . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize()
 				]
 			);
 

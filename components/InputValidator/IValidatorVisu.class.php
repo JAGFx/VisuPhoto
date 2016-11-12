@@ -19,7 +19,7 @@
 		 * @throws InputValidatorExceptions
 		 */
 		public function &validateString( &$str ) {
-			$str = $this->validateString( $str );
+			$str = parent::validateString( $str );
 
 			if ( empty( $str ) )
 				throw new InputValidatorExceptions(
@@ -32,7 +32,13 @@
 		}
 
 		/**
-		 * @param string $path
+		 * @param       $file
+		 * @param       $path
+		 * @param array $type
+		 * @param int   $size
+		 *
+		 * @return mixed
+		 * @throws \InputValidator\InputValidatorExceptions
 		 */
 		public function &moveFileUpload( &$file, &$path, array &$type = [ ], &$size = -1 ) {
 			$path = $this->validateString( $path );
@@ -54,8 +60,10 @@
 		}
 
 		/**
-		 * @param string $str1
-		 * @param string $str2
+		 * @param $str1
+		 * @param $str2
+		 *
+		 * @throws \InputValidator\InputValidatorExceptions
 		 */
 		public function validateSameString( &$str1, &$str2 ) {
 			$str1 = $this->validateString( $str1 );

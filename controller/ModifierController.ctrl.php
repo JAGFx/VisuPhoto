@@ -128,6 +128,10 @@ class ModifierController extends Controller
 	    );
 
 	    $this->getViewManager()->setValue(
+		    'currentCategory', null
+	    );
+
+	    $this->getViewManager()->setValue(
 		    'modifier',
 		    [
 			    "Button" => BASE_URL . 'viewModifier&imgId=' .

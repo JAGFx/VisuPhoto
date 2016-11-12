@@ -18,9 +18,7 @@
 			<select name="selectList" onChange="window.location.href=this.value" >
 				<option value="default" >Catégorie</option >
 				<?php foreach ( $data->navBar[ 'list' ] as $list ) : ?>
-
-                    <option
-                        value="<?= $data->listCategoty; ?><?php echo $list[0]; ?>" <?php echo ($list[0] == $data->currentCategory) ? "selected" : ""; ?>><?php echo $list[0]; ?> </option>
+					<option value="<?= $data->listCategoty; ?><?php echo $list->category; ?>" <?php echo ( $list->category == $data->currentCategory ) ? "selected" : ""; ?>><?php echo $list->category; ?> </option >
 				<?php endforeach; ?>
 			</select >
 		</li >

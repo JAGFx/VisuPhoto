@@ -17,7 +17,7 @@
 
 			try {
 				$pQuery->execute();
-				$data = $pQuery->fetch()[ 0 ];
+				$data = $pQuery->fetch( PDO::FETCH_CLASS )[ 0 ];
 
 			} catch ( Exception $exc ) {
 				$data = 0;
@@ -29,18 +29,9 @@
 
 		public function getListCategory() {
 
-			$pQuery = $this->pdo->prepare( "SELECT category FROM image GROUP BY category" );
+			$query = 'SELECT category FROM image GROUP BY category';
 
-			try {
-				$pQuery->execute();
-				$data = $pQuery->fetchAll();
-
-			} catch ( Exception $exc ) {
-				$data = null;
-
-			}
-
-			return ( !empty( $data ) ) ? $data : null;
+			return $this->findAll( $query, [ ] );
 		}
 		
 		/**
@@ -210,11 +201,9 @@
 		public function getRandomImage( $filter = null ) {
 			if ( is_null( $filter ) ) {
 
-				$nbFichiers = $this->size();
-				$rand = rand( 1, $nbFichiers );
+				$query = 'SELECT * FROM image ORDER BY RANDOM() LIMIT 1';
 
-				return $this->getImage( $rand );
-
+				return $this->findOne( $query, [ ], 'Image' );
 			} else
 				return $this->getRandomFilter( $filter );
 		}
@@ -253,7 +242,7 @@
 
         public function getLastImage()
         {
-            $query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1';
+		$query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1, 1';
 
             return $this->findOne($query, [], 'Image');
 
@@ -369,22 +358,13 @@
 		 * @return Image[]
 		 */
 		public function getImageList( image $img, $nb ) {
-            // TODO MODIFER FONCTION
-			$res = [ ];
+			$query  = 'SELECT * FROM image  WHERE id > ? ORDER BY id LIMIT ?';
+			$params = [
+				$img->getId(),
+				$nb
+			];
 
-			# Verifie que le nombre d'image est non nul
-			if ( !$nb > 0 ) {
-				debug_print_backtrace();
-				trigger_error( "Erreur dans ImageDAO.getImageList: nombre d'images nul" );
-			}
-			$id  = $img->getId();
-			$max = $id + $nb;
-
-			while ( $id < $this->size() && $id < $max ) {
-
-                $res[] = $this->getImage( $id );
-				$id++;
-			}
+			$res = $this->findAll( $query, $params, 'Image' );
 
 			return $res;
 		}

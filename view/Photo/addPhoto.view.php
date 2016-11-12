@@ -17,7 +17,7 @@
 			<label for="category" >Catégorie</label >
 			<select name="category" class="form-control" id="category" required >
 				<?php foreach ( $data->listeCtge as $list ) : ?>
-					<option value="<?php echo $list[ 0 ]; ?>" ><?php echo $list[ 0 ]; ?> </option >
+					<option value="<?php echo $list->category; ?>" ><?php echo $list->category; ?> </option >
 				<?php endforeach; ?>
 			</select >
 		</div >

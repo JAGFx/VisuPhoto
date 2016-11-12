@@ -74,14 +74,12 @@
 		/**
 		 * Récupère la session utilisateur
 		 *
-		 * @return User
-		 * @throws \Exception
+		 * @return User|null
 		 */
 		public static function getSession() {
-			if ( isset( $_SESSION[ 'user' ] ) && !is_null( $_SESSION[ 'user' ] ) )
-				throw new Exception( ERR_UNSTART_SESSION );
-
-			return unserialize( $_SESSION[ 'user' ] );
+			return ( isset( $_SESSION[ 'user' ] ) && !is_null( $_SESSION[ 'user' ] ) )
+				? unserialize( $_SESSION[ 'user' ] )
+				: null;
 		}
 
 		/**
@@ -92,6 +90,9 @@
 		 * @return bool
 		 */
 		public static function hasPrivilege( $priviege ) {
+			if ( is_null( self::getSession() ) )
+				return false;
+
 			return self::getSession()->getPrivilege() >= $priviege;
 		}
 	}

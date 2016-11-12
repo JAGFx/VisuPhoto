@@ -32,8 +32,14 @@
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				$this->makeMenu();
 
+				loadDAO( 'ImageDAO' );
+				$userDAO = loadDAO( 'UserDAO' );
+
+				$listVote = $userDAO->findVoteUser( UserSessionManager::getSession() );
+
 				$this->getViewManager()
 				     ->setPageView( 'Dashboard/base' )
+				     ->setValue( 'listVote', $listVote )
 				     ->render( 'Dashboard/dashboard' );
 
 			} else

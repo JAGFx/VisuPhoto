@@ -7,6 +7,8 @@
 	 * Time: 19:39
 	 */
 	final class User {
+		const BASE_PATH = 'assets/pics/avatars/';
+
 		/**
 		 * @var string
 		 */
@@ -21,6 +23,11 @@
 		 * @var int
 		 */
 		private $_privilege;
+
+		/**
+		 * @var string
+		 */
+		private $_avatar = 'nouser.png';
 
 		/**
 		 * User constructor.
@@ -61,6 +68,22 @@
 		}
 
 		/**
+		 * @return string
+		 */
+		public function getAvatar() {
+			return filter_var( $this->_avatar, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED )
+				? $this->_avatar
+				: self::BASE_PATH . $this->_avatar;
+		}
+
+		/**
+		 * @param string $avatar
+		 */
+		public function setAvatar( $avatar ) {
+			$this->_avatar = $avatar;
+		}
+
+		/**
 		 * serialize() checks if your class has a function with the magic name __sleep.
 		 * If so, that function is executed prior to any serialization.
 		 * It can clean up the object and is supposed to return an array with the names of all variables of that object that should be serialized.
@@ -72,7 +95,7 @@
 		 * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.sleep
 		 */
 		public function __sleep() {
-			return [ '_pseudo', '_privilege' ];
+			return [ '_pseudo', '_privilege', '_avatar' ];
 		}
 
 

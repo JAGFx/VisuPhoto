@@ -41,6 +41,24 @@
 				);
 		}
 
+		public function editUser( User $user ) {
+			$query  = 'UPDATE user SET password = ?, avatar = ? WHERE pseudo = ?';
+			$params = [
+				$user->getPassword(),
+				$user->getAvatar(),
+				$user->getPseudo()
+			];
+
+			$res = (Object) $this->execQuery( $query, $params );
+
+			if ( !$res->success )
+				throw new InputValidatorExceptions(
+					"Impossible de modifier l'utilisateur",
+					$res->message,
+					TYPE_FEEDBACK_DANGER
+				);
+		}
+
 		/**
 		 * Recherche un utilisateur (Par sa clé primaire: Nom)
 		 *
@@ -54,11 +72,24 @@
 				$pseudo
 			];
 
-			$user = $this->findOne( $query, $params );
+			$userFind = $this->findOne( $query, $params );
 
-			if ( !is_null( $user ) )
-				$user = new User( $user->pseudo, $user->password, $user->privilege );
+			if ( !is_null( $userFind ) ) {
+				$user = new User( $userFind->pseudo, $userFind->password, $userFind->privilege );
+				$user->setAvatar( $userFind->avatar );
+
+			} else
+				$user = null;
 
 			return $user;
+		}
+
+		public function findVoteUser( User $user ) {
+			$query  = 'SELECT i.*, n.valueJug FROM image i NATURAL JOIN note n WHERE n.pseudo = ? ORDER BY i.id';
+			$params = [
+				$user->getPseudo()
+			];
+
+			return $this->findAll( $query, $params );
 		}
 	}

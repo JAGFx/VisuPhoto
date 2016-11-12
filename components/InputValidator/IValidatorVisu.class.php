@@ -42,17 +42,18 @@
 		 */
 		public function &moveFileUpload( &$file, &$path, array &$type = [ ], &$size = -1 ) {
 			$path = $this->validateString( $path );
-			$base = __DIR__ . '/../../model/imgs/';
 
-			if ( !file_exists( $base . $path ) )
-				mkdir( $base . $path, 707 );
+			$base = __DIR__ . '/../../' . $path;
+
+			if ( !file_exists( $base ) )
+				mkdir( $base, 707 );
 
 			$file = $this->validateFileUploaded( $file, $type, $size );
-			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $path . $file[ 'name' ] );
+			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $file[ 'name' ] );
 			if ( !$move )
 				throw new InputValidatorExceptions(
 					"Téléchargement impossible",
-					"Impossible de d'uploader l'image",
+					"Impossible d'uploader l'image",
 					TYPE_FEEDBACK_ERROR
 				);
 

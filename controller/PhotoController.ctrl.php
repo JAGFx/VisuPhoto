@@ -230,7 +230,7 @@
 					try {
 						$comment  = $iv->validateString( $_POST[ 'comment' ] );
 						$ctge     = $iv->validateString( $_POST[ 'category' ] );
-						$basePath = 'uploads/';
+						$basePath = Image::BASE_PATH . 'uploads/';
 
 						// Si une URL est spécifié
 						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
@@ -239,7 +239,7 @@
 						// Sinon upload un fichier local
 						else {
 							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );
-							$path = $basePath . $file[ 'name' ];
+							$path = 'uploads/' . $file[ 'name' ];
 						}
 
 						$this->getDAO()->addImage( $path, $ctge, $comment );

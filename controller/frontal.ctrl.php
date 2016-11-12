@@ -147,6 +147,10 @@
 			$controller->registerUserAction();
 			break;
 
+		case 'editUser' :
+			$controller->editUserAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------Album
 		case 'viewlistAlbum' :

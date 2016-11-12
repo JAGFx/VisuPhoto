@@ -216,12 +216,21 @@
 					$iv = new IValidatorVisu();
 
 					try {
-						$comment = $iv->validateString( $_POST[ 'comment' ] );
-						$ctge    = $iv->validateString( $_POST[ 'category' ] );
-						$path    = 'uploads/';
+						$comment  = $iv->validateString( $_POST[ 'comment' ] );
+						$ctge     = $iv->validateString( $_POST[ 'category' ] );
+						$basePath = 'uploads/';
 
-						$file = $iv->moveFileUpload( $_FILES[ 'image' ], $path );
-						$this->getDAO()->addImage( $path . $file[ 'name' ], $ctge, $comment );
+						// Si une URL est spécifié
+						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
+							$path = $iv->validateURL( $_POST[ 'imageURL' ] );
+
+						// Sinon upload un fichier local
+						else {
+							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );
+							$path = $basePath . $file[ 'name' ];
+						}
+
+						$this->getDAO()->addImage( $path, $ctge, $comment );
 
 						// Notification de succès et redirection vers le tableau de bord
 						echo toAjax(

@@ -189,7 +189,7 @@
 		 */
 		public function filtreImage( Image $img, $filtre, $nbImage ) {
 
-			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id >= ? AND category = ? LIMIT  ?" );
+			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id > ? AND category = ? LIMIT  ?" );
 
 
 			try {
@@ -298,12 +298,12 @@
 		 * @return image|null
 		 */
 		public function getNextImage( image $img ) {
-			$id = $img->getId();
-			if ( $id < $this->size() ) {
-				$img = $this->getImage( $id + 1 );
-			}
+			$query  = 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT 1';
+			$params = [
+				$img->getId()
+			];
 
-			return $img;
+			return $this->findOne( $query, $params, 'Image' );
 		}
 		
 		/**
@@ -314,12 +314,12 @@
 		 * @return image|null
 		 */
 		public function getPrevImage( image $img ) {
-			$id = $img->getId();
-			if ( $id > 1 ) {
-				$img = $this->getImage( $id - 1 );
-			}
+			$query  = 'SELECT * FROM image WHERE id < ? ORDER BY id DESC LIMIT 1';
+			$params = [
+				$img->getId()
+			];
 
-			return $img;
+			return $this->findOne( $query, $params, 'Image' );
 		}
 
 		/**
@@ -334,12 +334,15 @@
 		 */
 		public function jumpToImage( image $img, $nb, $filter = null ) {
 			if ( is_null( $filter ) ) {
-				$imgID = (int) $img->getId();
+				$query  = ( $nb >= 0 )
+					? 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT ?, 1'
+					: 'SELECT * FROM image WHERE id < ? ORDER BY id DESC LIMIT ?, 1';
+				$params = [
+					$img->getId(),
+					abs( $nb ) - 1,
+				];
 
-				if ( $imgID + $nb >= 1 && $imgID + $nb <= $this->size() )
-					$img = $this->getImage( $imgID + $nb );
-
-				return $img;
+				return $this->findOne( $query, $params, 'Image' );
 
 			} else
 				return $this->jumpToImageFiltred( $img, $nb, $filter );
@@ -353,17 +356,22 @@
 		 * @return null|Image
 		 */
 		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
-			$filtredImg = $this->filtreImage( $img, $filter, $nb );
+			//var_dump($img);
 
-			$query  = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
+			//$filtredImg = $this->filtreImage( $img, $filter, $nb );
+
+			$query  = ( $nb >= 0 )
+				? 'SELECT * FROM image WHERE id > ? AND category = ? ORDER BY id LIMIT ?, 1'
+				: 'SELECT * FROM image WHERE id < ? AND category = ? ORDER BY id DESC LIMIT ?, 1';
 			$params = [
-				$filtredImg[ 0 ]->getId(),
-				$filter
+				$img->getId(),
+				$filter,
+				abs( $nb )
 			];
 
 			$result = $this->findOne( $query, $params, 'Image' );
 
-			return ( is_null( $result ) ) ? $filtredImg[ 0 ] : $result;
+			return $result;// ( is_null( $result ) ) ? $filtredImg[ 0 ] : $result;
 		}
 		
 
@@ -386,7 +394,7 @@
 			}
 			$id  = $img->getId();
 			$max = $id + $nb;
-            var_dump($this->size(), $id);
+			// var_dump($this->size(), $id);
 			while ( $id < $this->size() && $id < $max ) {
 
                 $res[] = $this->getImage( $id );

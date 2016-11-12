@@ -121,14 +121,13 @@
 			$this->photoAction();
 		}
 
-		/*
+		/**
 		 *
 		 * Traitement pour voter sur une photo (si utilisateur connecté ou non)
 		 * Si non connecté on regarde ses cookies et on l'autorise si il n'a pas voté
 		 * Si connecté on regardé dans la base s'il n'a pas encore voté et on ajoute un cookie
 		 *
 		 */
-
 		public function votePhotoAction() {
 			$valueJug = $_GET[ "jug" ];
 			$imgId    = $this->getImg()->getId();

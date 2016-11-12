@@ -1,5 +1,9 @@
 # VisuPhoto
 
+[![Build Status](https://scrutinizer-ci.com/g/JAGFx/VisuPhoto/badges/build.png?b=master)](https://scrutinizer-ci.com/g/JAGFx/VisuPhoto/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JAGFx/VisuPhoto/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JAGFx/VisuPhoto/?branch=master)
+
+
 Projet en Licence Mi-AW
 
 Sujet: Application de visualisation de photos

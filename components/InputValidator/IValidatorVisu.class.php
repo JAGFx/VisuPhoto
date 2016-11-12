@@ -19,7 +19,7 @@
 		 * @throws InputValidatorExceptions
 		 */
 		public function &validateString( &$str ) {
-			$str = parent::validateString( $str );
+			$str = $this->validateString( $str );
 
 			if ( empty( $str ) )
 				throw new InputValidatorExceptions(
@@ -35,7 +35,10 @@
 			$path = $this->validateString( $path );
 			$base = __DIR__ . '/../../model/imgs/';
 
-			$file = parent::validateFileUploaded( $file, $type, $size );
+			if ( !file_exists( $base . $path ) )
+				mkdir( $base . $path, 707 );
+
+			$file = $this->validateFileUploaded( $file, $type, $size );
 			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $path . $file[ 'name' ] );
 			if ( !$move )
 				throw new InputValidatorExceptions(

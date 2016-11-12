@@ -91,7 +91,7 @@
 		/**
 		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
 		 *
-		 * @param $imgId
+		 * @param integer $imgId
 		 * @param $valueJug
 		 * @param $pseudo
 		 */
@@ -154,7 +154,7 @@
 		/**
 		 * Retounrne le nombre de like / dislike d'une photo
 		 *
-		 * @param $imgId
+		 * @param integer $imgId
 		 *
 		 * @return null|object
 		 */
@@ -220,6 +220,9 @@
 		}
 
 
+		/**
+		 * @param string $filter
+		 */
 		public function getRandomFilter( $filter ) {
 			$query  = 'SELECT * FROM image WHERE category = ?';
 			$params = [
@@ -397,8 +400,8 @@
 
 		/**
 		 * @param $path
-		 * @param $ctge
-		 * @param $comment
+		 * @param string $ctge
+		 * @param string $comment
 		 *
 		 * @throws InputValidatorExceptions
 		 */

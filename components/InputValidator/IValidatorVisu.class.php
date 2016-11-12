@@ -31,6 +31,9 @@
 			return $str;
 		}
 
+		/**
+		 * @param string $path
+		 */
 		public function &moveFileUpload( &$file, &$path, array &$type = [ ], &$size = -1 ) {
 			$path = $this->validateString( $path );
 			$base = __DIR__ . '/../../model/imgs/';
@@ -47,6 +50,10 @@
 			return $file;
 		}
 
+		/**
+		 * @param string $str1
+		 * @param string $str2
+		 */
 		public function validateSameString( &$str1, &$str2 ) {
 			$str1 = $this->validateString( $str1 );
 			$str2 = $this->validateString( $str2 );

@@ -393,8 +393,8 @@
 		 * @param int $size
 		 */
 		private function setSize( &$size ) {
-			$this->_size = (int) ( isset( $size ) )
-				? htmlentities( $size )
+			$this->_size = ( isset( $size ) )
+				? (int) htmlentities( $size )
 				: MIN_WIDTH_PIC;
 		}
 

@@ -32,16 +32,16 @@ Supplémentaire:
 
 * Modification du profil
 
-* Liste des photo jugé dans le tableau de bord
+* Liste des photo jugées dans le tableau de bord
 
 ## Structure du projet
 
-Le projet repose sur une architecture MVC. L’interface utilisateur et les interactions des objets avec une base de données sont séparée.
+Le projet repose sur une architecture MVC. L’interface utilisateur et les interactions des objets avec une base de données sont séparés.
 Dossiers:
 
-* `assets` : Regroupe de tous les fichiers de style (CSS et JavaScript) + image servant uniquement à ces fichiers. Est inclus les différentes librairies telles que Bootstrap ou JQuery
+* `assets` : Regroupe tous les fichiers de style (CSS et JavaScript) + image servant uniquement à ces fichiers. Est inclus les différentes librairies telles que Bootstrap ou JQuery
 
-* `components` : Regroupe l'ensemble des outils utilisé pour ce projet (InputValidatoir, Controller, DAO, etc ...)
+* `components` : Regroupe l'ensemble des outils utilisés pour ce projet (InputValidatoir, Controller, DAO, etc ...)
 
 * `controller` : Regroupe tous les contrôleurs du projet
 
@@ -53,7 +53,7 @@ Dossiers:
 
 ## Configuration
 
-Le fichier `controller/commons.php` contient les constantes utilisé dans le projet. Parmis eux
+Le fichier `controller/commons.php` contient les constantes utilisées dans le projet. Parmis eux
 
 * Valeurs de ratio de zoom, taille minimal, url de base, etc ...
 
@@ -66,11 +66,11 @@ Droit d'écriture nécessaire sur les éléments suivant:
 * VisuPhoto/model/imageDB.db
 
 ## Principe
-Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.
+Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entrée. Le fichier `index.php` est le point d'entrée de l'application. Il inclu le contrôleur Frontal.
 
 Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
 
-Tous accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
+Tout accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
 
 Compte utilisateur mise à disposition: 
 > Login:                emmauel
@@ -80,7 +80,7 @@ Compte utilisateur mise à disposition:
 
 ## Outils
 ### Controller
-Cette classe abstraite est étendus par tous les contrôleurs du projet. Elle englobe les fonctionnalités suivantes:
+Cette classe abstraite est étendue par tous les contrôleurs du projet. Elle englobe les fonctionnalités suivantes:
 
 * Chargement du DAO
 
@@ -88,10 +88,10 @@ Cette classe abstraite est étendus par tous les contrôleurs du projet. Elle en
 
 * Redirection vers une autre action (Et donc un autre contrôleur)
 
-* Factorisation des donées communes à tous les contrôleurs (Menu)
+* Factorisation des données communes à tous les contrôleurs (Menu)
 
 #### Utilisation
-A l'arrivé sur le `Frontal contrôleur` il charge et créé le contrôleur correspondant à l'action demmandé
+A l'arrivée sur le `Frontal contrôleur` il charge et créer le contrôleur correspondant à l'action demmandée
 
 ##### Charger un contrôleur
 
@@ -99,7 +99,7 @@ La première partie en minuscule uniquement correspond à l'action
 
 La partie qui suit correspond au nom du Contrôleur
 
-Action à l'entré de contrôleur frontal: `zoomPhotoMatrix`
+Action à l'entrée de contrôleur frontal: `zoomPhotoMatrix`
 
 * Action: `zoom`
 
@@ -117,7 +117,7 @@ Action à l'entré de contrôleur frontal: `zoomPhotoMatrix`
 ### ViewManager
 La `ViewManager` permet de gérer les vues distinctement du contrôleur. C'est plus flexible.
 
-Il est uniquement accessible et créer depuis un contrôleur. 
+Il est uniquement accessible et créée depuis un contrôleur. 
 
 Il exite 3 actions:
 
@@ -125,12 +125,12 @@ Il exite 3 actions:
 
 * Définition du template principale
 
-* Rendue
+* Rendu
 
 #### Utilisation
 ##### Définir un template principale
 
-Répertoire d'entré pour définir une vue: `/view`
+Répertoire d'entrée pour définir une vue: `/view`
 
 Dossier de la vue: Répertoire entité. Ex: `Dashboard`
 
@@ -146,15 +146,15 @@ Nom du fichier de vue: Nom du fichier sans `.view.html|php`. Ex: `base`
 ````
 
 ##### Ajout de valeur
-Il existe deux comportement:
+Il existe deux comportements:
 
 * Ajout d'une valeur (Objet, entier, flottant, string, etc ...)
 
 * Ajout d'un tableau
 
-Pour l'ajout de valeur, celle-ci est créer si inexistante, remplacé sinon.
+Pour l'ajout de valeur, celle-ci est créée si inexistante, remplacée sinon.
 
-Pour l'ajout de tableau, celui-ci est créer si inexistant, fusionné sinon.
+Pour l'ajout de tableau, celui-ci est créé si inexistant, fusionné sinon.
 
 ````php
     /* Fichier /controller/AlbumController.ctrl.php - Méthode viewListAlbumAction()  */
@@ -178,7 +178,7 @@ Nom de la vue, voir `Définir un template principale`
 
 
 ### UserSessionManager
-Cette classe permet la gestion d'une session utilisateur. Elle nécessite la classe `User.class.php` pour fonctionné puisqu'elle en sérialise / désérialise une partie 
+Cette classe permet la gestion d'une session utilisateur. Elle nécessite la classe `User.class.php` pour fonctionner puisqu'elle en sérialise / désérialise une partie 
 
 > Privilège: Entier permettant de déterminer le droit d'accès à une ressource
 
@@ -194,7 +194,7 @@ Par défaut, un utilisateur dispose du privilège `USER_PRIVILEGE`.
 
 Un utilisateur avec le privilège `ADMIN_PRIVILEGE` dispose aussi du privilège `USER_PRIVILEGE`
 
-La session est initié dans le `frontal.ctrl` avec le privilège `NO_PRIVILEGE`.
+La session est initiée dans le `frontal.ctrl` avec le privilège `NO_PRIVILEGE`.
 
 #### Utilisation
 ##### Initialiser une session utilisateur
@@ -232,7 +232,7 @@ La session est initié dans le `frontal.ctrl` avec le privilège `NO_PRIVILEGE`.
 
 ### DAO
 Le constructeur de la classe détermine le type de SGBD et instencie une objet PDO avec celui-ci.
-Le DAO est auto-configuré avec les constantes renseignés dans `commons.php`.
+Le DAO est auto-configuré avec les constantes renseignées dans `commons.php`.
 Il existe 3 type de méthodes:
 
 * `execQuery( $aQuery, array $aParams ) ` : Execute une requête sans attente de résultat (`INSERT, UPDATE, DELETE`)

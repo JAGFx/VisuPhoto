@@ -320,9 +320,7 @@
 					"list" => $this->getDAO()->getListCategory(),
 
 					"Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
-							$this->getImg()->getId() . "&nbImg=" . $this->getNbImg(
-						) . "&size=" . $this->getSize() . "&popularite=" . $this->getPopularite(
-						),
+							$this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&popularite=true",
 
 					"Last" => BASE_URL . "lastPhotoMatrix&imgId=" .
 						  $this->getImg()->getId() . "&nbImg=" . $this->getNbImg(

@@ -61,9 +61,11 @@ Le fichier `controller/commons.php` contient les constantes utilisé dans le pro
 
 Droit d'écriture nécessaire sur les éléments suivant:
 
-* VisuPhoto/model/imgs/uploads
+* `model/imgs/uploads/`
 
-* VisuPhoto/model/imageDB.db
+* `model/imageDB.db`
+
+* `assets/pics/avatars/`
 
 ## Principe
 Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.

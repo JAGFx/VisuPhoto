@@ -74,7 +74,21 @@ Tous accès à tout autre fichiers ou dossier hors `assets` sera interdit et ret
 
 Compte utilisateur mise à disposition: 
 > Login:                emmauel
+
 > Mot de passe:     pswd
+
+
+## Outils
+### Controller
+Cette classe abstraite est étendus par tous les contrôleurs du projet. Elle englobe les fonctionnalités suivantes:
+
+* Chargement du DAO
+
+* Instanciation du ViewManager
+
+* Redirection vers une autre action (Et donc un autre contrôleur)
+
+* Factorisation des donées communes à tous les contrôleurs (Menu)
 
 #### Utilisation
 A l'arrivé sur le `Frontal contrôleur` il charge et créé le contrôleur correspondant à l'action demmandé
@@ -98,27 +112,6 @@ Action à l'entré de contrôleur frontal: `zoomPhotoMatrix`
     // Charge le contrôleur
     $controller = loadController( $action );
 ````
-
-
-##### Charger un DAO
-
-````php
-    // Charge le DAO "ImageDAO"
-    $imgDAO = loadDAO( 'ImageDAO' );
-````
-
-
-## Outils
-### Controller
-Cette classe abstraite est étendus par tous les contrôleurs du projet. Elle englobe les fonctionnalités suivantes:
-
-* Chargement du DAO
-
-* Instanciation du ViewManager
-
-* Redirection vers une autre action (Et donc un autre contrôleur)
-
-* Factorisation des donées communes à tous les contrôleurs (Menu)
 
 
 ### ViewManager
@@ -249,6 +242,13 @@ Il existe 3 type de méthodes:
 * `findOne( $aQuery, array $aParams, $className = null ) ` : Execute une requête pour trouver une seul occurence (`SELECT`)
 
 #### Utilisation
+##### Charger un DAO
+
+````php
+    // Charge le DAO "ImageDAO"
+    $imgDAO = loadDAO( 'ImageDAO' );
+````
+
 ##### Exécuter une requête sans résultat
 
 ````php
@@ -288,7 +288,7 @@ Il existe 3 type de méthodes:
     ];
     
     // Retour d'un tableau d'objet ou un tableau vide.
-    // "Image" défini le type d'objet à créer. Si non spécifié, c'est des stdObject qui sont crées
+    // "Image" défini le type d'objet à créer. Si non spécifié, ce sont des stdObject qui sont crées
     $result = $this->findAll( $query, $params, 'Image' );
 ````
 
@@ -305,7 +305,7 @@ Il existe 3 type de méthodes:
     ];
     
     // Retour d'un objet ou NULL
-    // "Image" défini le type d'objet à créer. Si non spécifié, c'est un stdObject qui est crée
+    // "Image" défini le type d'objet à créer. Si non spécifié, ce sont un stdObject qui est crée
     $result = $this->findOne( $query, $params, 'Image' );
 ````
 

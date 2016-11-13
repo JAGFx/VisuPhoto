@@ -183,6 +183,7 @@
 						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
 							$path = $iv->validateURL( $_POST[ 'imageURL' ] );
 
+						// TODO Remove old avatar
 						// Sinon upload un fichier local
 						else {
 							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );

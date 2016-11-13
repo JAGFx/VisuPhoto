@@ -13,6 +13,27 @@ Octobre - Novembre 2016
 ## Note
 Ceci ne remplace pas la documentation. Elle permet d'avoir des application concrêtre des notions.
 
+## Fonctionnalités
+Demandé: 
+
+* Affichage d'image et détails (Seul, Groupe)
+
+* Naviguation dans les images (Seul, Groupe)
+
+* Gestion d'album d'images
+
+* Gestion de jugement d'images
+
+* Filtrage par catégorie
+
+* Compte utilisateur
+
+Supplémentaire:
+
+* Modification du profil
+
+* Liste des photo jugé dans le tableau de bord
+
 ## Structure du projet
 
 Le projet repose sur une architecture MVC. L’interface utilisateur et les interactions des objets avec une base de données sont séparée.
@@ -20,7 +41,7 @@ Dossiers:
 
 * `assets` : Regroupe de tous les fichiers de style (CSS et JavaScript) + image servant uniquement à ces fichiers. Est inclus les différentes librairies telles que Bootstrap ou JQuery
 
-* `components` : Regroupe l'ensemble des outils utilisé pour ce projet (Comme InputValidatoir, Controller, DAO, etc ...)
+* `components` : Regroupe l'ensemble des outils utilisé pour ce projet (InputValidatoir, Controller, DAO, etc ...)
 
 * `controller` : Regroupe tous les contrôleurs du projet
 
@@ -31,8 +52,23 @@ Dossiers:
 * `view` : Regroupe toutes les interfaces utilisateurs
 
 
+
 ## Principe
 Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.
+
+Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
+
+Droit d'écriture nécessaire sur les éléments suivant:
+
+* VisuPhoto/model/imgs/uploads
+
+* VisuPhoto/model/imageDB.db
+
+Tous accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
+
+Compte utilisateur mise à disposition: 
+> Login:                emmauel
+> Mot de passe:     pswd
 
 #### Utilisation
 A l'arrivé sur le `Frontal contrôleur` il charge et créé le contrôleur correspondant à l'action demmandé
@@ -67,7 +103,19 @@ Action à l'entré de contrôleur frontal: `zoomPhotoMatrix`
 
 
 ## Outils
-## ViewManager
+### Controller
+Cette classe abstraite est étendus par tous les contrôleurs du projet. Elle englobe les fonctionnalités suivantes:
+
+* Chargement du DAO
+
+* Instanciation du ViewManager
+
+* Redirection vers une autre action (Et donc un autre contrôleur)
+
+* Factorisation des donées communes à tous les contrôleurs (Menu)
+
+
+### ViewManager
 La `ViewManager` permet de gérer les vues distinctement du contrôleur. C'est plus flexible.
 
 Il est uniquement accessible et créer depuis un contrôleur. 
@@ -131,6 +179,8 @@ Nom de la vue, voir `Définir un template principale`
 
 
 ### UserSessionManager
+Cette classe permet la gestion d'une session utilisateur. Elle nécessite la classe `User.class.php` pour fonctionné puisqu'elle en sérialise / désérialise une partie 
+
 > Privilège: Entier permettant de déterminer le droit d'accès à une ressource
 
 Il existe 3 types de privilège:
@@ -182,7 +232,9 @@ La session est initié dans le `frontal.ctrl` avec le privilège `NO_PRIVILEGE`.
 
 
 ### DAO
-Le DAO est caratérisé par 3 méthodes:
+Le constructeur de la classe détermine le type de SGBD et instencie une objet PDO avec celui-ci.
+Le DAO est auto-configuré avec les constantes renseignés dans `commons.php`.
+Il existe 3 type de méthodes:
 
 * `execQuery( $aQuery, array $aParams ) ` : Execute une requête sans attente de résultat (`INSERT, UPDATE, DELETE`)
 

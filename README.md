@@ -70,7 +70,7 @@ Droit d'écriture nécessaire sur les éléments suivant:
 ## Principe
 Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.
 
-Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
+Url valide: `http://path/to/VisuPhoto/?a=viewPhoto`
 
 Tous accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
 

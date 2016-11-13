@@ -51,6 +51,13 @@ Dossiers:
 
 * `view` : Regroupe toutes les interfaces utilisateurs
 
+## Configuration
+
+Le fichier `controller/commons.php` contient les constantes utilisé dans le projet. Parmis eux
+
+* Valeurs de ratio de zoom, taille minimal, url de base, etc ...
+
+* Paramètres de la DAO (Hôte, login, mot de passe, nom de la BDD, SGBD, port et encodage)
 
 
 ## Principe

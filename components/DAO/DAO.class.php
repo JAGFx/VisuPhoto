@@ -74,7 +74,7 @@
 		 * @var array Tableau d'options pour PDO
 		 */
 		private $_options = [
-			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION
+			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 		];
 
 
@@ -157,6 +157,17 @@
 		}
 
 		/**
+		 * Génère les objets si ceux-ci ne sont que partiellement générés avec PDO
+		 *
+		 * @param object[] $data Résultat de requête
+		 *
+		 * @return object[]|null Tableau d'objet
+		 */
+		public function objectMaker( $data ) {
+			return $data;
+		}
+
+		/**
 		 * Execute une requête ne nécessitant pas de résultat
 		 *
 		 * @param string $aQuery
@@ -218,7 +229,7 @@
 
 			$pQuery->closeCursor();
 
-			return ( empty( $data ) ) ? [ ] : $data;
+			return ( empty( $data ) ) ? [ ] : $this->objectMaker( $data );
 		}
 
 		/**
@@ -248,6 +259,6 @@
 
 			$pQuery->closeCursor();
 
-			return ( empty( $data ) ) ? null : $data;
+			return ( empty( $data ) ) ? null : $this->objectMaker( $data );
 		}
 	}

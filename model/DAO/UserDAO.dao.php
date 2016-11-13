@@ -45,7 +45,7 @@
 			$query  = 'UPDATE user SET password = ?, avatar = ? WHERE pseudo = ?';
 			$params = [
 				$user->getPassword(),
-				$user->getAvatar(),
+				str_replace( User::BASE_PATH, '', $user->getAvatar() ),
 				$user->getPseudo()
 			];
 

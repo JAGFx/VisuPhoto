@@ -155,6 +155,11 @@
 				$this->getViewManager()->render( 'User/registerUser' );
 		}
 
+		/**
+		 * Action pour l'édition d'information utilisateur
+		 *
+		 * @throws \Exception
+		 */
 		public function editUserAction() {
 			$this->makeMenu();
 			$this->makeContent();
@@ -244,8 +249,6 @@
 				]
 			);
 		}
-
-
 
 
 		// ---------------------------------------------------------------------------------------------- Getters / Setters

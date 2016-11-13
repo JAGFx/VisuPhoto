@@ -80,7 +80,6 @@
 		 * @throws \Exception
 		 */
 		protected function getDAO() {
-
 			if ( !$this->_dao instanceof $this->_nameDAO )
 				throw new Exception(
 					ERR_INVALID_DAO_INSTANCE . ' : Instance [ ' . $this->_nameDAO . ' ] - DAO [ ' . get_class(

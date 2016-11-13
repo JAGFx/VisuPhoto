@@ -8,25 +8,10 @@
 	class ImageDAO extends DAO {
 
 		/**
-		 * Retourne le nombre d'images référencées dans le DAO
+		 * Retourne la liste des catégories
 		 *
-		 * @return int
+		 * @return array|\object[]
 		 */
-		public function size() {
-			$pQuery = $this->pdo->prepare( "SELECT COUNT (*) FROM image" );
-
-			try {
-				$pQuery->execute();
-				$data = $pQuery->fetch( PDO::FETCH_CLASS )[ 0 ];
-
-			} catch ( Exception $exc ) {
-				$data = 0;
-			}
-
-			return $data;
-		}
-
-
 		public function getListCategory() {
 
 			$query = 'SELECT category FROM image GROUP BY category';
@@ -79,30 +64,40 @@
 		}
 
 
-        public function deletecategoryImage($catName)
-        {
+		/**
+		 * Supprime une catégorie
+		 *
+		 * @param string $catName
+		 *
+		 * @throws \InputValidator\InputValidatorExceptions
+		 */
+		public function deletecategoryImage( $catName ) {
 
-            $pQuery = "UPDATE image set category='vide' WHERE category=?";
+			$pQuery = "UPDATE image set category='vide' WHERE category=?";
 
-            $param = [
-                $catName
-            ];
+			$param = [
+				$catName
+			];
 
-            $this->execQuery($pQuery, $param);
+			$res = (Object) $this->execQuery( $pQuery, $param );
 
-        }
+			if ( !$res->success )
+				throw new InputValidatorExceptions(
+					"Suppression impossible",
+					$res->message,
+					TYPE_FEEDBACK_WARN
+				);
+		}
 
 
 		/**
 		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
 		 *
 		 * @param integer $imgId
-		 * @param $valueJug
-		 * @param $pseudo
+		 * @param int     $valueJug
+		 * @param string  $pseudo
 		 */
-
 		public function voteImage( $imgId, $valueJug, $pseudo ) {
-
 			$pQuery = "INSERT INTO note(idPhoto,valueJug,pseudo) VALUES (?,?,?)";
 
 			$params = [
@@ -114,15 +109,15 @@
 			$this->execQuery( $pQuery, $params );
 		}
 
-        /**
-         * Methode permettant de regarder si une personne a voté sur une photo
-         *
-         * @param int $imgId
-         * @param String $pseudo
-         * @return null|object
-         */
+		/**
+		 * Methode permettant de regarder si une personne a voté sur une photo
+		 *
+		 * @param int    $imgId
+		 * @param String $pseudo
+		 *
+		 * @return null|object
+		 */
 		public function checkvoteImage( $imgId, $pseudo ) {
-
 			$pQuery = "SELECT * FROM note WHERE pseudo=? and idPhoto=?";
 
 			$params = [
@@ -133,28 +128,36 @@
 			return $this->findOne( $pQuery, $params );
 		}
 
-        /**
-         * Methode qui permet de trier les photos par la popularité ( moyenne des votes)
-         *
-         * @param Image $img
-         * @param int $nbImage
-         * @return array
-         */
-        public function populariteImage(Image $img, $nbImage)
-        {
-            $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ? ,?");
+		/**
+		 * Methode qui permet de trier les photos par la popularité ( moyenne des votes)
+		 *
+		 * @param Image $img
+		 * @param int   $nbImage
+		 *
+		 * @return array
+		 */
+		public function populariteImage( Image $img, $nbImage ) {
+			$pQuery = $this->pdo->prepare(
+				"SELECT image.id, AVG( valueJug ) AS vote, path, category, comment
+				FROM image
+				LEFT OUTER JOIN note
+				ON image.id=note.idPhoto
+				GROUP BY Image.id
+				ORDER BY vote DESC
+				LIMIT ? ,?"
+			);
 
-            try {
+			try {
 
-                $pQuery->execute([$img->getId() - 1, $nbImage]);
-                $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
-            } catch (Exception $exc) {
-                $data = [];
-            }
+				$pQuery->execute( [ $img->getId() - 1, $nbImage ] );
+				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
+			} catch ( Exception $exc ) {
+				$data = [ ];
+			}
 
-            return (!empty($data)) ? $data : [];
+			return ( !empty( $data ) ) ? $data : [ ];
 
-        }
+		}
 
 		/**
 		 * Retounrne le nombre de like / dislike d'une photo
@@ -165,9 +168,16 @@
 		 */
 
 
-        public function infovoteImage($imgId)
-        {
-			$pQuery = "SELECT (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=0) as Dislike, (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=1) as Like";
+		public function infovoteImage( $imgId ) {
+			$pQuery = "SELECT (
+						SELECT count(*)
+						FROM note
+						WHERE idPhoto = ?
+							AND valueJug=0 ) as Dislike,
+						( SELECT count(*)
+						FROM note
+						WHERE idPhoto = ?
+							AND valueJug=1) as Like";
 
 			$param = [
 				$imgId,
@@ -254,42 +264,54 @@
 				return $this->getImage( 1 );
 		}
 
-        public function getLastImage()
-        {
-		$query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1, 1';
+		/**
+		 * Retourne la dernière image
+		 *
+		 * @return null|Image
+		 */
+		public function getLastImage() {
+			$query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1, 1';
 
-            return $this->findOne($query, [], 'Image');
+			return $this->findOne( $query, [ ], 'Image' );
 
-        }
+		}
 
-        public function getLastImageFiltre($filtre)
-        {
-            $query = 'SELECT * FROM image WHERE category = ? ORDER BY id DESC LIMIT 1';
-            $params = [
-                $filtre
-            ];
+		/**
+		 * Retourne la dernière image d'une catégorie
+		 *
+		 * @param string $filtre
+		 *
+		 * @return null|Image
+		 */
+		public function getLastImageFiltre( $filtre ) {
+			$query  = 'SELECT * FROM image WHERE category = ? ORDER BY id DESC LIMIT 1';
+			$params = [
+				$filtre
+			];
 
-            return $this->findOne($query, $params, 'Image');
+			return $this->findOne( $query, $params, 'Image' );
 
-        }
+		}
 
-        public function getLastImagePop()
-        {
-            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote LIMIT 1';
+		/**
+		 * Retourne la dernière image populaire
+		 *
+		 * @return null|Image
+		 */
+		public function getLastImagePop() {
+			$query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote LIMIT 1';
 
-            return $this->findOne($query, [], 'Image');
-
-
-        }
+			return $this->findOne( $query, [ ], 'Image' );
+		}
 		
 		/**
 		 * Retourne l'image suivante d'une image
 		 *
-		 * @param image $img
+		 * @param Image $img
 		 *
-		 * @return image|null
+		 * @return Image|null
 		 */
-		public function getNextImage( image $img ) {
+		public function getNextImage( Image $img ) {
 			$query  = 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT 1';
 			$params = [
 				$img->getId()
@@ -301,11 +323,11 @@
 		/**
 		 * Retourne l'image précédente d'une image
 		 *
-		 * @param image $img
+		 * @param Image $img
 		 *
-		 * @return image|null
+		 * @return Image|null
 		 */
-		public function getPrevImage( image $img ) {
+		public function getPrevImage( Image $img ) {
 			$query  = 'SELECT * FROM image WHERE id < ? ORDER BY id DESC LIMIT 1';
 			$params = [
 				$img->getId()
@@ -318,13 +340,13 @@
 		 * Retourne la nouvelle image
 		 * saute en avant ou en arrière de $nb images
 		 *
-		 * @param image  $img
+		 * @param Image  $img
 		 * @param int    $nb
 		 * @param string $filter
 		 *
 		 * @return Image|null
 		 */
-		public function jumpToImage( image $img, $nb, $filter = null ) {
+		public function jumpToImage( Image $img, $nb, $filter = null ) {
 			if ( is_null( $filter ) ) {
 				$query  = ( $nb >= 0 )
 					? 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT ?, 1'
@@ -384,6 +406,8 @@
 		}
 
 		/**
+		 * Retourne toutes les images
+		 *
 		 * @return Image[]
 		 */
 		public function getFullImageList() {
@@ -393,7 +417,9 @@
 		}
 
 		/**
-		 * @param $path
+		 * Ajoute une image dans la BDD
+		 *
+		 * @param        $path
 		 * @param string $ctge
 		 * @param string $comment
 		 *

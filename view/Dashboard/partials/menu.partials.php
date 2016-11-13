@@ -5,7 +5,7 @@
 		<li ><a href="<?= BASE_URL . 'addAlbum'; ?>" >Créer</a ></li >
 
 		<h3 >Image</h3 >
-		<li><a href="<?= BASE_URL . 'viewlistCategory'; ?>">Liste Catégories</a></li>
+		<li ><a href="<?= BASE_URL . 'viewlistCategory'; ?>" >Liste Catégories</a ></li >
 		<li ><a href="<?= BASE_URL . 'addPhoto'; ?>" >Créer</a ></li >
 	</ul >
 </div >

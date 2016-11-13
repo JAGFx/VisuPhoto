@@ -245,7 +245,6 @@
 			} catch ( Exception $exc ) {
 				$data = [ ];
 			}
-			//var_dump( $data );
 
 			$pQuery->closeCursor();
 

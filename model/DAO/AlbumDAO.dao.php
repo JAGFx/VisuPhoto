@@ -37,13 +37,14 @@
 
 
 		/**
-         * Methode pour ajouter des albums dans la base de données
-         *
-         * @param Album $album
-         * @throws InputValidatorExceptions
-         */
+		 * Methode pour ajouter des albums dans la base de données
+		 *
+		 * @param Album $album
+		 *
+		 * @throws InputValidatorExceptions
+		 */
 		public function addAlbum( Album $album ) {
-			$query = 'INSERT INTO album( name, owner, images ) VALUES ( ?, ?, ? )';
+			$query  = 'INSERT INTO album( name, owner, images ) VALUES ( ?, ?, ? )';
 			$params = [
 				$album->getName(),
 				$album->getOwner()->getPseudo(),
@@ -60,14 +61,16 @@
 				);
 		}
 
-        /**
-         *
-         * Mise à jour d'un album dans la base de données
-         * @param Album $album
-         * @throws InputValidatorExceptions
-         */
+		/**
+		 *
+		 * Mise à jour d'un album dans la base de données
+		 *
+		 * @param Album $album
+		 *
+		 * @throws InputValidatorExceptions
+		 */
 		public function editAlbum( Album $album ) {
-			$query = 'UPDATE album SET name = ?, owner = ?, images = ? WHERE id = ?';
+			$query  = 'UPDATE album SET name = ?, owner = ?, images = ? WHERE id = ?';
 			$params = [
 				$album->getName(),
 				$album->getOwner()->getPseudo(),
@@ -85,15 +88,16 @@
 				);
 		}
 
-        /**
-         *
-         * Suppression d'un album de la base de données
-         *
-         * @param Album $album
-         * @throws InputValidatorExceptions
-         */
+		/**
+		 *
+		 * Suppression d'un album de la base de données
+		 *
+		 * @param Album $album
+		 *
+		 * @throws InputValidatorExceptions
+		 */
 		public function removeAlbum( Album $album ) {
-			$query = 'DELETE FROM album WHERE id = ?';
+			$query  = 'DELETE FROM album WHERE id = ?';
 			$params = [
 				$album->getId()
 			];
@@ -109,13 +113,15 @@
 		}
 
 		/**
+		 * Retourne la liste des album d'un utilisateur
+		 *
 		 * @param User $user
 		 *
 		 * @return Album[]
 		 * @throws Exception
 		 */
 		public function findListAlbumByUser( User $user ) {
-			$query = 'SELECT * FROM album WHERE owner = ?';
+			$query  = 'SELECT * FROM album WHERE owner = ?';
 			$params = [
 				$user->getPseudo()
 			];
@@ -125,17 +131,17 @@
 			return $this->objectMaker( $result );
 		}
 
-        /**
-         *
-         * Fonction de recherche d'album pour un id donné ( retourne album)
-         *
-	 * @param int $id
-	 *
-*@return Album
-         * @throws InputValidatorExceptions
-         */
+		/**
+		 *
+		 * Fonction de recherche d'album pour un id donné ( retourne album)
+		 *
+		 * @param int $id
+		 *
+		 * @return Album
+		 * @throws InputValidatorExceptions
+		 */
 		public function findAlbumById( $id ) {
-			$query = 'SELECT * FROM album WHERE id = ?';
+			$query  = 'SELECT * FROM album WHERE id = ?';
 			$params = [
 				$id
 			];

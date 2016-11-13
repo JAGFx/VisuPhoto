@@ -155,6 +155,11 @@
 				$this->getViewManager()->render( 'User/registerUser' );
 		}
 
+		/**
+		 * Action pour l'édition d'information utilisateur
+		 *
+		 * @throws \Exception
+		 */
 		public function editUserAction() {
 			$this->makeMenu();
 			$this->makeContent();
@@ -178,6 +183,7 @@
 						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
 							$path = $iv->validateURL( $_POST[ 'imageURL' ] );
 
+						// TODO Remove old avatar
 						// Sinon upload un fichier local
 						else {
 							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );
@@ -244,8 +250,6 @@
 				]
 			);
 		}
-
-
 
 
 		// ---------------------------------------------------------------------------------------------- Getters / Setters

@@ -99,6 +99,9 @@
 				}
 		}
 
+		/**
+		 * Supprime toutes les image de l'album
+		 */
 		public function emptyImage() {
 			$this->_images = [ ];
 		}

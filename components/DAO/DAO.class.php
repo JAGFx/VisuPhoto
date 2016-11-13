@@ -159,9 +159,9 @@
 		/**
 		 * Génère les objets si ceux-ci ne sont que partiellement générés avec PDO
 		 *
-		 * @param object[]|object $data Résultat de requête
+		 * @param object[]|object|null $data Résultat de requête
 		 *
-		 * @return object[]|null Tableau d'objet
+		 * @return object[]|object|null Tableau d'objet
 		 */
 		public function objectMaker( $data ) {
 			if ( is_array( $data ) ) {
@@ -245,7 +245,6 @@
 			} catch ( Exception $exc ) {
 				$data = [ ];
 			}
-			//var_dump( $data );
 
 			$pQuery->closeCursor();
 

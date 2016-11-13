@@ -147,31 +147,27 @@
 				: $this->filtreByCategoryAction();
 		}
 
-        public function lastPhotoMatrixAction()
-        {
-            // Traitement
-            //$lastImg = $this->getDAO()->getLastImage();
+		public function lastPhotoMatrixAction() {
+			// Traitement
+			if ( !is_null( $this->getFiltre() ) ) {
+				$lastImg = $this->getDAO()->getLastImageFiltre( $this->getFiltre() );
+			} elseif ( $this->getPopularite() == "true" ) {
+				$lastImg = $this->getDAO()->getLastImagePop();
+			} else {
+				$lastImg = $this->getDAO()->getLastImage();
+			}
 
-            if (!is_null($this->getFiltre())) {
-                $lastImg = $this->getDAO()->getLastImageFiltre($this->getFiltre());
-            } elseif ($this->getPopularite() == "true") {
-                $lastImg = $this->getDAO()->getLastImagePop();
-            } else {
-                $lastImg = $this->getDAO()->getLastImage();
-            }
+			$this->setImg( $lastImg );
 
-            $this->setImg($lastImg);
-
-            // Génération de la vue
-
-            if (!is_null($this->getFiltre())) {
-                $this->filtreByCategoryAction();
-            } elseif ($this->getPopularite() == "true") {
-                $this->photoMatrixAction();
-            } else {
-                $this->photoMatrixAction();
-            }
-        }
+			// Génération de la vue
+			if ( !is_null( $this->getFiltre() ) ) {
+				$this->filtreByCategoryAction();
+			} elseif ( $this->getPopularite() == "true" ) {
+				$this->photoMatrixAction();
+			} else {
+				$this->photoMatrixAction();
+			}
+		}
 
 		/**
 		 * Traitement pour afficher plus d'image dans la matrice
@@ -372,8 +368,8 @@
 		 * @param int $size
 		 */
 		private function setSize( &$size ) {
-			$this->_size = (int) ( isset( $size ) )
-				? htmlentities( $size )
+			$this->_size = ( isset( $size ) )
+				? (int) htmlentities( $size )
 				: MIN_WIDTH_PIC;
 		}
 
@@ -405,9 +401,9 @@
 		 * @param string $popularite
 		 */
 		public function setPopularite( &$popularite ) {
-            $this->_popularite = (isset($popularite) && (!empty($popularite) && $popularite == "true"))
-                ? "true"
-                : "false";
+			$this->_popularite = ( isset( $popularite ) && ( !empty( $popularite ) && $popularite == "true" ) )
+				? "true"
+				: "false";
 		}
 
 

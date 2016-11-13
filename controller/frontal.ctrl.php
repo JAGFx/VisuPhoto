@@ -67,9 +67,9 @@
 			$controller->addPhotoAction();
 			break;
 
-        case 'votePhoto':
-            $controller->votePhotoAction();
-            break;
+		case 'votePhoto':
+			$controller->votePhotoAction();
+			break;
 
 		case 'lastPhoto':
 			$controller->lastPhotoMatrixAction();
@@ -85,9 +85,9 @@
 			$controller->firstPhotoMatrixAction();
 			break;
 
-        case 'lastPhotoMatrix' :
-            $controller->lastPhotoMatrixAction();
-            break;
+		case 'lastPhotoMatrix' :
+			$controller->lastPhotoMatrixAction();
+			break;
 
 		case 'randomPhotoMatrix' :
 			$controller->randomPhotoMatrixAction();
@@ -113,24 +113,26 @@
 			$controller->filtreByCategoryAction();
 			break;
 
-        case 'popularitePhotoMatrix':
-            $controller->populariteAction();
-            break;
+		case 'popularitePhotoMatrix':
+			$controller->populariteAction();
+			break;
 
 
 		// ----------------------------------------------------------------------------------------------A Propos
 		case 'viewAPropos' :
 			$controller->aProposAction();
 			break;
-        // ----------------------------------------------------------------------------------------------Modifier image
 
-        case 'viewModifier' :
-            $controller->modifierAction();
-            break;
 
-        case 'updateModifier' :
-            $controller->updateModifierAction();
-            break;
+		// ----------------------------------------------------------------------------------------------Modifier image
+		case 'viewModifier' :
+			$controller->modifierAction();
+			break;
+
+		case 'updateModifier' :
+			$controller->updateModifierAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------User
 		case 'loginUser' :
@@ -148,6 +150,7 @@
 		case 'editUser' :
 			$controller->editUserAction();
 			break;
+
 
 		// ----------------------------------------------------------------------------------------------Album viewListAlbum
 		case 'viewlistAlbum' :
@@ -170,13 +173,14 @@
 			$controller->removeAlbumAction();
 			break;
 
-        case 'viewlistCategory' :
-            $controller->viewListCategoryAction();
-            break;
+		case 'viewlistCategory' :
+			$controller->viewListCategoryAction();
+			break;
 
-        case 'deleteCategory' :
-            $controller->deleteCategoryAction();
-            break;
+		case 'deleteCategory' :
+			$controller->deleteCategoryAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------Dashboard
 		case 'homeDashboard' :
@@ -186,6 +190,7 @@
 		case 'editionDashboard' :
 			$controller->editionDashboardAction();
 			break;
+
 
 		// ----------------------------------------------------------------------------------------------Home
 		default:

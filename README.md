@@ -61,14 +61,16 @@ Le fichier `controller/commons.php` contient les constantes utilisées dans le p
 
 Droit d'écriture nécessaire sur les éléments suivant:
 
-* VisuPhoto/model/imgs/uploads
+* `model/imgs/uploads/`
 
-* VisuPhoto/model/imageDB.db
+* `model/imageDB.db`
+
+* `assets/pics/avatars/`
 
 ## Principe
 Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entrée. Le fichier `index.php` est le point d'entrée de l'application. Il inclu le contrôleur Frontal.
 
-Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
+Url valide: `http://path/to/VisuPhoto/?a=viewPhoto`
 
 Tout accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
 

@@ -21,7 +21,7 @@
 		 *
 		 * @param object $userIN Objet retourné par PDO
 		 *
-		 * @return User
+		 * @return User|null
 		 */
 		protected function make( $userIN ) {
 			if ( !is_null( $userIN ) ) {
@@ -88,7 +88,7 @@
 		/**
 		 * Recherche un utilisateur (Par sa clé primaire: Nom)
 		 *
-		 * @param $pseudo
+		 * @param string $pseudo
 		 *
 		 * @return null|User
 		 */
@@ -103,6 +103,13 @@
 			return $this->objectMaker( $userFind );
 		}
 
+		/**
+		 * Retourne l'ensemble jugement porté sur les imagess
+		 *
+		 * @param \User $user
+		 *
+		 * @return array|\object[]
+		 */
 		public function findVoteUser( User $user ) {
 			$query  = 'SELECT i.*, n.valueJug FROM image i NATURAL JOIN note n WHERE n.pseudo = ? ORDER BY i.id';
 			$params = [

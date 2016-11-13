@@ -79,6 +79,20 @@
 		}
 
 
+        public function deletecategoryImage($catName)
+        {
+
+            $pQuery = "UPDATE image set category='vide' WHERE category=?";
+
+            $param = [
+                $catName
+            ];
+
+            $this->execQuery($pQuery, $param);
+
+        }
+
+
 		/**
 		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
 		 *
@@ -250,7 +264,7 @@
 
         public function getLastImageFiltre($filtre)
         {
-            $query = 'SELECT * FROM image WHERE category = ?';
+            $query = 'SELECT * FROM image WHERE category = ? ORDER BY id DESC LIMIT 1';
             $params = [
                 $filtre
             ];
@@ -261,7 +275,7 @@
 
         public function getLastImagePop()
         {
-            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote ASC LIMIT 1';
+            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote LIMIT 1';
 
             return $this->findOne($query, [], 'Image');
 

@@ -102,8 +102,6 @@
 				$this->getImg(), $this->getFiltre(), $this->getNbImg()
 			);
 
-			//var_dump($filtreImages);
-
 			foreach ( $filtreImages as $image )
 				$matrix[] = [
 					$image,
@@ -152,14 +150,27 @@
         public function lastPhotoMatrixAction()
         {
             // Traitement
-            $lastImg = $this->getDAO()->getLastImage();
+            //$lastImg = $this->getDAO()->getLastImage();
+
+            if (!is_null($this->getFiltre())) {
+                $lastImg = $this->getDAO()->getLastImageFiltre($this->getFiltre());
+            } elseif ($this->getPopularite() == "true") {
+                $lastImg = $this->getDAO()->getLastImagePop();
+            } else {
+                $lastImg = $this->getDAO()->getLastImage();
+            }
 
             $this->setImg($lastImg);
 
             // Génération de la vue
-            (is_null($this->getFiltre()))
-                ? $this->photoMatrixAction()
-                : $this->filtreByCategoryAction();
+
+            if (!is_null($this->getFiltre())) {
+                $this->filtreByCategoryAction();
+            } elseif ($this->getPopularite() == "true") {
+                $this->photoMatrixAction();
+            } else {
+                $this->photoMatrixAction();
+            }
         }
 
 		/**

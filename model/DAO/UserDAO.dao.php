@@ -17,6 +17,25 @@
 	class UserDAO extends DAO {
 
 		/**
+		 * Création d'un objet
+		 *
+		 * @param object $userIN Objet retourné par PDO
+		 *
+		 * @return User
+		 */
+		protected function make( $userIN ) {
+			if ( !is_null( $userIN ) ) {
+				$user = new User( $userIN->pseudo, $userIN->password, $userIN->privilege );
+				$user->setAvatar( $userIN->avatar );
+
+			} else
+				$user = null;
+
+			return $user;
+		}
+
+
+		/**
 		 * Ajoute un utilisateur dans la BDD
 		 *
 		 * @param User $user
@@ -41,6 +60,13 @@
 				);
 		}
 
+		/**
+		 * Met à jour les information d'un utilisateur
+		 *
+		 * @param User $user
+		 *
+		 * @throws InputValidator\InputValidatorExceptions
+		 */
 		public function editUser( User $user ) {
 			$query  = 'UPDATE user SET password = ?, avatar = ? WHERE pseudo = ?';
 			$params = [
@@ -74,14 +100,7 @@
 
 			$userFind = $this->findOne( $query, $params );
 
-			if ( !is_null( $userFind ) ) {
-				$user = new User( $userFind->pseudo, $userFind->password, $userFind->privilege );
-				$user->setAvatar( $userFind->avatar );
-
-			} else
-				$user = null;
-
-			return $user;
+			return $this->objectMaker( $userFind );
 		}
 
 		public function findVoteUser( User $user ) {

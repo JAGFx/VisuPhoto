@@ -159,12 +159,32 @@
 		/**
 		 * Génère les objets si ceux-ci ne sont que partiellement générés avec PDO
 		 *
-		 * @param object[] $data Résultat de requête
+		 * @param object[]|object $data Résultat de requête
 		 *
 		 * @return object[]|null Tableau d'objet
 		 */
 		public function objectMaker( $data ) {
-			return $data;
+			if ( is_array( $data ) ) {
+				$entities = [ ];
+
+				foreach ( $data as $entity )
+					$entities[] = $this->make( $entity );
+
+				return $entities;
+
+			} else
+				return $this->make( $data );
+		}
+
+		/**
+		 * Création d'un objet
+		 *
+		 * @param object|null $object Objet retourné par PDO
+		 *
+		 * @return object|null
+		 */
+		protected function make( $object ) {
+			return $object;
 		}
 
 		/**
@@ -229,7 +249,7 @@
 
 			$pQuery->closeCursor();
 
-			return ( empty( $data ) ) ? [ ] : $this->objectMaker( $data );
+			return ( empty( $data ) ) ? [ ] : $data;
 		}
 
 		/**
@@ -259,6 +279,6 @@
 
 			$pQuery->closeCursor();
 
-			return ( empty( $data ) ) ? null : $this->objectMaker( $data );
+			return ( empty( $data ) ) ? null : $data;
 		}
 	}

@@ -59,17 +59,16 @@ Le fichier `controller/commons.php` contient les constantes utilisé dans le pro
 
 * Paramètres de la DAO (Hôte, login, mot de passe, nom de la BDD, SGBD, port et encodage)
 
-
-## Principe
-Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.
-
-Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
-
 Droit d'écriture nécessaire sur les éléments suivant:
 
 * VisuPhoto/model/imgs/uploads
 
 * VisuPhoto/model/imageDB.db
+
+## Principe
+Le projet est fait de tel sorte à ce qu'il y ai qu'un seul point d'entré. Le fichier `index.php` est le point d'entré de l'application. Il inclu le contrôleur Frontal.
+
+Url valide: `http://path/to/VisuPhoto/?s=viewPhoto`
 
 Tous accès à tout autre fichiers ou dossier hors `assets` sera interdit et retournera une `Error 401`
 

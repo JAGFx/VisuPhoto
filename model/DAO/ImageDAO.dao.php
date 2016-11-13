@@ -13,7 +13,6 @@
 		 * @return array|\object[]
 		 */
 		public function getListCategory() {
-
 			$query = 'SELECT category FROM image GROUP BY category';
 
 			return $this->findAll( $query, [ ] );
@@ -27,18 +26,12 @@
 		 * @return Image|null
 		 */
 		public function getImage( $imgId ) {
+			$query  = 'SELECT * FROM image WHERE id = ?';
+			$params = [
+				$imgId
+			];
 
-			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id = ?" );
-
-
-			try {
-				$pQuery->execute( [ $imgId ] );
-				$data = $pQuery->fetchObject( 'Image' );
-			} catch ( Exception $exc ) {
-				$data = null;
-			}
-
-			return ( !empty( $data ) ) ? $data : null;
+			return $this->findOne( $query, $params, 'Image' );
 		}
 
 		/**
@@ -51,7 +44,6 @@
 		 */
 
 		public function updateImage( $category, $commentaire, $imgId ) {
-
 			$pQuery = "UPDATE image set category=?,comment=? WHERE id=?";
 
 			$param = [
@@ -72,7 +64,6 @@
 		 * @throws \InputValidator\InputValidatorExceptions
 		 */
 		public function deletecategoryImage( $catName ) {
-
 			$pQuery = "UPDATE image set category='vide' WHERE category=?";
 
 			$param = [
@@ -137,26 +128,20 @@
 		 * @return array
 		 */
 		public function populariteImage( Image $img, $nbImage ) {
-			$pQuery = $this->pdo->prepare(
-				"SELECT image.id, AVG( valueJug ) AS vote, path, category, comment
+			$query = 'SELECT image.id, AVG( valueJug ) AS vote, path, category, comment
 				FROM image
 				LEFT OUTER JOIN note
 				ON image.id=note.idPhoto
 				GROUP BY Image.id
 				ORDER BY vote DESC
-				LIMIT ? ,?"
-			);
+				LIMIT ? ,?';
 
-			try {
+			$params = [
+				$img->getId() - 1,
+				$nbImage
+			];
 
-				$pQuery->execute( [ $img->getId() - 1, $nbImage ] );
-				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
-			} catch ( Exception $exc ) {
-				$data = [ ];
-			}
-
-			return ( !empty( $data ) ) ? $data : [ ];
-
+			return $this->findAll( $query, $params, 'Image' );
 		}
 
 		/**
@@ -196,22 +181,14 @@
 		 * @return Image[]
 		 */
 		public function filtreImage( Image $img, $filtre, $nbImage ) {
-			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id > ? AND category = ? LIMIT  ?" );
+			$pQuery = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT  ?';
+			$params = [
+				$img->getId() - 1,
+				$filtre,
+				$nbImage
+			];
 
-			try {
-				$pQuery->execute(
-					[
-						$img->getId() - 1,
-						$filtre,
-						$nbImage
-					]
-				);
-				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
-			} catch ( Exception $exc ) {
-				$data = [ ];
-			}
-
-			return ( !empty( $data ) ) ? $data : [ ];
+			return $this->findAll( $pQuery, $params, 'Image' );
 		}
 		
 
@@ -273,7 +250,6 @@
 			$query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1, 1';
 
 			return $this->findOne( $query, [ ], 'Image' );
-
 		}
 
 		/**
@@ -290,7 +266,6 @@
 			];
 
 			return $this->findOne( $query, $params, 'Image' );
-
 		}
 
 		/**

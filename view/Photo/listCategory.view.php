@@ -9,9 +9,9 @@
 		<?php foreach ( $data->listCategory as $list ) : ?>
 
 			<tr >
-				<td ><?php echo $list[ 0 ] ?></td >
+				<td ><?php echo $list->category ?></td >
 				<td >
-					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'deleteCategory&catName=' . $list[ 0 ]; ?>" >Supprimer</a >
+					<a class="btn btn-xs btn-primary" href="<?= BASE_URL . 'deleteCategory&catName=' . $list->category; ?>" >Supprimer</a >
 				</td >
 			</tr >
 		<?php endforeach; ?>

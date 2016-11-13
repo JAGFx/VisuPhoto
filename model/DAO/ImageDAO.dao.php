@@ -91,6 +91,20 @@
 		}
 
 
+        public function deletecategoryImage($catName)
+        {
+
+            $pQuery = "UPDATE image set category='vide' WHERE category=?";
+
+            $param = [
+                $catName
+            ];
+
+            $this->execQuery($pQuery, $param);
+
+        }
+
+
 		/**
 		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
 		 *
@@ -272,7 +286,7 @@
 
         public function getLastImageFiltre($filtre)
         {
-            $query = 'SELECT * FROM image WHERE category = ?';
+            $query = 'SELECT * FROM image WHERE category = ? ORDER BY id DESC LIMIT 1';
             $params = [
                 $filtre
             ];
@@ -283,7 +297,7 @@
 
         public function getLastImagePop()
         {
-            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote ASC LIMIT 1';
+            $query = 'SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote LIMIT 1';
 
             return $this->findOne($query, [], 'Image');
 
@@ -377,6 +391,19 @@
 		 */
 		public function getImageList( image $img, $nb ) {
             // TODO MODIFER FONCTION
+
+            $pQuery = $this->pdo->prepare("SELECT id FROM image ORDER BY id DESC LIMIT 1");
+
+            try {
+                $pQuery->execute();
+                $data = $pQuery->fetch()[0];
+
+            } catch (Exception $exc) {
+                var_dump($exc->getMessage());
+                $data = 0;
+            }
+
+
 			$res = [ ];
 
 			# Verifie que le nombre d'image est non nul
@@ -386,8 +413,8 @@
 			}
 			$id  = $img->getId();
 			$max = $id + $nb;
-            var_dump($this->size(), $id);
-			while ( $id < $this->size() && $id < $max ) {
+
+            while ($id <= $data && $id < $max) {
 
                 $res[] = $this->getImage( $id );
 				$id++;

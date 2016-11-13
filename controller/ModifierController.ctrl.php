@@ -69,6 +69,7 @@ class ModifierController extends Controller
             try {
 
                 $imgId = $this->getImg()->getId();
+
                 $newCommentaire = htmlentities($inputValidator->validateString($_POST['commentaire']));
 
                 //On regarde si l'utilisateur veur ajouter une catégorie
@@ -79,6 +80,7 @@ class ModifierController extends Controller
                 }
 
                 $this->getDAO()->updateImage($newCategory, $newCommentaire, $imgId);
+
 
                 echo toAjax(
                     TYPE_FEEDBACK_SUCCESS,
@@ -118,6 +120,10 @@ class ModifierController extends Controller
 			    "list" => $this->getDAO()->getListCategory()
 		    ]
 	    );
+
+        $this->getViewManager()->setValue(
+            'currentCategory', ""
+        );
 
 
         $this->getViewManager()->setValue(

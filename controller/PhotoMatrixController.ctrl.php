@@ -149,14 +149,27 @@
         public function lastPhotoMatrixAction()
         {
             // Traitement
-            $lastImg = $this->getDAO()->getLastImage();
+            //$lastImg = $this->getDAO()->getLastImage();
+
+            if (!is_null($this->getFiltre())) {
+                $lastImg = $this->getDAO()->getLastImageFiltre($this->getFiltre());
+            } elseif ($this->getPopularite() == "true") {
+                $lastImg = $this->getDAO()->getLastImagePop();
+            } else {
+                $lastImg = $this->getDAO()->getLastImage();
+            }
 
             $this->setImg($lastImg);
 
             // Génération de la vue
-            (is_null($this->getFiltre()))
-                ? $this->photoMatrixAction()
-                : $this->filtreByCategoryAction();
+
+            if (!is_null($this->getFiltre())) {
+                $this->filtreByCategoryAction();
+            } elseif ($this->getPopularite() == "true") {
+                $this->photoMatrixAction();
+            } else {
+                $this->photoMatrixAction();
+            }
         }
 
 		/**
@@ -298,7 +311,7 @@
                     "list" => $this->getDAO()->getListCategory(),
 
                     "Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
-                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&popularite=" . $this->getPopularite(),
+                        $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&popularite=true",
 
                     "Last" => BASE_URL . "lastPhotoMatrix&imgId=" .
                         $this->getImg()->getId() . "&nbImg=" . $this->getNbImg() . "&size=" . $this->getSize() . "&flt=" . $this->getFiltre() . "&popularite=" . $this->getPopularite(),

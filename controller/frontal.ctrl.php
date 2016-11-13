@@ -160,6 +160,14 @@
 			$controller->removeAlbumAction();
 			break;
 
+        case 'viewlistCategory' :
+            $controller->viewListCategoryAction();
+            break;
+
+        case 'deleteCategory' :
+            $controller->deleteCategoryAction();
+            break;
+
 		// ----------------------------------------------------------------------------------------------Dashboard
 		case 'homeDashboard' :
 			$controller->dashboardAction();

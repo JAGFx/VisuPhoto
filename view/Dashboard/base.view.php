@@ -37,6 +37,10 @@
 			</div >
 		</div >
 
+		<?php
+			require __DIR__ . '/../Default/partials/footer.partials.php';
+		?>
+
 		<script src="assets/lib/jquery-3.1.1/jquery-3.1.1.min.js" ></script >
 		<script src="assets/lib/bootstrap-3.3.7-dist/js/bootstrap.min.js" ></script >
 		<script src="assets/lib/formsJS/forms.js" ></script >

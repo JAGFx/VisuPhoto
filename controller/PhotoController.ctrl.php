@@ -121,14 +121,13 @@
 			$this->photoAction();
 		}
 
-		/*
+		/**
 		 *
 		 * Traitement pour voter sur une photo (si utilisateur connecté ou non)
 		 * Si non connecté on regarde ses cookies et on l'autorise si il n'a pas voté
 		 * Si connecté on regardé dans la base s'il n'a pas encore voté et on ajoute un cookie
 		 *
 		 */
-
 		public function votePhotoAction() {
 			$valueJug = $_GET[ "jug" ];
 			$imgId    = $this->getImg()->getId();
@@ -207,6 +206,19 @@
 			$this->photoAction();
 		}
 
+		/**
+		 * Traitement pour accèder à la dernière image
+		 */
+		public function lastPhotoMatrixAction() {
+			// Traitement
+			$lastImg = $this->getDAO()->getLastImage();
+
+			$this->setImg( $lastImg );
+
+			// Génération de la vue
+			$this->photoAction();
+		}
+
         /**
          * Methode pour ajouter des photos dans la base si l'utilisateur est connecté
          */
@@ -216,12 +228,21 @@
 					$iv = new IValidatorVisu();
 
 					try {
-						$comment = $iv->validateString( $_POST[ 'comment' ] );
-						$ctge    = $iv->validateString( $_POST[ 'category' ] );
-						$path    = 'uploads/';
+						$comment  = $iv->validateString( $_POST[ 'comment' ] );
+						$ctge     = $iv->validateString( $_POST[ 'category' ] );
+						$basePath = Image::BASE_PATH . 'uploads/';
 
-						$file = $iv->moveFileUpload( $_FILES[ 'image' ], $path );
-						$this->getDAO()->addImage( $path . $file[ 'name' ], $ctge, $comment );
+						// Si une URL est spécifié
+						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
+							$path = $iv->validateURL( $_POST[ 'imageURL' ] );
+
+						// Sinon upload un fichier local
+						else {
+							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );
+							$path = 'uploads/' . $file[ 'name' ];
+						}
+
+						$this->getDAO()->addImage( $path, $ctge, $comment );
 
 						// Notification de succès et redirection vers le tableau de bord
 						echo toAjax(
@@ -297,10 +318,13 @@
 					"list" => $this->getDAO()->getListCategory(),
 
 					"Popularite" => BASE_URL . "popularitePhotoMatrix&imgId=" .
-							$this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize() . "&flt=" . "&popularite=true",
+							$this->getImg()->getId(
+							) . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize(
+						) . "&flt=" . "&popularite=true",
 
-                    "Last" => BASE_URL . "lastPhotoMatrix&imgId=" .
-                        $this->getImg()->getId() . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize()
+					"Last" => BASE_URL . "lastPhoto&imgId=" .
+						  $this->getImg()->getId(
+						  ) . "&nbImg=" . MIN_NB_PIC . "&size=" . $this->getSize()
 				]
 			);
 
@@ -314,7 +338,7 @@
 			$this->getViewManager()->setValue(
 				'modifier',
 				[
-					"Button" => '?a=viewModifier&imgId=' .
+					"Button" => BASE_URL . 'viewModifier&imgId=' .
 						    ( $this->getImg()->getId() ) . '&size=' . $this->getSize()
 				]
 			);
@@ -350,7 +374,7 @@
 		}
 
 		/**
-		 * @param &Image $img
+		 * @param Image $img
 		 */
 		private function setImg( &$img ) {
 			$this->_img = ( isset( $img ) && !empty( $img ) )
@@ -366,7 +390,7 @@
 		}
 
 		/**
-		 * @param &int $size
+		 * @param int $size
 		 */
 		private function setSize( &$size ) {
 			$this->_size = (int) ( isset( $size ) )

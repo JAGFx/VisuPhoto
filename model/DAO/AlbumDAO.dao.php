@@ -11,7 +11,32 @@
 	 */
 	class AlbumDAO extends DAO {
 
-        /**
+		/**
+		 * Création d'un objet
+		 *
+		 * @param object|null $albumIN Objet retourné par PDO
+		 *
+		 * @return Album|null
+		 */
+		protected function make( $albumIN ) {
+			if ( !is_null( $albumIN ) ) {
+
+				$imgDAO  = loadDAO( 'ImageDAO' );
+				$userDAO = loadDAO( 'UserDAO' );
+
+				$alb = new Album( $albumIN->id, $albumIN->name, $userDAO->findUser( $albumIN->owner ) );
+
+				foreach ( explode( ',', $albumIN->images ) as $imgID )
+					$alb->addImage( $imgDAO->getImage( $imgID ) );
+
+			} else
+				$alb = null;
+
+			return $alb;
+		}
+
+
+		/**
          * Methode pour ajouter des albums dans la base de données
          *
          * @param Album $album
@@ -96,30 +121,17 @@
 			];
 
 			$result = $this->findAll( $query, $params );
-			$albums = [ ];
-			$imgDAO = loadDAO( 'ImageDAO' );
-			$userDAO = loadDAO( 'UserDAO' );
 
-			foreach ( $result as $album ) {
-				$album = (Object) $album;
-
-				$alb = new Album( $album->id, $album->name, $userDAO->findUser( $album->owner ) );
-
-				foreach ( explode( ',', $album->images ) as $imgID )
-					$alb->addImage( $imgDAO->getImage( $imgID ) );
-
-				$albums[] = $alb;
-			}
-
-			return $albums;
+			return $this->objectMaker( $result );
 		}
 
         /**
          *
          * Fonction de recherche d'album pour un id donné ( retourne album)
          *
-         * @param $id
-         * @return Album
+	 * @param int $id
+	 *
+*@return Album
          * @throws InputValidatorExceptions
          */
 		public function findAlbumById( $id ) {
@@ -129,43 +141,15 @@
 			];
 
 			$result = $this->findOne( $query, $params );
-			$imgDAO = loadDAO( 'ImageDAO' );
-			$userDAO = loadDAO( 'UserDAO' );
 
-			if ( is_null( $result ) )
-				throw new InputValidatorExceptions(
-					"Impossible de supprimer l'album",
-					"L'album est déjà supprimé",
-					TYPE_FEEDBACK_DANGER
-				);
-
-			$alb = new Album( $result->id, $result->name, $userDAO->findUser( $result->owner ) );
-
-			foreach ( explode( ',', $result->images ) as $imgID )
-				$alb->addImage( $imgDAO->getImage( $imgID ) );
-
-			return $alb;
+			return $this->objectMaker( $result );
 		}
 
 		public function findListAlbum() {
 			$query = 'SELECT * FROM album';
 
 			$result = $this->findAll( $query, [ ] );
-			$albums = [ ];
-			$imgDAO = loadDAO( 'ImageDAO' );
-			$userDAO = loadDAO( 'UserDAO' );
 
-			foreach ( $result as $album ) {
-				$album = (Object) $album;
-
-				$alb = new Album( $album->id, $album->name, $userDAO->findUser( $album->owner ) );
-
-				foreach ( explode( ',', $album->images ) as $imgID )
-					$alb->addImage( $imgDAO->getImage( $imgID ) );
-
-				$albums[] = $alb;
-			}
-
-			return $albums;
+			return $this->objectMaker( $result );
 		}
 	}

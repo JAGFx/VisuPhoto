@@ -1,1 +1,1 @@
-<?php require $data->pathInclude; ?>
+<?php require $data->pathInclude;

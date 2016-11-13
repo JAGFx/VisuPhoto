@@ -6,14 +6,18 @@
 
 		<div class="form-group" >
 			<label for="image" >Image</label >
-			<input type="file" name="image" id="image" accept="image/*" required >
+			<div class="input-group" >
+				<input type="file" name="image" class="form-control" id="image" accept="image/*" >
+				<div class="input-group-addon" > - OU -</div >
+				<input type="url" name="imageURL" class="form-control" id="imageURL" placeholder="URL : http://www.exemple.fr/image.png" >
+			</div >
 		</div >
 
 		<div class="form-group" >
 			<label for="category" >Catégorie</label >
 			<select name="category" class="form-control" id="category" required >
 				<?php foreach ( $data->listeCtge as $list ) : ?>
-					<option value="<?php echo $list[ 0 ]; ?>" ><?php echo $list[ 0 ]; ?> </option >
+					<option value="<?php echo $list->category; ?>" ><?php echo $list->category; ?> </option >
 				<?php endforeach; ?>
 			</select >
 		</div >

@@ -31,22 +31,41 @@
 			return $str;
 		}
 
+		/**
+		 * @param       $file
+		 * @param       $path
+		 * @param array $type
+		 * @param int   $size
+		 *
+		 * @return mixed
+		 * @throws \InputValidator\InputValidatorExceptions
+		 */
 		public function &moveFileUpload( &$file, &$path, array &$type = [ ], &$size = -1 ) {
 			$path = $this->validateString( $path );
-			$base = __DIR__ . '/../../model/imgs/';
 
-			$file = parent::validateFileUploaded( $file, $type, $size );
-			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $path . $file[ 'name' ] );
+			$base = __DIR__ . '/../../' . $path;
+
+			if ( !file_exists( $base ) )
+				mkdir( $base, 707 );
+
+			$file = $this->validateFileUploaded( $file, $type, $size );
+			$move = move_uploaded_file( $file[ 'tmp_name' ], $base . $file[ 'name' ] );
 			if ( !$move )
 				throw new InputValidatorExceptions(
 					"Téléchargement impossible",
-					"Impossible de d'uploader l'image",
+					"Impossible d'uploader l'image",
 					TYPE_FEEDBACK_ERROR
 				);
 
 			return $file;
 		}
 
+		/**
+		 * @param $str1
+		 * @param $str2
+		 *
+		 * @throws \InputValidator\InputValidatorExceptions
+		 */
 		public function validateSameString( &$str1, &$str2 ) {
 			$str1 = $this->validateString( $str1 );
 			$str2 = $this->validateString( $str2 );

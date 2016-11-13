@@ -30,14 +30,16 @@
 		/**
 		 * Image constructor.
 		 */
-		function __construct() { }
+		public function __construct() { }
 
 		# Retourne l'URL de cette image
 		/**
 		 * @return string
 		 */
 		public function getPath() {
-			return self::BASE_PATH . $this->path;
+			return filter_var( $this->path, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED )
+				? $this->path
+				: self::BASE_PATH . $this->path;
 		}
 
 		/**

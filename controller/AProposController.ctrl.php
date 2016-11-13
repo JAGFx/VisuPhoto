@@ -29,11 +29,11 @@
 		 * Rendue de page par défaut
 		 */
 		public function aProposAction() {
-			// Génération de la vue
+			// Ajout des valeurs de vues communes
 			$this->makeMenu();
 			$this->makeContent();
 
-			// Génération de la vue
+			// Affichge de la vue
 			$this->getViewManager()->render( 'APropos/aPropos' );
 		}
 

@@ -8,5 +8,5 @@ model/imgs/jons/
 /**/npm.js
 /model/SELECT_t___FROM_image_t_ORDER_BY_path_AS.sql
 /model/SELECT_t___FROM_user_t.sql
-/model/imageDB.db
+model/imageDB.db
 model/imgs/uploads/

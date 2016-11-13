@@ -129,7 +129,7 @@
 					$this->getDAO()->addUser( $user );
 
 					// Création d'une session utilisateur
-					UserSessionManager::start( $user );
+					UserSessionManager::renew( $user );
 
 					// Notification de succès et redirection vers le tableau de bord
 					echo toAjax(
@@ -153,6 +153,73 @@
 			// Sinon génération de la page d'inscription
 			else
 				$this->getViewManager()->render( 'User/registerUser' );
+		}
+
+		public function editUserAction() {
+			$this->makeMenu();
+			$this->makeContent();
+
+			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				// Si Données envoyé, traitement
+				if ( !empty( $_POST ) ) {
+					$iv = new IValidatorVisu();
+
+					try {
+						// Récupération des données utilisateur validé
+						$pswd        = htmlentities(
+							$iv->validateString( $_POST[ 'password' ] )
+						);
+						$confirmPswd = htmlentities(
+							$iv->validateString( $_POST[ 'confirmPassword' ] )
+						);
+						$basePath    = User::BASE_PATH;
+
+						// Si une URL est spécifié
+						if ( isset( $_POST[ 'imageURL' ] ) && !empty( $_POST[ 'imageURL' ] ) )
+							$path = $iv->validateURL( $_POST[ 'imageURL' ] );
+
+						// Sinon upload un fichier local
+						else {
+							$file = $iv->moveFileUpload( $_FILES[ 'image' ], $basePath );
+							$path = $file[ 'name' ];
+						}
+
+						// Vérification des données utilisateur
+						$iv->validateSameString( $pswd, $confirmPswd );
+
+						$user = new User(
+							UserSessionManager::getSession()->getPseudo(), encrypt( $pswd )
+						);
+						$user->setAvatar( $path );
+
+						$this->getDAO()->editUser( $user );
+
+						UserSessionManager::renew( $user );
+
+						// Notification de succès et redirection vers le tableau de bord
+						echo toAjax(
+							TYPE_FEEDBACK_SUCCESS,
+							[
+								'Titre'   => 'Modification réussite réussie',
+								'Message' => 'Vos modification on bien été effectué !',
+							],
+							BASE_URL . PATH_TO_DASH
+						);
+
+
+					} catch ( InputValidatorExceptions $ive ) {
+						// L'une des données utilisateur n'est pas du bon type ou sont incorrectes, notification utilisateur
+						echo ivExceptionToAjax( (object) $ive->getError() );
+					}
+
+					// Sinon génération de la page d'inscription
+				} else
+					$this->getViewManager()
+					     ->setPageView( 'Dashboard/base' )
+					     ->render( 'User/editUser' );
+
+			} else
+				$this->redirectToRoute( PATH_TO_DASH );
 		}
 
 

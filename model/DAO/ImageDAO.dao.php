@@ -17,10 +17,9 @@
 
 			try {
 				$pQuery->execute();
-				$data = $pQuery->fetch()[ 0 ];
+				$data = $pQuery->fetch( PDO::FETCH_CLASS )[ 0 ];
 
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = 0;
 			}
 
@@ -30,19 +29,9 @@
 
 		public function getListCategory() {
 
-			$pQuery = $this->pdo->prepare( "SELECT category FROM image GROUP BY category" );
+			$query = 'SELECT category FROM image GROUP BY category';
 
-			try {
-				$pQuery->execute();
-				$data = $pQuery->fetchAll();
-
-			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
-				$data = null;
-
-			}
-
-			return ( !empty( $data ) ) ? $data : null;
+			return $this->findAll( $query, [ ] );
 		}
 		
 		/**
@@ -61,7 +50,6 @@
 				$pQuery->execute( [ $imgId ] );
 				$data = $pQuery->fetchObject( 'Image' );
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = null;
 			}
 
@@ -108,7 +96,7 @@
 		/**
 		 * Ajoute dans la table vote un vote si l'utilisateur n'a pas encore voté pour la photo
 		 *
-		 * @param $imgId
+		 * @param integer $imgId
 		 * @param $valueJug
 		 * @param $pseudo
 		 */
@@ -142,7 +130,6 @@
 				$imgId
 			];
 
-
 			return $this->findOne( $pQuery, $params );
 		}
 
@@ -155,7 +142,6 @@
          */
         public function populariteImage(Image $img, $nbImage)
         {
-
             $pQuery = $this->pdo->prepare("SELECT image.id,AVG(valueJug) AS vote,path,category,comment FROM image LEFT OUTER JOIN note on image.id=note.idPhoto GROUP BY Image.id ORDER BY vote DESC LIMIT ? ,?");
 
             try {
@@ -163,7 +149,6 @@
                 $pQuery->execute([$img->getId() - 1, $nbImage]);
                 $data = $pQuery->fetchAll(PDO::FETCH_CLASS, "Image");
             } catch (Exception $exc) {
-                var_dump($exc->getMessage());
                 $data = [];
             }
 
@@ -174,7 +159,7 @@
 		/**
 		 * Retounrne le nombre de like / dislike d'une photo
 		 *
-		 * @param $imgId
+		 * @param integer $imgId
 		 *
 		 * @return null|object
 		 */
@@ -182,7 +167,6 @@
 
         public function infovoteImage($imgId)
         {
-
 			$pQuery = "SELECT (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=0) as Dislike, (SELECT count(*) FROM note WHERE idPhoto=? and valueJug=1) as Like";
 
 			$param = [
@@ -202,9 +186,7 @@
 		 * @return Image[]
 		 */
 		public function filtreImage( Image $img, $filtre, $nbImage ) {
-
-			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id >= ? AND category = ? LIMIT  ?" );
-
+			$pQuery = $this->pdo->prepare( "SELECT * FROM image WHERE id > ? AND category = ? LIMIT  ?" );
 
 			try {
 				$pQuery->execute(
@@ -216,7 +198,6 @@
 				);
 				$data = $pQuery->fetchAll( PDO::FETCH_CLASS, "Image" );
 			} catch ( Exception $exc ) {
-				var_dump( $exc->getMessage() );
 				$data = [ ];
 			}
 
@@ -232,22 +213,19 @@
 		 * @return Image|null
 		 */
 		public function getRandomImage( $filter = null ) {
-
 			if ( is_null( $filter ) ) {
 
-				$nbFichiers = $this->size();
+				$query = 'SELECT * FROM image ORDER BY RANDOM() LIMIT 1';
 
-				$rand = rand( 1, $nbFichiers );
-
-				//var_dump($nbFichiers, $rand);
-
-				return $this->getImage( $rand );
-
+				return $this->findOne( $query, [ ], 'Image' );
 			} else
 				return $this->getRandomFilter( $filter );
 		}
 
 
+		/**
+		 * @param string $filter
+		 */
 		public function getRandomFilter( $filter ) {
 			$query  = 'SELECT * FROM image WHERE category = ?';
 			$params = [
@@ -278,7 +256,7 @@
 
         public function getLastImage()
         {
-            $query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1';
+		$query = 'SELECT * FROM image ORDER BY id DESC LIMIT 1, 1';
 
             return $this->findOne($query, [], 'Image');
 
@@ -312,12 +290,12 @@
 		 * @return image|null
 		 */
 		public function getNextImage( image $img ) {
-			$id = $img->getId();
-			if ( $id < $this->size() ) {
-				$img = $this->getImage( $id + 1 );
-			}
+			$query  = 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT 1';
+			$params = [
+				$img->getId()
+			];
 
-			return $img;
+			return $this->findOne( $query, $params, 'Image' );
 		}
 		
 		/**
@@ -328,12 +306,12 @@
 		 * @return image|null
 		 */
 		public function getPrevImage( image $img ) {
-			$id = $img->getId();
-			if ( $id > 1 ) {
-				$img = $this->getImage( $id - 1 );
-			}
+			$query  = 'SELECT * FROM image WHERE id < ? ORDER BY id DESC LIMIT 1';
+			$params = [
+				$img->getId()
+			];
 
-			return $img;
+			return $this->findOne( $query, $params, 'Image' );
 		}
 
 		/**
@@ -348,12 +326,15 @@
 		 */
 		public function jumpToImage( image $img, $nb, $filter = null ) {
 			if ( is_null( $filter ) ) {
-				$imgID = (int) $img->getId();
+				$query  = ( $nb >= 0 )
+					? 'SELECT * FROM image WHERE id > ? ORDER BY id LIMIT ?, 1'
+					: 'SELECT * FROM image WHERE id < ? ORDER BY id DESC LIMIT ?, 1';
+				$params = [
+					$img->getId(),
+					abs( $nb ) - 1,
+				];
 
-				if ( $imgID + $nb >= 1 && $imgID + $nb <= $this->size() )
-					$img = $this->getImage( $imgID + $nb );
-
-				return $img;
+				return $this->findOne( $query, $params, 'Image' );
 
 			} else
 				return $this->jumpToImageFiltred( $img, $nb, $filter );
@@ -367,17 +348,18 @@
 		 * @return null|Image
 		 */
 		public function jumpToImageFiltred( Image $img, $nb, $filter ) {
-			$filtredImg = $this->filtreImage( $img, $filter, $nb );
-
-			$query  = 'SELECT * FROM image WHERE id > ? AND category = ? LIMIT 1';
+			$query  = ( $nb >= 0 )
+				? 'SELECT * FROM image WHERE id > ? AND category = ? ORDER BY id LIMIT ?, 1'
+				: 'SELECT * FROM image WHERE id < ? AND category = ? ORDER BY id DESC LIMIT ?, 1';
 			$params = [
-				$filtredImg[ 0 ]->getId(),
-				$filter
+				$img->getId(),
+				$filter,
+				abs( $nb )
 			];
 
 			$result = $this->findOne( $query, $params, 'Image' );
 
-			return ( is_null( $result ) ) ? $filtredImg[ 0 ] : $result;
+			return $result;
 		}
 		
 
@@ -390,35 +372,13 @@
 		 * @return Image[]
 		 */
 		public function getImageList( image $img, $nb ) {
-            // TODO MODIFER FONCTION
+			$query  = 'SELECT * FROM image  WHERE id > ? ORDER BY id LIMIT ?';
+			$params = [
+				$img->getId(),
+				$nb
+			];
 
-            $pQuery = $this->pdo->prepare("SELECT id FROM image ORDER BY id DESC LIMIT 1");
-
-            try {
-                $pQuery->execute();
-                $data = $pQuery->fetch()[0];
-
-            } catch (Exception $exc) {
-                var_dump($exc->getMessage());
-                $data = 0;
-            }
-
-
-			$res = [ ];
-
-			# Verifie que le nombre d'image est non nul
-			if ( !$nb > 0 ) {
-				debug_print_backtrace();
-				trigger_error( "Erreur dans ImageDAO.getImageList: nombre d'images nul" );
-			}
-			$id  = $img->getId();
-			$max = $id + $nb;
-
-            while ($id <= $data && $id < $max) {
-
-                $res[] = $this->getImage( $id );
-				$id++;
-			}
+			$res = $this->findAll( $query, $params, 'Image' );
 
 			return $res;
 		}
@@ -434,8 +394,8 @@
 
 		/**
 		 * @param $path
-		 * @param $ctge
-		 * @param $comment
+		 * @param string $ctge
+		 * @param string $comment
 		 *
 		 * @throws InputValidatorExceptions
 		 */

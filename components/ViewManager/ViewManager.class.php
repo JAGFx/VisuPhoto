@@ -1,5 +1,5 @@
 <?php
-	
+
 	/**
 	 * Created by PhpStorm.
 	 *
@@ -9,18 +9,20 @@
 	 */
 	final class ViewManager {
 		/**
-		 * @var array
+		 * @var array Données transmise à la vue
 		 */
 		private $_data;
 		/**
-		 * @var string
+		 * @var string Nom du template Principale
 		 */
 		private $_pageView = null;
 
 
 		/**
-		 * @param string $key
-		 * @param mixed  $value
+		 * Ajoute une valeur aux données de la vue
+		 *
+		 * @param string $key   Nom de l'indexe de la valeur
+		 * @param mixed  $value Valeur
 		 *
 		 * @return ViewManager $this
 		 */
@@ -36,7 +38,9 @@
 		}
 
 		/**
-		 * @param string $contentView
+		 * Prépare et affiche les données dans la vues
+		 *
+		 * @param string $contentView Nom de la vue
 		 *
 		 * @return ViewManager $this
 		 * @throws Exception

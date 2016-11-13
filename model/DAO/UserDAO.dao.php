@@ -17,6 +17,25 @@
 	class UserDAO extends DAO {
 
 		/**
+		 * Création d'un objet
+		 *
+		 * @param object $userIN Objet retourné par PDO
+		 *
+		 * @return User
+		 */
+		protected function make( $userIN ) {
+			if ( !is_null( $userIN ) ) {
+				$user = new User( $userIN->pseudo, $userIN->password, $userIN->privilege );
+				$user->setAvatar( $userIN->avatar );
+
+			} else
+				$user = null;
+
+			return $user;
+		}
+
+
+		/**
 		 * Ajoute un utilisateur dans la BDD
 		 *
 		 * @param User $user
@@ -42,6 +61,31 @@
 		}
 
 		/**
+		 * Met à jour les information d'un utilisateur
+		 *
+		 * @param User $user
+		 *
+		 * @throws InputValidator\InputValidatorExceptions
+		 */
+		public function editUser( User $user ) {
+			$query  = 'UPDATE user SET password = ?, avatar = ? WHERE pseudo = ?';
+			$params = [
+				$user->getPassword(),
+				str_replace( User::BASE_PATH, '', $user->getAvatar() ),
+				$user->getPseudo()
+			];
+
+			$res = (Object) $this->execQuery( $query, $params );
+
+			if ( !$res->success )
+				throw new InputValidatorExceptions(
+					"Impossible de modifier l'utilisateur",
+					$res->message,
+					TYPE_FEEDBACK_DANGER
+				);
+		}
+
+		/**
 		 * Recherche un utilisateur (Par sa clé primaire: Nom)
 		 *
 		 * @param $pseudo
@@ -54,13 +98,17 @@
 				$pseudo
 			];
 
-			$user = $this->findOne( $query, $params );
+			$userFind = $this->findOne( $query, $params );
 
-			//var_dump( $user );
+			return $this->objectMaker( $userFind );
+		}
 
-			if ( !is_null( $user ) )
-				$user = new User( $user->pseudo, $user->password, $user->privilege );
+		public function findVoteUser( User $user ) {
+			$query  = 'SELECT i.*, n.valueJug FROM image i NATURAL JOIN note n WHERE n.pseudo = ? ORDER BY i.id';
+			$params = [
+				$user->getPseudo()
+			];
 
-			return $user;
+			return $this->findAll( $query, $params );
 		}
 	}

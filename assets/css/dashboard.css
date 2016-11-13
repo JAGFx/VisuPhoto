@@ -11,6 +11,8 @@ body {
 .user { position: relative; }
 
 
+.navbar { border-bottom: 3px solid #1967BE !important; }
+
 .nav > li.user > a {
 	padding-left: 55px;
 }
@@ -157,3 +159,59 @@ body {
 	display:       inline-block;
 	border-radius: 50%;
 }
+
+
+footer {
+	z-index:        1000;
+	position:       fixed;
+	bottom:         0;
+	left:           0;
+	width:          100vw;
+	padding:        10px;
+	text-align:     center;
+	background:     #38302E;
+	color:          #F5F5F5;
+	border-top:     3px solid #737373;
+	text-transform: uppercase;
+	font-size:      0.9em;
+	letter-spacing: 0.3em;
+}
+
+
+section#head {
+	background:      url("../pics/behind_you_by_ryky-da0ciyy.png") center center no-repeat;
+	background-size: cover;
+	margin:          -20px -40px 0;
+	padding:         40px 0;
+}
+
+
+section#head .light {
+	color:      #F5F5F5;
+	background: rgba(0, 0, 0, 0.16);
+	padding:    5px 0;
+}
+
+
+.btn-default-o {
+	background:     transparent;
+	border:         1px solid #F5F5F5;
+	color:          #F5F5F5;
+	text-transform: uppercase;
+	letter-spacing: .1em;
+}
+
+
+.btn-default-o:hover {
+	background:   #2780E3;
+	border-color: #2780E3;
+}
+
+
+#infoUser .page-header { margin-top: 20px; }
+
+
+.votePos { color: #3FB618; }
+
+
+.voteNeg { color: #FF0039; }

@@ -21,7 +21,7 @@
 		</section >
 		<?php
 
-			require __DIR__ . '/../Default/partials/footer.partials.html';
+			require __DIR__ . '/../Default/partials/footer.partials.php';
 		?>
 	</body >
 	<script src="assets/lib/jquery-3.1.1/jquery-3.1.1.min.js" ></script >

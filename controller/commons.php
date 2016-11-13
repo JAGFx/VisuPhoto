@@ -7,24 +7,44 @@
 	 */
 
 	// ----------------------------------------------------------------------------------------------Constants
+	define( 'VERSION', '1.1' );
+
+	// App
 	define( 'BASE_URL', '?a=' );
-define('LIKE_BUTTON', 1);
-define('DISLIKE_BUTTON', 0);
+	define( 'LIKE_BUTTON', 1 );
+	define( 'DISLIKE_BUTTON', 0 );
 	define( 'MORE_RATIO', 1.25 );
 	define( 'LESS_RATIO', 0.75 );
 	define( 'MIN_WIDTH_PIC', 480 );
 	define( 'MIN_NB_PIC', 1 );
 
+	// Loader
 	define( 'ERR_INVALID_DAO_NAME', 'Nom de DAO invalide ou introuvable' );
 	define( 'ERR_INVALID_CTRL_NAME', 'Nom de Controlêur invalide ou introuvable' );
 	define( 'ERR_INVALID_VIEW_NAME', 'Nom de la Vue invalide ou introuvable' );
+	define( 'ERR_INVALID_CLASS_NAME', 'Nom de la Class invalide ou introuvable' );
+	define( 'ERR_INVALID_DAO_INSTANCE', "L'instance du DAO est invalide" );
 
+	// Alert
 	define( 'TYPE_FEEDBACK_SUCCESS', -1 );
-	define( 'TYPE_FEEDBACK_INFO', 1 );
-	define( 'TYPE_FEEDBACK_WARN', 2 );
-	define( 'TYPE_FEEDBACK_DANGER', 3 );
-	define( 'TYPE_FEEDBACK_ERROR', 4 );
+	define( 'TYPE_FEEDBACK_INFO', 0 );
+	define( 'TYPE_FEEDBACK_WARN', 1 );
+	define( 'TYPE_FEEDBACK_DANGER', 2 );
+	define( 'TYPE_FEEDBACK_ERROR', 3 );
 
+	// DAO
+	define( 'DB_HOST', null );
+	define( 'DB_LOGIN', null );
+	define( 'DB_PSWD', null );
+	define( 'DB_DBNAME', 'model/imageDB.db' );
+	define( 'DB_SGBD', DAO::_DAO_SGBD_SQLITE );
+	define( 'DB_PORT', null );
+	define( 'DB_CHARSET', null );
+
+	// UserSessionManager
+	define( 'ERR_UNSTART_SESSION', "La session utilisateur doit être démarré" );
+
+	// Routing
 	define( 'PATH_TO_DASH', 'homeDashboard' );
 
 	// ----------------------------------------------------------------------------------------------Functions
@@ -105,6 +125,9 @@ define('DISLIKE_BUTTON', 0);
 		require_once __DIR__ . '/../components/Controller/Controller.class.php';
 		require_once $path;
 
+		if ( !class_exists( $ctrl ) )
+			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $ctrl );
+
 		// Création et retour du contrôleur
 		return new  $ctrl();
 	}
@@ -124,6 +147,9 @@ define('DISLIKE_BUTTON', 0);
 			throw new Exception( ERR_INVALID_DAO_NAME . ' : ' . $name );
 
 		require_once $path;
+
+		if ( !class_exists( $name ) )
+			throw new Exception( ERR_INVALID_CLASS_NAME . ' : ' . $name );
 
 		return new $name();
 	}

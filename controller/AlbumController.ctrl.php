@@ -30,26 +30,32 @@
 
 		// ---------------------------------------------------------------------------------------------- Actions
 		public function viewAlbum() {
+			// Ajout des valeurs de vues communes
 			$this->makeMenu();
 			$this->makeContent();
 
+			// Ajout de l'album et affichge de la vue
 			$this->getViewManager()
-				->setValue( 'listAlbum', $this->_album )
-				->render( 'Album/viewAlbum' );
+			     ->setValue( 'listAlbum', $this->_album )
+			     ->render( 'Album/viewAlbum' );
 		}
 
-        /**
-         * Permet de visualiser la liste des albums dans le dashboard de l'utilisateur
-         */
+		/**
+		 * Permet de visualiser la liste des albums dans le dashboard de l'utilisateur
+		 */
 		public function viewListAlbumAction() {
+			// Accessible que si utilisateur connecté
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				// Ajout des valeurs de vues communes
 				$this->makeMenu();
 				$this->makeContent();
+
 
 				$listAlbum = $this->getDAO()->findListAlbumByUser(
 					UserSessionManager::getSession()
 				);
 
+				// Affichge dashboard et rendu de la vue
 				$this->getViewManager()
 				     ->setPageView( 'Dashboard/base' )
 				     ->setValue( 'listAlbum', $listAlbum )
@@ -59,19 +65,24 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
-        /**
-         * Methode pour créer un album si l'utilisateur est connecté
-         * Affiche en retour succès ou echec avec la fonction toAjax
-         */
+		/**
+		 * Methode pour créer un album si l'utilisateur est connecté
+		 * Affiche en retour succès ou echec avec la fonction toAjax
+		 */
 		public function addAlbumAction() {
+			// Accessible que si utilisateur connecté
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+
+				// Si envoie de données faire ....
 				if ( !empty( $_POST ) ) {
 					$iv = new IValidatorVisu();
 
 					try {
+						// Récupération des données utilisateur
 						$name    = $iv->validateString( $_POST[ 'name' ] );
 						$listImg = $iv->validateString( $_POST[ 'listImg' ] );
 
+						// Ajout en base de donnée
 						$album  = new Album( null, $name, UserSessionManager::getSession() );
 						$imgDAO = loadDAO( 'ImageDAO' );
 
@@ -94,13 +105,17 @@
 						echo ivExceptionToAjax( (object) $ive->getError() );
 					}
 
+					// Sinon afficher la vue
 				} else {
+					// Ajout des valeurs de vues communes
 					$this->makeMenu();
 					$this->makeContent();
 
+					// Ajout des données supplémentaires
 					$photoDAO = loadDAO( 'ImageDAO' );
 					$listImg  = $photoDAO->getFullImageList();
 
+					// Affichage dashboard et rendu
 					$this->getViewManager()
 					     ->setValue( 'listImg', $listImg )
 					     ->setPageView( 'Dashboard/base' )
@@ -112,18 +127,22 @@
 		}
 
 
-        /**
-         * Methode pour éditer un album déjà créé
-         */
+		/**
+		 * Methode pour éditer un album déjà créé
+		 */
 		public function editAlbumAction() {
+			// Accessible que si utilisateur connecté
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
+				// Si envoie de données faire ....
 				if ( !empty( $_POST ) ) {
 					$iv = new IValidatorVisu();
 
 					try {
+						// Récupération des données utilisateur
 						$name    = $iv->validateString( $_POST[ 'name' ] );
 						$listImg = $iv->validateString( $_POST[ 'listImg' ] );
 
+						// Modification de l'album
 						$this->getAlbum()->setName( $name );
 						$this->getAlbum()->emptyImage();
 
@@ -132,14 +151,15 @@
 						foreach ( explode( ',', $listImg ) as $imgID )
 							$this->getAlbum()->addImage( $imgDAO->getImage( $imgID ) );
 
+						// Mise à jour
 						$this->getDAO()->editAlbum( $this->getAlbum() );
 
 						// Notification de succès et redirection vers le tableau de bord
 						echo toAjax(
 							TYPE_FEEDBACK_SUCCESS,
 							[
-                                'Titre' => 'Edition réussie',
-                                'Message' => "La modification de l'album à été effectué avec succès",
+								'Titre'   => 'Edition réussie',
+								'Message' => "La modification de l'album à été effectué avec succès",
 							]
 						);
 
@@ -148,14 +168,17 @@
 						echo ivExceptionToAjax( (object) $ive->getError() );
 					}
 
+					// Sinon afficher la vue
 				} else {
+					// Ajout des valeurs de vues communes
 					$this->makeMenu();
 					$this->makeContent();
 
-
+					// Ajout des données supplémentaires
 					$photoDAO = loadDAO( 'ImageDAO' );
 					$listImg  = $photoDAO->getFullImageList();
 
+					// Affichage dashboard et rendu
 					$this->getViewManager()
 					     ->setPageView( 'Dashboard/base' )
 					     ->setValue( 'listImg', $listImg )
@@ -167,12 +190,14 @@
 				$this->redirectToRoute( 'loginUser' );
 		}
 
-        /**
-         * Suppression d'un album par un utilisateur
-         */
+		/**
+		 * Suppression d'un album par un utilisateur
+		 */
 		public function removeAlbumAction() {
+			// Accessible que si utilisateur connecté
 			if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) {
 				try {
+					// Suppression de l'album
 					$this->getDAO()->removeAlbum( $this->getAlbum() );
 					$this->redirectToRoute( 'viewlistAlbum' );
 
@@ -208,7 +233,7 @@
 		}
 
 		/**
-		 * @return AlbumDAO|null
+		 * @return DAO|null
 		 */
 		protected function getDAO() {
 			return parent::getDAO(); // TODO: Change the autogenerated stub

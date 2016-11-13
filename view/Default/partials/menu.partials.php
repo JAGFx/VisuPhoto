@@ -26,7 +26,8 @@
 				<?php if ( UserSessionManager::hasPrivilege( UserSessionManager::USER_PRIVILEGE ) ) : ?>
 					<li class="dropdown user active" >
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-							<img src="assets/pics/nouser.png" width="30" height="30" class="img-circle" > <?= UserSessionManager::getSession(
+							<img src="<?= UserSessionManager::getSession()->getAvatar(
+							) ?>" width="30" height="30" class="img-circle" > <?= UserSessionManager::getSession(
 							)->getPseudo() ?> <span class="caret" ></span >
 						</a >
 						<ul class="dropdown-menu" >

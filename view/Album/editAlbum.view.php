@@ -12,8 +12,7 @@
 
 	<?php else : ?>
 
-		<h1 class="col-xs-12 page-header" >Album > Modifier > <?= $data->albumToEdit->getName(); ?>
-			<!--<span class="label label-primary" ><? /*= $data->albumToEdit->getCategory(); */ ?></span >--></h1 >
+		<h1 class="col-xs-12 page-header" >Album > Modifier > <?= $data->albumToEdit->getName(); ?></h1 >
 
 		<form method="POST" action="?a=editAlbum&albumID=<?= $data->albumToEdit->getId(
 		); ?>" data-preventDefault="yes" class="col-xs-12" >

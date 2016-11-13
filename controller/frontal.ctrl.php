@@ -24,6 +24,7 @@
 	require __DIR__ . '/commons.php';
 	require __DIR__ . '/../components/InputValidator/IValidatorVisu.class.php';
 
+	// Initialisation de la session utilisateur
 	UserSessionManager::init();
 	UserSessionManager::start();
 
@@ -31,6 +32,7 @@
 
 	$controller = loadController( $action );
 
+	// Action demandé
 	switch ( $action ) {
 		// ----------------------------------------------------------------------------------------------Photo
 		case 'viewPhoto' :
@@ -68,6 +70,11 @@
         case 'votePhoto':
             $controller->votePhotoAction();
             break;
+
+		case 'lastPhoto':
+			$controller->lastPhotoMatrixAction();
+			break;
+
 
 		// ----------------------------------------------------------------------------------------------Photo Matrix
 		case 'viewPhotoMatrix' :
@@ -138,6 +145,9 @@
 			$controller->registerUserAction();
 			break;
 
+		case 'editUser' :
+			$controller->editUserAction();
+			break;
 
 		// ----------------------------------------------------------------------------------------------Album viewListAlbum
 		case 'viewlistAlbum' :
